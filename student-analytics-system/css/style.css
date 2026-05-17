@@ -1,0 +1,87 @@
+body{
+  margin:0;
+  padding:20px;
+  background:#f5f7fb;
+  font-family:Tahoma,sans-serif;
+}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+}
+
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.field{
+  margin-bottom:16px;
+}
+
+label{
+  display:block;
+  margin-bottom:8px;
+  font-weight:bold;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  box-sizing:border-box;
+}
+
+button{
+  padding:12px 16px;
+  border:none;
+  border-radius:10px;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#1d4ed8;
+}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+}
+
+.stat-card{
+  background:#fff;
+  padding:20px;
+  border-radius:16px;
+  text-align:center;
+}
+
+.stat-number{
+  font-size:40px;
+  font-weight:bold;
+}
+
+.scale{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.scale label{
+  background:#f1f5f9;
+  padding:10px;
+  border-radius:10px;
+  text-align:center;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+.green{background:#16a34a}
