@@ -1,8 +1,3 @@
-# dashboard.html (เวอร์ชันปรับปรุงล่าสุด)
-
-ให้นำไฟล์นี้ไปแทน dashboard.html เดิมทั้งหมด
-
-```html
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -11,7 +6,6 @@
 <title>แดชบอร์ดครู | ทดธ. วท.ประจวบฯ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
-
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px}
@@ -32,6 +26,7 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;min-heigh
   --tr:.18s cubic-bezier(.4,0,.2,1);
 }
 
+/* ===== HEADER ===== */
 .header{
   position:sticky;top:0;z-index:200;
   background:rgba(255,255,255,.94);
@@ -39,269 +34,375 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;min-heigh
   border-bottom:1px solid var(--g200);
   box-shadow:var(--shadow-sm);
 }
-
 .header-inner{
-  max-width:1200px;
-  margin:0 auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 1.5rem;
-  height:60px;
-  gap:12px;
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 1.5rem;height:60px;gap:12px;
 }
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.brand-logo{
+  width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,var(--o500),#F5A070);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(232,106,46,.3);
+}
+.brand-text{display:flex;flex-direction:column;line-height:1.2}
+.brand-school{font-family:'Kanit',sans-serif;font-size:13px;font-weight:600;color:var(--g900)}
+.brand-dept{font-size:11px;color:var(--g400)}
+.header-nav{display:flex;gap:4px}
+.nav-pill{padding:6px 14px;border-radius:20px;font-size:12.5px;font-weight:500;color:var(--g500);text-decoration:none;border:1.5px solid transparent;transition:var(--tr);white-space:nowrap}
+.nav-pill:hover{color:var(--o500);background:var(--o100)}
+.nav-pill.active{color:var(--o500);background:var(--o100);border-color:rgba(232,106,46,.25)}
+.header-actions{display:flex;gap:8px;align-items:center}
+.btn-xs{padding:7px 14px;border-radius:var(--r-sm);font-size:12.5px;font-weight:600;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:var(--tr);font-family:'Sarabun',sans-serif}
+.btn-export{background:var(--o500);color:#fff;box-shadow:0 2px 6px rgba(232,106,46,.25)}
+.btn-export:hover{background:#C05520}
+.btn-clear{background:var(--white);color:var(--g500);border:1.5px solid var(--g200)}
+.btn-clear:hover{border-color:var(--red);color:var(--red)}
 
-.main{
-  max-width:1200px;
-  margin:0 auto;
-  padding:1.5rem;
-}
+/* ===== MAIN ===== */
+.main{max-width:1200px;margin:0 auto;padding:1.5rem}
 
-.page-title{
-  font-family:'Kanit',sans-serif;
-  font-size:1.5rem;
-  font-weight:700;
-  color:var(--g900);
-}
+/* ===== PAGE HEADER ===== */
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.page-title{font-family:'Kanit',sans-serif;font-size:1.5rem;font-weight:700;color:var(--g900)}
+.page-sub{font-size:.85rem;color:var(--g400);margin-top:3px}
+.filter-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.filter-select{padding:8px 32px 8px 12px;border-radius:var(--r-md);border:1.5px solid var(--g200);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M3 5l4 4 4-4' stroke='%239C978F' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;font-size:.875rem;color:var(--g700);font-family:'Sarabun',sans-serif;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.filter-select:focus{border-color:var(--o500)}
 
-.page-sub{
-  font-size:.85rem;
-  color:var(--g400);
-  margin-top:3px;
-}
-
-.stat-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:1rem;
-  margin:1.5rem 0;
-}
-
-@media(max-width:800px){
-  .stat-grid{grid-template-columns:repeat(2,1fr)}
-}
-
-@media(max-width:400px){
-  .stat-grid{grid-template-columns:1fr}
-}
+/* ===== STAT GRID ===== */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+@media(max-width:800px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:400px){.stat-grid{grid-template-columns:1fr}}
 
 .stat-card{
-  background:var(--white);
-  border-radius:var(--r-lg);
-  border:1px solid var(--g200);
-  padding:1.25rem;
-  box-shadow:var(--shadow-sm);
+  background:var(--white);border-radius:var(--r-lg);
+  border:1px solid var(--g200);padding:1.25rem 1.25rem 1rem;
+  box-shadow:var(--shadow-sm);transition:var(--tr);
+  display:flex;align-items:flex-start;gap:12px;
 }
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.stat-icon{width:44px;height:44px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.stat-body{flex:1;min-width:0}
+.stat-num{font-family:'Kanit',sans-serif;font-size:2rem;font-weight:700;color:var(--g900);line-height:1}
+.stat-label{font-size:.8rem;color:var(--g400);margin-top:4px;font-weight:500}
+.stat-sub{font-size:.75rem;color:var(--g300);margin-top:2px}
+.num-red{color:var(--red)}
+.num-amber{color:var(--amber)}
+.num-green{color:var(--green)}
+.num-blue{color:var(--blue)}
 
-.stat-num{
-  font-family:'Kanit',sans-serif;
-  font-size:2rem;
-  font-weight:700;
-}
-
+/* ===== TABS ===== */
 .tab-bar{
-  display:flex;
-  gap:4px;
-  margin-bottom:1rem;
-  background:var(--white);
-  border:1px solid var(--g200);
-  border-radius:var(--r-md);
-  padding:5px;
-  overflow-x:auto;
+  display:flex;gap:4px;margin-bottom:1rem;
+  background:var(--white);border:1px solid var(--g200);
+  border-radius:var(--r-md);padding:5px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
 }
-
 .tab-btn{
-  padding:8px 16px;
-  border:none;
-  border-radius:var(--r-sm);
-  background:transparent;
-  cursor:pointer;
+  display:flex;align-items:center;gap:6px;white-space:nowrap;
+  padding:8px 16px;border-radius:var(--r-sm);
+  font-size:.875rem;font-weight:500;color:var(--g500);
+  border:none;background:transparent;cursor:pointer;transition:var(--tr);
+  font-family:'Sarabun',sans-serif;
 }
+.tab-btn:hover{background:var(--g100);color:var(--g700)}
+.tab-btn.active{background:var(--o100);color:var(--o500);font-weight:600}
 
-.tab-btn.active{
-  background:var(--o100);
-  color:var(--o500);
-  font-weight:600;
-}
-
+/* ===== PANEL ===== */
 .panel{display:none}
-.panel.active{display:block}
+.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.panel-card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--g200);box-shadow:var(--shadow-sm);overflow:hidden}
+.panel-head{padding:1.25rem 1.5rem;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.panel-title{font-family:'Kanit',sans-serif;font-size:1rem;font-weight:600;color:var(--g900)}
+.panel-note{font-size:.8rem;color:var(--g400)}
+.panel-body{padding:1.25rem 1.5rem}
 
-.panel-card{
-  background:var(--white);
-  border-radius:var(--r-lg);
-  border:1px solid var(--g200);
-  overflow:hidden;
-}
-
-.panel-head{
-  padding:1.25rem 1.5rem;
-  border-bottom:1px solid var(--g100);
-}
-
-.panel-body{
-  padding:1.25rem 1.5rem;
-}
-
+/* ===== RISK LIST ===== */
 .risk-item{
-  display:flex;
-  gap:12px;
-  padding:1rem;
-  border:1px solid var(--g200);
-  border-radius:var(--r-md);
-  margin-bottom:8px;
+  display:flex;align-items:flex-start;gap:12px;
+  padding:1rem;border-radius:var(--r-md);
+  border:1.5px solid var(--g200);margin-bottom:8px;
+  background:var(--white);transition:var(--tr);
 }
-
+.risk-item:hover{border-color:var(--g300);box-shadow:var(--shadow-sm)}
 .risk-level{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  margin-top:5px;
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px;
 }
-
+.risk-info{flex:1;min-width:0}
+.risk-name{font-size:.9rem;font-weight:600;color:var(--g900)}
+.risk-class{font-size:.8rem;color:var(--g400);margin-left:6px;font-weight:400}
+.risk-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
 .risk-tag{
-  display:inline-block;
-  margin:4px 4px 0 0;
-  padding:2px 8px;
-  border-radius:10px;
-  font-size:.75rem;
-  background:var(--red-bg);
-  color:var(--red);
+  font-size:.75rem;padding:2px 9px;border-radius:10px;
+  background:var(--red-bg);color:var(--red);font-weight:500;
+}
+.risk-tag.warn{background:var(--amber-bg);color:var(--amber)}
+.risk-score{font-size:.75rem;font-weight:700;color:var(--g400);flex-shrink:0;text-align:right}
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--g400);font-size:.9rem}
+.empty-icon{font-size:2.5rem;margin-bottom:.75rem}
+
+/* ===== SKILL BARS ===== */
+.skill-row{margin-bottom:12px}
+.skill-meta{display:flex;justify-content:space-between;font-size:.8rem;color:var(--g500);margin-bottom:5px;font-weight:500}
+.bar-track{height:10px;background:var(--g100);border-radius:5px;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* ===== TAG CLOUD ===== */
+.tag-cloud{display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem}
+.t-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:20px;
+  font-size:.8rem;font-weight:500;
+  background:var(--g100);color:var(--g600);border:1px solid var(--g200);
+}
+.t-tag .cnt{
+  background:var(--white);border-radius:10px;
+  padding:0 6px;font-size:.7rem;font-weight:700;color:var(--g500);
 }
 
-.table-wrap{
-  overflow-x:auto;
-  scrollbar-width:thin;
+/* ===== DEVICE GRID ===== */
+.device-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.d-card{
+  background:var(--white);border:1px solid var(--g200);
+  border-radius:var(--r-md);padding:1.25rem;
 }
+.d-label{font-size:.8rem;color:var(--g500);margin-bottom:.75rem;font-weight:600}
+.d-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.d-bar-label{font-size:.8rem;color:var(--g600);min-width:110px}
+.d-bar-track{flex:1;height:8px;background:var(--g100);border-radius:4px;overflow:hidden}
+.d-bar-fill{height:100%;border-radius:4px;background:var(--o500)}
+.d-pct{font-size:.75rem;font-weight:700;color:var(--g500);min-width:28px;text-align:right}
 
-.s-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:700px;
+/* ===== STUDENT TABLE ===== */
+.search-bar{
+  width:100%;max-width:320px;padding:9px 14px;
+  border:1.5px solid var(--g200);border-radius:var(--r-md);
+  font-size:.875rem;font-family:'Sarabun',sans-serif;color:var(--g700);
+  background:var(--white);outline:none;
 }
-
-.s-table th,
-.s-table td{
-  padding:12px 14px;
-  border-bottom:1px solid var(--g100);
-  white-space:nowrap;
-}
-
-.badge{
-  display:inline-block;
-  padding:3px 10px;
-  border-radius:10px;
-  font-size:.75rem;
-  font-weight:600;
-}
-
+.search-bar:focus{border-color:var(--o500)}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.s-table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:650px}
+.s-table th{padding:10px 14px;text-align:left;font-size:.75rem;font-weight:600;color:var(--g400);letter-spacing:.05em;text-transform:uppercase;background:var(--g50);border-bottom:1px solid var(--g200)}
+.s-table td{padding:12px 14px;border-bottom:1px solid var(--g100);vertical-align:middle;color:var(--g700)}
+.s-table tr:last-child td{border-bottom:none}
+.s-table tr:hover td{background:var(--o50)}
+.badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.75rem;font-weight:600}
 .badge-red{background:var(--red-bg);color:var(--red)}
 .badge-amber{background:var(--amber-bg);color:var(--amber)}
 .badge-green{background:var(--green-bg);color:var(--green)}
 .badge-gray{background:var(--g100);color:var(--g500)}
+.badge-blue{background:var(--blue-bg);color:var(--blue)}
 
-.footer{
-  text-align:center;
-  padding:1.5rem;
-  color:var(--g400);
+/* ===== SKILLS 2-COL LAYOUT ===== */
+.skills-layout{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:700px){.skills-layout{grid-template-columns:1fr}}
+.sub-card{background:var(--g50);border:1px solid var(--g200);border-radius:var(--r-md);padding:1.25rem}
+.sub-card-title{font-size:.85rem;font-weight:600;color:var(--g700);margin-bottom:1rem;display:flex;align-items:center;gap:6px}
+
+/* ===== CAREER CHART ===== */
+.career-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.career-label{font-size:.8rem;color:var(--g600);min-width:140px}
+.career-bar{flex:1;height:8px;background:var(--g100);border-radius:4px;overflow:hidden}
+.career-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--o500),var(--o400))}
+.career-cnt{font-size:.75rem;color:var(--g400);min-width:30px;text-align:right;font-weight:600}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:1.25rem;font-size:.8rem;color:var(--g400);border-top:1px solid var(--g200);background:var(--white);display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-top:2rem}
+
+/* ===== RESPONSIVE HEADER ===== */
+@media(max-width:500px){
+  .brand-dept{display:none}
+  .page-title{font-size:1.2rem}
+  .header-actions{gap:5px}
+  .btn-xs{padding:6px 10px;font-size:11.5px}
 }
 </style>
 </head>
-
 <body>
 
 <header class="header">
   <div class="header-inner">
-    <div>
-      <div class="page-title">📊 แดชบอร์ดวิเคราะห์ผู้เรียน</div>
-      <div class="page-sub" id="lastUpdate">
-        ข้อมูลอัปเดตล่าสุด: -
+    <a class="brand" href="index.html">
+      <div class="brand-logo">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M11 3L3 8v1.5h16V8L11 3z" fill="white" opacity=".95"/>
+          <rect x="4" y="10" width="3" height="7" rx="1" fill="white" opacity=".9"/>
+          <rect x="9.5" y="10" width="3" height="7" rx="1" fill="white" opacity=".9"/>
+          <rect x="15" y="10" width="3" height="7" rx="1" fill="white" opacity=".9"/>
+          <rect x="3" y="17" width="16" height="2" rx="1" fill="white" opacity=".9"/>
+        </svg>
       </div>
-    </div>
-
-    <div>
-      <select id="filterClass" onchange="render()"></select>
-      <button onclick="exportCSV()">⬇️ CSV</button>
-      <button onclick="confirmClear()">🗑️ ล้าง</button>
+      <div class="brand-text">
+        <span class="brand-school">วท.ประจวบคีรีขันธ์</span>
+        <span class="brand-dept">แผนก ทดธ.</span>
+      </div>
+    </a>
+    <nav class="header-nav">
+      <a href="index.html" class="nav-pill">📋 แบบสำรวจ</a>
+      <a href="dashboard.html" class="nav-pill active">📊 แดชบอร์ด</a>
+    </nav>
+    <div class="header-actions">
+      <select class="filter-select" id="filterClass" onchange="render()">
+        <option value="all">ทุกห้อง</option>
+      </select>
+      <button class="btn-xs btn-export" onclick="exportCSV()">⬇️ CSV</button>
+      <button class="btn-xs btn-clear" onclick="confirmClear()">🗑️ ล้าง</button>
     </div>
   </div>
 </header>
 
 <main class="main">
-
-<div class="stat-grid">
-
-  <div class="stat-card">
-    <div class="stat-num" id="sTotalStudents">0</div>
-    <div>นักเรียนทั้งหมด</div>
-  </div>
-
-  <div class="stat-card">
-    <div class="stat-num" id="sRisk">0</div>
-    <div>กลุ่มเสี่ยงสูง</div>
-  </div>
-
-  <div class="stat-card">
-    <div class="stat-num" id="sNoDevice">0</div>
-    <div>ขาดอุปกรณ์</div>
-  </div>
-
-  <div class="stat-card">
-    <div class="stat-num" id="sSpecial">0</div>
-    <div>มีทักษะพิเศษ</div>
-  </div>
-
-</div>
-
-<div class="tab-bar">
-  <button class="tab-btn active" onclick="showTab('risk',this)">🚨 แจ้งเตือนเสี่ยง</button>
-  <button class="tab-btn" onclick="showTab('students',this)">📋 รายชื่อทั้งหมด</button>
-</div>
-
-<div class="panel active" id="panel-risk">
-  <div class="panel-card">
-    <div class="panel-head">
-      🚨 นักเรียนกลุ่มเสี่ยง
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">📊 แดชบอร์ดวิเคราะห์ผู้เรียน</h1>
+      <p class="page-sub">ข้อมูลอัปเดตจากแบบสำรวจ · ปีการศึกษา 2568</p>
     </div>
-    <div class="panel-body" id="riskBody"></div>
   </div>
-</div>
 
-<div class="panel" id="panel-students">
-  <div class="panel-card">
-    <div class="panel-head">
-      📋 รายชื่อนักเรียน
+  <!-- Stat Cards -->
+  <div class="stat-grid" id="statGrid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:var(--o100)">👥</div>
+      <div class="stat-body">
+        <div class="stat-num" id="sTotalStudents">0</div>
+        <div class="stat-label">นักเรียนทั้งหมด</div>
+        <div class="stat-sub" id="sTotalSub">ยังไม่มีข้อมูล</div>
+      </div>
     </div>
-
-    <div class="panel-body">
-      <div class="table-wrap">
-
-        <table class="s-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>ชื่อ</th>
-              <th>ห้อง</th>
-              <th>ทักษะคอม</th>
-              <th>อุปกรณ์</th>
-              <th>อินเทอร์เน็ต</th>
-              <th>ความเสี่ยง</th>
-            </tr>
-          </thead>
-
-          <tbody id="studentTbody"></tbody>
-
-        </table>
-
+    <div class="stat-card">
+      <div class="stat-icon" style="background:var(--red-bg)">🚨</div>
+      <div class="stat-body">
+        <div class="stat-num num-red" id="sRisk">0</div>
+        <div class="stat-label">กลุ่มเสี่ยงสูง</div>
+        <div class="stat-sub" id="sRiskSub">คะแนนเสี่ยง ≥ 8</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:var(--amber-bg)">💻</div>
+      <div class="stat-body">
+        <div class="stat-num num-amber" id="sNoDevice">0</div>
+        <div class="stat-label">ขาดอุปกรณ์</div>
+        <div class="stat-sub">ไม่มีคอมส่วนตัว</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background:var(--green-bg)">⭐</div>
+      <div class="stat-body">
+        <div class="stat-num num-green" id="sSpecial">0</div>
+        <div class="stat-label">มีทักษะพิเศษ</div>
+        <div class="stat-sub">ทักษะดิจิทัลพิเศษ</div>
       </div>
     </div>
   </div>
-</div>
 
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('risk',this)">🚨 แจ้งเตือนเสี่ยง</button>
+    <button class="tab-btn" onclick="showTab('skills',this)">⭐ ทักษะ/ความสามารถ</button>
+    <button class="tab-btn" onclick="showTab('devices',this)">📱 ความพร้อมอุปกรณ์</button>
+    <button class="tab-btn" onclick="showTab('students',this)">📋 รายชื่อทั้งหมด</button>
+  </div>
+
+  <!-- Panel: Risk -->
+  <div class="panel active" id="panel-risk">
+    <div class="panel-card">
+      <div class="panel-head">
+        <div class="panel-title">🚨 นักเรียนกลุ่มเสี่ยงที่ต้องดูแลพิเศษ</div>
+        <div class="panel-note">เรียงลำดับจากความเสี่ยงมากไปน้อย</div>
+      </div>
+      <div class="panel-body" id="riskBody">
+        <div class="empty-state"><div class="empty-icon">📋</div>ยังไม่มีข้อมูล — ให้นักเรียนกรอกแบบสำรวจก่อน</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Skills -->
+  <div class="panel" id="panel-skills">
+    <div class="panel-card">
+      <div class="panel-head">
+        <div class="panel-title">⭐ ภาพรวมทักษะและความสามารถ</div>
+      </div>
+      <div class="panel-body">
+        <div class="skills-layout">
+          <div class="sub-card">
+            <div class="sub-card-title">📊 ค่าเฉลี่ยทักษะหลัก (scale 1–5)</div>
+            <div id="skillBars"></div>
+          </div>
+          <div>
+            <div class="sub-card" style="margin-bottom:1rem">
+              <div class="sub-card-title">✨ ทักษะพิเศษในห้องเรียน</div>
+              <div class="tag-cloud" id="specialSkillTags"><span class="t-tag">ยังไม่มีข้อมูล</span></div>
+            </div>
+            <div class="sub-card" style="margin-bottom:1rem">
+              <div class="sub-card-title">📱 Social Media ที่ใช้งาน</div>
+              <div class="tag-cloud" id="platformTags"><span class="t-tag">ยังไม่มีข้อมูล</span></div>
+            </div>
+            <div class="sub-card">
+              <div class="sub-card-title">🎯 เป้าหมายอาชีพ</div>
+              <div id="careerChart"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Devices -->
+  <div class="panel" id="panel-devices">
+    <div class="panel-card">
+      <div class="panel-head">
+        <div class="panel-title">📱 ความพร้อมด้านอุปกรณ์และสภาพแวดล้อม</div>
+      </div>
+      <div class="panel-body">
+        <div class="device-grid" id="deviceGrid">
+          <div class="empty-state"><div class="empty-icon">💻</div>ยังไม่มีข้อมูล</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Students -->
+  <div class="panel" id="panel-students">
+    <div class="panel-card">
+      <div class="panel-head">
+        <div class="panel-title">📋 รายชื่อนักเรียนทั้งหมด</div>
+        <input type="text" class="search-bar" id="searchInput" placeholder="🔍 ค้นหาชื่อ..." oninput="filterTable(this.value)">
+      </div>
+      <div class="panel-body" style="padding:0">
+        <div class="table-wrap">
+          <table class="s-table" id="studentTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>ชื่อ–นามสกุล</th>
+                <th>ระดับ/ห้อง</th>
+                <th>ทักษะคอม</th>
+                <th>อุปกรณ์</th>
+                <th>อินเทอร์เน็ต</th>
+                <th>ความเสี่ยง</th>
+                <th>ทักษะพิเศษ</th>
+              </tr>
+            </thead>
+            <tbody id="studentTbody">
+              <tr><td colspan="8" class="empty-state">ยังไม่มีข้อมูล</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
 <footer class="footer">
-  ระบบวิเคราะห์ผู้เรียน v2.0
+  <span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span>
+  <span style="opacity:.3">●</span>
+  <span>วิทยาลัยเทคนิคประจวบคีรีขันธ์</span>
+  <span style="opacity:.3">●</span>
+  <span style="opacity:.5">ระบบวิเคราะห์ผู้เรียน v2.0</span>
 </footer>
 
 <script>
@@ -311,587 +412,244 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;min-heigh
 let ALL_DATA = [];
 let FILTERED = [];
 
-// ===================================================
-// SECURITY
-// ===================================================
-function esc(str=''){
-  return String(str)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
-}
-
-// ===================================================
-// RISK
-// ===================================================
-function calculateRisk(d){
-
-  let score = 0;
-
-  if(d.has_computer === 'none') score += 3;
-  if(d.home_internet === 'none') score += 3;
-  if(d.absence === '7+') score += 2;
-
-  if(d.submission_habit === '1') score += 3;
-  if(d.submission_habit === '2') score += 2;
-
-  if(d.part_time === 'weekly') score += 2;
-
-  if(d.computer_skill_level === '1') score += 2;
-
-  if(d.challenge_attitude === 'avoid') score += 1;
-
-  if(d.sleep_hours === 'under5') score += 1;
-
-  return score;
-}
-
-// ===================================================
-// LOAD DATA
-// ===================================================
 function loadData(){
-
-  const currentClass =
-    document.getElementById('filterClass')?.value || 'all';
-
-  try{
-
-    ALL_DATA = JSON.parse(
-      localStorage.getItem('learner_data') || '[]'
-    );
-
-    if(!Array.isArray(ALL_DATA)){
-      ALL_DATA = [];
-    }
-
-  }catch(err){
-    console.error(err);
-    ALL_DATA = [];
-  }
-
-  ALL_DATA = ALL_DATA.map(d=>({
-    ...d,
-    _risk: calculateRisk(d)
-  }));
-
-  const classes = [...new Set(
-    ALL_DATA.map(d=>d.classroom).filter(Boolean)
-  )].sort();
-
+  ALL_DATA = JSON.parse(localStorage.getItem('learner_data')||'[]');
+  // Populate class filter
+  const classes = [...new Set(ALL_DATA.map(d=>d.classroom).filter(Boolean))].sort();
   const sel = document.getElementById('filterClass');
-
-  sel.innerHTML =
-    '<option value="all">ทุกห้อง</option>' +
-    classes.map(c=>
-      `<option value="${esc(c)}">${esc(c)}</option>`
-    ).join('');
-
-  if(classes.includes(currentClass)){
-    sel.value = currentClass;
-  }else{
-    sel.value = 'all';
-  }
+  sel.innerHTML = '<option value="all">ทุกห้อง</option>' +
+    classes.map(c=>`<option value="${c}">${c}</option>`).join('');
 }
 
 function getFiltered(){
-
   const cls = document.getElementById('filterClass').value;
-
-  return cls === 'all'
-    ? ALL_DATA
-    : ALL_DATA.filter(d => d.classroom === cls);
+  return cls==='all' ? ALL_DATA : ALL_DATA.filter(d=>d.classroom===cls);
 }
 
 // ===================================================
 // RENDER
 // ===================================================
 function render(){
-
+  loadData();
   FILTERED = getFiltered();
-
   renderStats();
   renderRisk();
+  renderSkills();
+  renderDevices();
   renderTable(FILTERED);
-  updateLastUpdate();
 }
 
-function updateLastUpdate(){
-
-  const el = document.getElementById('lastUpdate');
-
-  if(el){
-    el.textContent =
-      'ข้อมูลอัปเดตล่าสุด: ' +
-      new Date().toLocaleString('th-TH');
-  }
-}
-
-// ===================================================
-// STATS
-// ===================================================
 function renderStats(){
-
   const n = FILTERED.length;
-
   document.getElementById('sTotalStudents').textContent = n;
+  document.getElementById('sTotalSub').textContent = n ? `กรอกแล้ว ${n} คน` : 'ยังไม่มีข้อมูล';
 
   const risk = FILTERED.filter(d=>d._risk>=8).length;
-
   document.getElementById('sRisk').textContent = risk;
+  document.getElementById('sRiskSub').textContent = n ? `คิดเป็น ${Math.round(risk/n*100)||0}%` : 'คะแนนเสี่ยง ≥ 8';
 
-  const noDevice = FILTERED.filter(
-    d=>d.has_computer==='none'
-  ).length;
-
+  const noDevice = FILTERED.filter(d=>d.has_computer==='none').length;
   document.getElementById('sNoDevice').textContent = noDevice;
 
-  const special = FILTERED.filter(d=>
-    d.special_skills &&
-    !d.special_skills.includes('none')
-  ).length;
-
+  const special = FILTERED.filter(d=>d.special_skills && !d.special_skills.includes('none')).length;
   document.getElementById('sSpecial').textContent = special;
 }
 
-// ===================================================
-// RISK PANEL
-// ===================================================
 function renderRisk(){
-
   const body = document.getElementById('riskBody');
-
-  const risky = [...FILTERED]
-    .sort((a,b)=>(b._risk||0)-(a._risk||0))
-    .filter(d=>(d._risk||0)>=3);
-
+  const risky = [...FILTERED].sort((a,b)=>(b._risk||0)-(a._risk||0)).filter(d=>(d._risk||0)>=3);
   if(!risky.length){
-
-    body.innerHTML = `
-      <div>
-        ยังไม่มีนักเรียนกลุ่มเสี่ยง
-      </div>
-    `;
-
+    body.innerHTML = `<div class="empty-state"><div class="empty-icon">${FILTERED.length?'🟢':'📋'}</div>${FILTERED.length?'ยอดเยี่ยม! ยังไม่มีนักเรียนกลุ่มเสี่ยง':'ยังไม่มีข้อมูล — ให้นักเรียนกรอกแบบสำรวจก่อน'}</div>`;
     return;
   }
-
   body.innerHTML = risky.map(d=>{
+    const level = d._risk>=8?'#D93025':d._risk>=5?'#C8760A':'#6B6560';
+    const tags = [];
+    if(d.has_computer==='none') tags.push({t:'ไม่มีคอมพิวเตอร์',w:false});
+    if(d.home_internet==='none') tags.push({t:'ไม่มีอินเทอร์เน็ต',w:false});
+    if(d.absence==='7+') tags.push({t:'ขาดเรียนบ่อย',w:false});
+    if(d.submission_habit==='1'||d.submission_habit==='2') tags.push({t:'ส่งงานไม่ตรงเวลา',w:true});
+    if(d.part_time==='weekly') tags.push({t:'ทำงานพิเศษทุกสัปดาห์',w:true});
+    if(d.computer_skill_level==='1') tags.push({t:'ทักษะคอมต่ำมาก',w:true});
+    if(d.challenge_attitude==='avoid') tags.push({t:'หลีกเลี่ยงงานยาก',w:true});
+    if(d.sleep_hours==='under5') tags.push({t:'นอนน้อยมาก',w:true});
 
-    const level =
-      d._risk >= 8
-        ? '#D93025'
-        : d._risk >= 5
-          ? '#C8760A'
-          : '#6B6560';
-
-    return `
-      <div class="risk-item">
-
-        <div class="risk-level"
-          style="background:${level}">
-        </div>
-
-        <div>
-
-          <strong>
-            ${esc(d.fullname || '—')}
-          </strong>
-
-          <div>
-            ${esc(d.level || '')}
-            ${esc(d.classroom || '')}
-          </div>
-
-          <div class="risk-tag">
-            คะแนน ${d._risk || 0}
-          </div>
-
-        </div>
-
+    return `<div class="risk-item">
+      <div class="risk-level" style="background:${level}"></div>
+      <div class="risk-info">
+        <span class="risk-name">${d.fullname||'—'}</span>
+        <span class="risk-class">${d.level||''} ${d.classroom||''}</span>
+        <div class="risk-tags">${tags.map(t=>`<span class="risk-tag${t.w?' warn':''}">${t.t}</span>`).join('')}</div>
       </div>
-    `;
-
+      <div class="risk-score">คะแนน<br><strong style="font-size:1.1rem">${d._risk||0}</strong></div>
+    </div>`;
   }).join('');
 }
 
-// ===================================================
-// TABLE
-// ===================================================
+function renderSkills(){
+  // Skill bars
+  const metrics = [
+    {key:'computer_skill_level',label:'💻 ทักษะคอมพิวเตอร์',color:'#E86A2E'},
+    {key:'submission_habit',label:'📬 การส่งงานตรงเวลา',color:'#1E7E4E'},
+    {key:'family_support',label:'🏠 การสนับสนุนจากครอบครัว',color:'#1565C0'},
+    {key:'multitasking',label:'⚡ การทำงาน Multitasking',color:'#6A1B9A'},
+  ];
+  const sbEl = document.getElementById('skillBars');
+  if(!FILTERED.length){sbEl.innerHTML='<div style="color:var(--g400);font-size:.85rem">ยังไม่มีข้อมูล</div>';return;}
+  sbEl.innerHTML = metrics.map(m=>{
+    const vals = FILTERED.map(d=>parseInt(d[m.key]||0)).filter(Boolean);
+    const avg = vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1) : '—';
+    const pct = vals.length ? (parseFloat(avg)/5*100) : 0;
+    return `<div class="skill-row">
+      <div class="skill-meta"><span>${m.label}</span><span>${avg}/5</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${m.color}"></div></div>
+    </div>`;
+  }).join('');
+
+  // Special skills
+  const skillLabels = {video_edit:'🎬 ตัดต่อวิดีโอ',graphic:'🎨 ออกแบบกราฟิก',photo:'📷 ถ่ายภาพ/วิดีโอ',code:'👨‍💻 เขียนโค้ด',ads:'📢 ยิงโฆษณา',seo:'🔍 SEO',accounting:'📊 บัญชีดิจิทัล'};
+  const skillCount = {};
+  FILTERED.forEach(d=>{if(Array.isArray(d.special_skills))d.special_skills.filter(s=>s!=='none').forEach(s=>{skillCount[s]=(skillCount[s]||0)+1})});
+  const sEl = document.getElementById('specialSkillTags');
+  const sorted = Object.entries(skillCount).sort((a,b)=>b[1]-a[1]);
+  sEl.innerHTML = sorted.length ? sorted.map(([k,v])=>`<span class="t-tag">${skillLabels[k]||k}<span class="cnt">${v}</span></span>`).join('') : '<span class="t-tag">ยังไม่มีข้อมูล</span>';
+
+  // Platforms
+  const platLabels = {tiktok:'🎵 TikTok',facebook:'📘 Facebook',instagram:'📸 Instagram',youtube:'▶️ YouTube',x:'🐦 X',lineoa:'💚 Line OA',shopee:'🛒 Shopee/Lazada'};
+  const platCount = {};
+  FILTERED.forEach(d=>{if(Array.isArray(d.social_platforms))d.social_platforms.forEach(s=>{platCount[s]=(platCount[s]||0)+1})});
+  const pEl = document.getElementById('platformTags');
+  const pSorted = Object.entries(platCount).sort((a,b)=>b[1]-a[1]);
+  pEl.innerHTML = pSorted.length ? pSorted.map(([k,v])=>`<span class="t-tag">${platLabels[k]||k}<span class="cnt">${v}</span></span>`).join('') : '<span class="t-tag">ยังไม่มีข้อมูล</span>';
+
+  // Career
+  const careerLabels = {study_more:'🎓 เรียนต่อ',company:'🏢 สมัครงาน',own_biz:'🚀 เปิดธุรกิจ',freelance:'💻 Freelance',unsure:'🤷 ยังไม่แน่ใจ'};
+  const careerCount = {};
+  FILTERED.forEach(d=>{if(d.career_goal)careerCount[d.career_goal]=(careerCount[d.career_goal]||0)+1});
+  const cEl = document.getElementById('careerChart');
+  const max = Math.max(1,...Object.values(careerCount));
+  cEl.innerHTML = Object.entries(careerCount).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`
+    <div class="career-row">
+      <div class="career-label">${careerLabels[k]||k}</div>
+      <div class="career-bar"><div class="career-fill" style="width:${v/max*100}%"></div></div>
+      <div class="career-cnt">${v}</div>
+    </div>`).join('') || '<div style="color:var(--g400);font-size:.85rem">ยังไม่มีข้อมูล</div>';
+}
+
+function renderDevices(){
+  const el = document.getElementById('deviceGrid');
+  if(!FILTERED.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">💻</div>ยังไม่มีข้อมูล</div>';return;}
+  const n = FILTERED.length;
+  const pct = (key,val)=>Math.round(FILTERED.filter(d=>d[key]===val).length/n*100);
+
+  const sections = [
+    {label:'💻 สถานะคอมพิวเตอร์',rows:[
+      {l:'มีส่วนตัว',pct:pct('has_computer','own')},
+      {l:'ใช้ร่วม',pct:pct('has_computer','shared')},
+      {l:'ใช้ของโรงเรียน',pct:pct('has_computer','school_only')},
+      {l:'ไม่มีเลย',pct:pct('has_computer','none')},
+    ]},
+    {label:'🌐 อินเทอร์เน็ตที่บ้าน',rows:[
+      {l:'WiFi เร็ว',pct:pct('home_internet','fast_wifi')},
+      {l:'WiFi ช้า',pct:pct('home_internet','slow_wifi')},
+      {l:'Data มือถือ',pct:pct('home_internet','mobile_data')},
+      {l:'ไม่มีอินเทอร์เน็ต',pct:pct('home_internet','none')},
+    ]},
+    {label:'📱 ระบบสมาร์ทโฟน',rows:[
+      {l:'Android',pct:pct('smartphone_os','android')},
+      {l:'iOS (iPhone)',pct:pct('smartphone_os','ios')},
+      {l:'ไม่มีสมาร์ทโฟน',pct:pct('smartphone_os','none')},
+    ]},
+    {label:'😴 ชั่วโมงการนอน',rows:[
+      {l:'< 5 ชม.',pct:pct('sleep_hours','under5')},
+      {l:'5–6 ชม.',pct:pct('sleep_hours','5-6')},
+      {l:'7–8 ชม.',pct:pct('sleep_hours','7-8')},
+      {l:'> 8 ชม.',pct:pct('sleep_hours','over8')},
+    ]},
+  ];
+
+  el.innerHTML = sections.map(s=>`
+    <div class="d-card">
+      <div class="d-label">${s.label}</div>
+      ${s.rows.map(r=>`
+        <div class="d-bar-row">
+          <div class="d-bar-label">${r.l}</div>
+          <div class="d-bar-track"><div class="d-bar-fill" style="width:${r.pct}%"></div></div>
+          <div class="d-pct">${r.pct}%</div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
 function renderTable(data){
-
   const tbody = document.getElementById('studentTbody');
-
   if(!data.length){
-
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="7">ยังไม่มีข้อมูล</td>
-      </tr>
-    `;
-
+    tbody.innerHTML='<tr><td colspan="8" class="empty-state">ยังไม่มีข้อมูล</td></tr>';
     return;
   }
-
-  const devLabels = {
-    own:'✅ มีส่วนตัว',
-    shared:'🤝 ใช้ร่วม',
-    school_only:'🏫 โรงเรียน',
-    none:'❌ ไม่มี'
-  };
-
-  const netLabels = {
-    fast_wifi:'⚡ เร็ว',
-    slow_wifi:'📶 ช้า',
-    mobile_data:'📱 Data',
-    none:'❌ ไม่มี'
-  };
-
+  const skillLabels = {video_edit:'ตัดต่อ',graphic:'กราฟิก',photo:'ถ่ายภาพ',code:'โค้ด',ads:'Ads',seo:'SEO',accounting:'บัญชี'};
+  const devLabels = {own:'✅ มีส่วนตัว',shared:'🤝 ใช้ร่วม',school_only:'🏫 โรงเรียน',none:'❌ ไม่มี'};
+  const netLabels = {fast_wifi:'⚡ เร็ว',slow_wifi:'📶 ช้า',mobile_data:'📱 Data',none:'❌ ไม่มี'};
   tbody.innerHTML = data.map((d,i)=>{
-
-    const risk = d._risk || 0;
-
-    const rBadge =
-      risk>=8
-        ? 'badge-red'
-        : risk>=5
-          ? 'badge-amber'
-          : 'badge-green';
-
-    return `
-      <tr>
-
-        <td>${i+1}</td>
-
-        <td>
-          ${esc(d.fullname || '—')}
-        </td>
-
-        <td>
-          ${esc(d.classroom || '-')}
-        </td>
-
-        <td>
-          ${esc(d.computer_skill_level || '-')}/5
-        </td>
-
-        <td>
-          ${devLabels[d.has_computer] || '-'}
-        </td>
-
-        <td>
-          ${netLabels[d.home_internet] || '-'}
-        </td>
-
-        <td>
-          <span class="badge ${rBadge}">
-            ${risk}
-          </span>
-        </td>
-
-      </tr>
-    `;
-
+    const risk = d._risk||0;
+    const rBadge = risk>=8?'badge-red':risk>=5?'badge-amber':risk>=3?'badge-gray':'badge-green';
+    const rLabel = risk>=8?'🔴 สูง':risk>=5?'🟡 กลาง':risk>=3?'⚪ ต่ำ':'🟢 ปลอดภัย';
+    const skills = Array.isArray(d.special_skills)?d.special_skills.filter(s=>s!=='none').map(s=>skillLabels[s]||s):[];
+    const skillHtml = skills.length ? skills.map(s=>`<span class="badge badge-blue">${s}</span>`).join(' ') : '<span class="badge badge-gray">—</span>';
+    const compSkill = d.computer_skill_level ? `${d.computer_skill_level}/5` : '—';
+    return `<tr>
+      <td style="color:var(--g400);font-size:.8rem">${i+1}</td>
+      <td><strong style="color:var(--g900)">${d.fullname||'—'}</strong></td>
+      <td><span class="badge badge-gray">${d.level||''} ${d.classroom||''}</span></td>
+      <td>${compSkill}</td>
+      <td style="font-size:.82rem">${devLabels[d.has_computer]||'—'}</td>
+      <td style="font-size:.82rem">${netLabels[d.home_internet]||'—'}</td>
+      <td><span class="badge ${rBadge}">${rLabel} (${risk})</span></td>
+      <td>${skillHtml}</td>
+    </tr>`;
   }).join('');
 }
 
 // ===================================================
-// TAB
+// INTERACTIONS
 // ===================================================
 function showTab(id, btn){
-
-  document.querySelectorAll('.panel')
-    .forEach(p=>p.classList.remove('active'));
-
-  document.querySelectorAll('.tab-btn')
-    .forEach(b=>b.classList.remove('active'));
-
-  document.getElementById('panel-'+id)
-    .classList.add('active');
-
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
   btn.classList.add('active');
 }
 
-// ===================================================
-// EXPORT CSV
-// ===================================================
+function filterTable(q){
+  const lq = q.toLowerCase();
+  const filtered = FILTERED.filter(d=>(d.fullname||'').toLowerCase().includes(lq));
+  renderTable(filtered);
+}
+
 function exportCSV(){
-
-  if(!FILTERED.length){
-    alert('ยังไม่มีข้อมูล');
-    return;
-  }
-
+  if(!FILTERED.length){alert('ยังไม่มีข้อมูล');return;}
   const keys = Object.keys(FILTERED[0]);
-
-  const rows = [
-
-    keys.join(','),
-
-    ...FILTERED.map(d=>
-
-      keys.map(k=>{
-
-        const v =
-          Array.isArray(d[k])
-            ? d[k].join('|')
-            : d[k] || '';
-
-        return `"${String(v).replace(/"/g,'""')}"`;
-
-      }).join(',')
-
-    )
-  ];
-
-  const blob = new Blob(
-    [
-      new Uint8Array([0xEF,0xBB,0xBF]),
-      rows.join('\n')
-    ],
-    {
-      type:'text/csv;charset=utf-8;'
-    }
-  );
-
+  const rows = [keys.join(','), ...FILTERED.map(d=>keys.map(k=>{
+    const v = Array.isArray(d[k])?d[k].join('|'):d[k]||'';
+    return `"${String(v).replace(/"/g,'""')}"`;
+  }).join(','))];
+  const blob = new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8'});
   const a = document.createElement('a');
-
   a.href = URL.createObjectURL(blob);
-
-  a.download =
-    `learner_data_${
-      new Date()
-      .toLocaleDateString('th-TH')
-      .replace(/\//g,'-')
-    }.csv`;
-
+  a.download = `learner_data_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.csv`;
   a.click();
 }
 
-// ===================================================
-// CLEAR
-// ===================================================
 function confirmClear(){
-
-  if(confirm(
-    'ลบข้อมูลนักเรียนทั้งหมดหรือไม่?'
-  )){
-
-    localStorage.setItem(
-      'learner_backup',
-      localStorage.getItem('learner_data')
-    );
-
+  if(confirm('ลบข้อมูลนักเรียนทั้งหมดหรือไม่?\n\nการดำเนินการนี้ไม่สามารถยกเลิกได้')){
     localStorage.removeItem('learner_data');
-
-    loadData();
     render();
   }
 }
 
-// ===================================================
-// INIT
-// ===================================================
-loadData();
+// Init
 render();
-
-setInterval(()=>{
-  loadData();
-  render();
-},30000);
-
-// ===================================================
-// แบบประเมินภาวะซึมเศร้า (Depression Risk)
-// ===================================================
-// เพิ่ม field ใหม่ใน index.html
-// depression_mood          = อารมณ์เศร้า
-// depression_sleep         = ปัญหาการนอน
-// depression_tired         = อ่อนเพลีย
-// depression_concentration = สมาธิลดลง
-// depression_hopeless      = รู้สึกหมดหวัง
-// depression_stress        = ความเครียดสะสม
-// depression_social        = การแยกตัวจากสังคม
-// depression_help          = ต้องการพบครู/ที่ปรึกษา
-
-function calculateRiskScore(data){
-  let score = 0;
-
-  // ความเสี่ยงเดิม
-  if(data.has_computer==='none') score += 2;
-  if(data.home_internet==='none') score += 2;
-  if(data.absence==='7+') score += 2;
-  if(data.submission_habit==='1') score += 2;
-  if(data.computer_skill_level==='1') score += 1;
-  if(data.challenge_attitude==='avoid') score += 1;
-  if(data.sleep_hours==='under5') score += 1;
-
-  // Depression Risk
-  const depFields = [
-    'depression_mood',
-    'depression_sleep',
-    'depression_tired',
-    'depression_concentration',
-    'depression_hopeless',
-    'depression_stress',
-    'depression_social'
-  ];
-
-  depFields.forEach(k=>{
-    score += parseInt(data[k] || 0);
-  });
-
-  if(data.depression_help==='yes') score += 3;
-
-  return score;
-}
-
-// ===================================================
-// ระดับความเสี่ยงภาวะซึมเศร้า
-// ===================================================
-function getDepressionLevel(score){
-  if(score >= 18) return {label:'🔴 เสี่ยงสูงมาก', class:'badge-red'};
-  if(score >= 12) return {label:'🟠 เสี่ยงสูง', class:'badge-amber'};
-  if(score >= 6) return {label:'🟡 เฝ้าระวัง', class:'badge-gray'};
-  return {label:'🟢 ปกติ', class:'badge-green'};
-}
-
-// ===================================================
-// ตัวอย่างหน้าประเมินภาวะซึมเศร้า
-// ===================================================
-
-/*
-<section class="form-section" style="background:#fff;border:1px solid #E5E2DC;border-radius:20px;padding:24px;margin-top:24px">
-  <h2 style="font-family:'Kanit',sans-serif;color:#E86A2E;margin-bottom:8px">
-    🧠 แบบประเมินความเสี่ยงภาวะซึมเศร้า
-  </h2>
-
-  <p style="color:#6B6560;font-size:.9rem;margin-bottom:20px">
-    กรุณาเลือกคำตอบที่ตรงกับความรู้สึกของนักเรียนมากที่สุดในช่วง 2 สัปดาห์ที่ผ่านมา
-  </p>
-
-  <div style="display:grid;gap:16px">
-
-    <div>
-      <label style="font-weight:600">1. รู้สึกเศร้า ท้อแท้ หรือหมดกำลังใจ</label>
-      <select name="depression_mood" class="input">
-        <option value="0">ไม่เลย</option>
-        <option value="1">บางวัน</option>
-        <option value="2">บ่อย</option>
-        <option value="3">เกือบทุกวัน</option>
-      </select>
-    </div>
-
-    <div>
-      <label style="font-weight:600">2. มีปัญหาการนอน นอนน้อย หรือนอนไม่หลับ</label>
-      <select name="depression_sleep" class="input">
-        <option value="0">ไม่มี</option>
-        <option value="1">เล็กน้อย</option>
-        <option value="2">ปานกลาง</option>
-        <option value="3">รุนแรง</option>
-      </select>
-    </div>
-
-    <div>
-      <label style="font-weight:600">3. รู้สึกอ่อนเพลีย ไม่มีแรง</label>
-      <select name="depression_tired" class="input">
-        <option value="0">ไม่มี</option>
-        <option value="1">เล็กน้อย</option>
-        <option value="2">ปานกลาง</option>
-        <option value="3">รุนแรง</option>
-      </select>
-    </div>
-
-    <div>
-      <label style="font-weight:600">4. ต้องการพูดคุยกับครูที่ปรึกษาหรือผู้เชี่ยวชาญ</label>
-      <select name="depression_help" class="input">
-        <option value="no">ยังไม่ต้องการ</option>
-        <option value="yes">ต้องการ</option>
-      </select>
-    </div>
-
-  </div>
-
-  <div style="margin-top:20px;padding:14px;border-radius:14px;background:#FFF8F4;color:#C05520;font-size:.88rem">
-    ⚠️ ระบบนี้ใช้เพื่อคัดกรองเบื้องต้นเท่านั้น หากพบความเสี่ยงสูง ควรส่งต่อครูที่ปรึกษาหรือผู้เชี่ยวชาญ
-  </div>
-</section>
-*/
-
-// ===================================================
-// FORM SECTION สำหรับ index.html
-// ===================================================
-// ให้นำ section นี้ไปเพิ่มในฟอร์มแบบประเมิน
-
-/*
-<div class="form-section">
-  <h3>🧠 แบบประเมินความเสี่ยงภาวะซึมเศร้า</h3>
-
-  <label>ช่วง 2 สัปดาห์ที่ผ่านมา รู้สึกเศร้าหรือหมดกำลังใจบ่อยแค่ไหน?</label>
-  <select name="depression_mood">
-    <option value="0">ไม่เลย</option>
-    <option value="1">บางวัน</option>
-    <option value="2">บ่อย</option>
-    <option value="3">เกือบทุกวัน</option>
-  </select>
-
-  <label>มีปัญหาการนอนหรือไม่?</label>
-  <select name="depression_sleep">
-    <option value="0">ไม่มี</option>
-    <option value="1">เล็กน้อย</option>
-    <option value="2">ปานกลาง</option>
-    <option value="3">รุนแรง</option>
-  </select>
-
-  <label>รู้สึกอ่อนเพลีย ไม่มีแรง?</label>
-  <select name="depression_tired">
-    <option value="0">ไม่มี</option>
-    <option value="1">เล็กน้อย</option>
-    <option value="2">ปานกลาง</option>
-    <option value="3">รุนแรง</option>
-  </select>
-
-  <label>สมาธิลดลงหรือไม่?</label>
-  <select name="depression_concentration">
-    <option value="0">ไม่มี</option>
-    <option value="1">เล็กน้อย</option>
-    <option value="2">ปานกลาง</option>
-    <option value="3">รุนแรง</option>
-  </select>
-
-  <label>รู้สึกหมดหวังหรือไร้คุณค่า?</label>
-  <select name="depression_hopeless">
-    <option value="0">ไม่เลย</option>
-    <option value="1">บางครั้ง</option>
-    <option value="2">บ่อย</option>
-    <option value="3">เกือบทุกวัน</option>
-  </select>
-
-  <label>มีความเครียดสะสมมาก?</label>
-  <select name="depression_stress">
-    <option value="0">ไม่มี</option>
-    <option value="1">เล็กน้อย</option>
-    <option value="2">ปานกลาง</option>
-    <option value="3">มาก</option>
-  </select>
-
-  <label>แยกตัว ไม่อยากเข้าสังคม?</label>
-  <select name="depression_social">
-    <option value="0">ไม่เลย</option>
-    <option value="1">บางครั้ง</option>
-    <option value="2">บ่อย</option>
-    <option value="3">เกือบทุกวัน</option>
-  </select>
-
-  <label>ต้องการพบครูที่ปรึกษาหรือผู้ให้คำปรึกษาหรือไม่?</label>
-  <select name="depression_help">
-    <option value="no">ยังไม่ต้องการ</option>
-    <option value="yes">ต้องการ</option>
-  </select>
-</div>
-*/
-
+// Auto refresh every 30s
+setInterval(render, 30000);
 </script>
 </body>
 </html>
-```
