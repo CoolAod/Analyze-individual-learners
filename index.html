@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>แบบสำรวจผู้เรียน | แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล วิทยาลัยเทคนิคประจวบคีรีขันธ์</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-height:1.65;min-height:100vh;overflow-x:hidden}
+:root{
+  --o500:#E86A2E;--o400:#F07C42;--o300:#F5A070;--o100:#FEF0E8;--o50:#FFF8F4;
+  --g900:#1A1714;--g700:#3D3830;--g600:#524D47;--g500:#6B6560;--g400:#9C978F;
+  --g300:#C8C3BC;--g200:#E5E2DC;--g100:#F0EDE8;--g50:#F7F5F3;
+  --white:#FFFFFF;
+  --red:#D93025;--red-bg:#FEE9E7;
+  --amber:#C8760A;--amber-bg:#FEF5E4;
+  --green:#1E7E4E;--green-bg:#E6F5EC;
+  --blue:#1565C0;--blue-bg:#E3F2FD;
+  --purple:#6A0DAD;--purple-bg:#F3E8FF;
+  --teal:#00796B;--teal-bg:#E0F2F1;
+  --shadow-xs:0 1px 2px rgba(0,0,0,.05);--shadow-sm:0 2px 6px rgba(0,0,0,.07);--shadow-md:0 6px 24px rgba(0,0,0,.09);
+  --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:28px;--transition:.18s cubic-bezier(.4,0,.2,1);
+}
+/* ===== HEADER ===== */
+.header{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--g200);box-shadow:var(--shadow-xs)}
+.header-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;height:60px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.brand-logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--o500),var(--o300));display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(232,106,46,.3);flex-shrink:0}
+.brand-text{display:flex;flex-direction:column;line-height:1.2}
+.brand-school{font-family:'Kanit',sans-serif;font-size:13px;font-weight:600;color:var(--g900)}
+.brand-dept{font-size:11px;color:var(--g400);margin-top:1px}
+.header-nav{display:flex;gap:4px;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav-pill{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;color:var(--g500);text-decoration:none;border:1.5px solid transparent;transition:var(--transition);white-space:nowrap}
+.nav-pill:hover{color:var(--o500);background:var(--o100)}
+.nav-pill.active{color:var(--o500);background:var(--o100);border-color:rgba(232,106,46,.25)}
+@media(max-width:520px){.brand-school{font-size:11px}.brand-dept{display:none}.nav-pill{padding:5px 9px;font-size:11px}}
+/* ===== HERO ===== */
+.hero{background:linear-gradient(160deg,var(--white) 0%,var(--o50) 100%);border-bottom:1px solid var(--g200);padding:2rem 1.25rem 1.75rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(232,106,46,.08) 0%,transparent 70%);top:-100px;right:-100px;pointer-events:none}
+.hero::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(232,106,46,.05) 0%,transparent 70%);bottom:-80px;left:-60px;pointer-events:none}
+.hero-inner{max-width:680px;margin:0 auto;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--o100);color:var(--o500);font-size:11.5px;font-weight:600;letter-spacing:.08em;padding:5px 14px;border-radius:20px;margin-bottom:.875rem;border:1px solid rgba(232,106,46,.2);text-transform:uppercase}
+.hero-title{font-family:'Kanit',sans-serif;font-size:clamp(1.4rem,5vw,2.1rem);font-weight:700;color:var(--g900);line-height:1.2;margin-bottom:.6rem}
+.hero-title em{font-style:normal;color:var(--o500)}
+.hero-desc{font-size:.9rem;color:var(--g500);max-width:520px;margin:0 auto 1.25rem;line-height:1.75}
+/* ===== STEP INDICATOR ===== */
+.steps-wrap{max-width:720px;margin:0 auto}
+.steps-track{display:flex;align-items:center;gap:0;margin-bottom:.75rem}
+.step-item{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;cursor:pointer}
+.step-item:not(:last-child)::after{content:'';position:absolute;top:15px;left:calc(50% + 15px);right:calc(-50% + 15px);height:2px;background:var(--g200);z-index:0;transition:background var(--transition)}
+.step-item.done:not(:last-child)::after,.step-item.active:not(:last-child)::after{background:var(--o300)}
+.step-item.phq-step.done:not(:last-child)::after,.step-item.phq-step.active:not(:last-child)::after{background:#C5A0E0}
+.step-item.adhd-step.done:not(:last-child)::after,.step-item.adhd-step.active:not(:last-child)::after{background:#80CBC4}
+.step-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;z-index:1;transition:all var(--transition);background:var(--white);border:2px solid var(--g200);color:var(--g400)}
+.step-item.done .step-dot{background:var(--o500);border-color:var(--o500);color:var(--white)}
+.step-item.active .step-dot{background:var(--o500);border-color:var(--o500);color:var(--white);box-shadow:0 0 0 4px rgba(232,106,46,.2)}
+.step-item.phq-step.active .step-dot{background:var(--purple);border-color:var(--purple);box-shadow:0 0 0 4px rgba(106,13,173,.2)}
+.step-item.phq-step.done .step-dot{background:var(--purple);border-color:var(--purple)}
+.step-item.adhd-step.active .step-dot{background:var(--teal);border-color:var(--teal);box-shadow:0 0 0 4px rgba(0,121,107,.2)}
+.step-item.adhd-step.done .step-dot{background:var(--teal);border-color:var(--teal)}
+.step-label{font-size:9px;color:var(--g400);margin-top:5px;white-space:nowrap;font-weight:500;transition:color var(--transition)}
+.step-item.active .step-label{color:var(--o500);font-weight:600}
+.step-item.phq-step.active .step-label{color:var(--purple)}
+.step-item.adhd-step.active .step-label{color:var(--teal)}
+.step-item.done .step-label{color:var(--g500)}
+.progress-bar-outer{height:5px;background:var(--g200);border-radius:3px;overflow:hidden;margin-top:.5rem}
+.progress-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--o500),var(--o300));transition:width .4s cubic-bezier(.4,0,.2,1);width:0%}
+@media(max-width:560px){.step-label{display:none}.step-dot{width:24px;height:24px;font-size:9px}.step-item:not(:last-child)::after{top:12px}}
+/* ===== MAIN ===== */
+.main{max-width:920px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+.form-card{background:var(--white);border-radius:var(--r-xl);border:1px solid var(--g200);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:1.5rem}
+.form-card.phq-card{border-color:rgba(106,13,173,.2);box-shadow:0 6px 24px rgba(106,13,173,.07)}
+.form-card.adhd-card{border-color:rgba(0,121,107,.2);box-shadow:0 6px 24px rgba(0,121,107,.07)}
+.card-header{display:flex;align-items:center;gap:14px;padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--g100);background:var(--g50)}
+.phq-card .card-header{background:linear-gradient(135deg,#FAF5FF,var(--purple-bg))}
+.adhd-card .card-header{background:linear-gradient(135deg,#E0F7FA,var(--teal-bg))}
+.card-icon{width:44px;height:44px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.card-num{font-size:10.5px;font-weight:600;color:var(--g400);letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.card-title{font-family:'Kanit',sans-serif;font-size:1.1rem;font-weight:600;color:var(--g900);line-height:1.2}
+.card-desc{font-size:.85rem;color:var(--g400);margin-top:2px}
+.card-body{padding:1.5rem}
+.form-section{display:none}
+.form-section.active{display:block;animation:slideUp .3s cubic-bezier(.4,0,.2,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.fg-full{grid-column:span 2}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}.fg-full{grid-column:span 1}}
+.field{display:flex;flex-direction:column;gap:8px}
+.field-label{font-size:.875rem;font-weight:600;color:var(--g700);display:flex;align-items:center;gap:6px}
+.field-label .q-num{font-size:10px;font-weight:700;background:var(--o100);color:var(--o500);padding:2px 7px;border-radius:10px}
+.req{color:var(--o500);margin-left:2px}
+.f-input,.f-select,.f-textarea{width:100%;padding:11px 14px;border:1.5px solid var(--g200);border-radius:var(--r-md);font-family:'Sarabun',sans-serif;font-size:.9rem;color:var(--g700);background:var(--white);outline:none;transition:border-color var(--transition),box-shadow var(--transition);-webkit-appearance:none;appearance:none}
+.f-input:focus,.f-select:focus,.f-textarea:focus{border-color:var(--o500);box-shadow:0 0 0 3.5px rgba(232,106,46,.14)}
+.f-input::placeholder,.f-textarea::placeholder{color:var(--g300)}
+.f-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%239C978F' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:38px;cursor:pointer}
+.f-textarea{resize:vertical;min-height:110px;line-height:1.7}
+.radio-stack{display:flex;flex-direction:column;gap:8px}
+.radio-row{display:flex;gap:8px;flex-wrap:wrap}
+.check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px}
+@media(max-width:480px){.check-grid{grid-template-columns:1fr 1fr}}
+.r-card,.c-card{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1.5px solid var(--g200);border-radius:var(--r-md);background:var(--white);cursor:pointer;font-size:.875rem;color:var(--g600);transition:all var(--transition);user-select:none;position:relative;overflow:hidden}
+.r-card::before,.c-card::before{content:'';position:absolute;inset:0;background:var(--o100);opacity:0;transition:opacity var(--transition)}
+.r-card:hover,.c-card:hover{border-color:var(--o400)}
+.r-card:hover::before,.c-card:hover::before{opacity:.5}
+.r-card input,.c-card input{width:17px;height:17px;flex-shrink:0;accent-color:var(--o500);cursor:pointer;position:relative;z-index:1}
+.r-card span,.c-card span{position:relative;z-index:1;line-height:1.4}
+.r-card:has(input:checked),.c-card:has(input:checked){border-color:var(--o500);background:var(--o50)}
+.r-card:has(input:checked)::before,.c-card:has(input:checked)::before{opacity:0}
+.r-card:has(input:checked) span,.c-card:has(input:checked) span{color:var(--o500);font-weight:600}
+.r-card .emoji,.c-card .emoji{font-size:16px;flex-shrink:0;position:relative;z-index:1}
+.scale-labels{display:flex;justify-content:space-between;font-size:11.5px;color:var(--g400);margin-bottom:8px}
+.scale-btns{display:flex;gap:6px}
+.sc-btn{flex:1;display:flex;justify-content:center;cursor:pointer}
+.sc-btn input{display:none}
+.sc-btn span{width:100%;text-align:center;padding:10px 4px;border:1.5px solid var(--g200);border-radius:var(--r-md);font-size:1rem;font-weight:700;color:var(--g400);background:var(--white);transition:all var(--transition);display:block}
+.sc-btn:hover span{border-color:var(--o400);color:var(--o400);background:var(--o50)}
+.sc-btn:has(input:checked) span{background:var(--o500);border-color:var(--o500);color:var(--white);box-shadow:0 3px 10px rgba(232,106,46,.35);transform:scale(1.05)}
+@media(max-width:400px){.scale-btns{gap:4px}.sc-btn span{padding:9px 2px;font-size:.9rem}}
+.notice{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:var(--r-md);background:var(--amber-bg);border:1px solid rgba(200,118,10,.2);font-size:.83rem;color:var(--amber);line-height:1.5}
+.notice.info{background:var(--o50);border-color:rgba(232,106,46,.2);color:var(--o500)}
+.notice.phq-info{background:var(--purple-bg);border-color:rgba(106,13,173,.2);color:var(--purple)}
+.notice.adhd-info{background:var(--teal-bg);border-color:rgba(0,121,107,.2);color:var(--teal)}
+/* PHQ / ADHD QUESTIONS */
+.phq-question,.adhd-question{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--g100)}
+.phq-question:last-child,.adhd-question:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.phq-q-num{font-size:11px;font-weight:700;color:var(--purple);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.375rem}
+.adhd-q-num{font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.375rem}
+.phq-q-text,.adhd-q-text{font-size:.975rem;font-weight:600;color:var(--g900);margin-bottom:.875rem;line-height:1.5}
+.phq-options,.adhd-options{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:560px){.phq-options,.adhd-options{grid-template-columns:repeat(2,1fr)}}
+.phq-opt,.adhd-opt{position:relative}
+.phq-opt input,.adhd-opt input{position:absolute;opacity:0;width:0;height:0}
+.phq-opt label{display:flex;flex-direction:column;align-items:center;gap:4px;padding:.625rem .5rem;border-radius:var(--r-md);border:1.5px solid var(--g200);cursor:pointer;font-size:.8rem;text-align:center;color:var(--g500);transition:all var(--transition);background:var(--white);user-select:none}
+.phq-opt label:hover{border-color:var(--purple);color:var(--purple)}
+.phq-opt input:checked+label{background:var(--purple-bg);border-color:var(--purple);color:var(--purple);font-weight:600}
+.adhd-opt label{display:flex;flex-direction:column;align-items:center;gap:4px;padding:.625rem .5rem;border-radius:var(--r-md);border:1.5px solid var(--g200);cursor:pointer;font-size:.8rem;text-align:center;color:var(--g500);transition:all var(--transition);background:var(--white);user-select:none}
+.adhd-opt label:hover{border-color:var(--teal);color:var(--teal)}
+.adhd-opt input:checked+label{background:var(--teal-bg);border-color:var(--teal);color:var(--teal);font-weight:600}
+.phq-opt-score,.adhd-opt-score{font-size:1.2rem;font-weight:700}
+.phq-opt-txt,.adhd-opt-txt{line-height:1.3}
+/* RESULT CARDS */
+.result-card{display:none;background:var(--white);border-radius:var(--r-xl);border:2px solid var(--g200);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:1.5rem}
+.result-header{padding:1.5rem;text-align:center;border-bottom:1px solid var(--g100)}
+.result-score-circle{width:90px;height:90px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto .875rem;font-family:'Kanit',sans-serif}
+.result-score-num{font-size:2rem;font-weight:700;line-height:1}
+.result-score-max{font-size:.82rem;opacity:.7}
+.result-severity{font-family:'Kanit',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:.25rem}
+.result-severity-sub{font-size:.85rem;color:var(--g400)}
+.severity-none{background:var(--green-bg);border-color:var(--green)}.severity-none .result-score-circle{background:rgba(30,126,78,.1)}.severity-none .result-score-num,.severity-none .result-severity{color:var(--green)}
+.severity-mild{background:var(--amber-bg);border-color:var(--amber)}.severity-mild .result-score-circle{background:rgba(200,118,10,.1)}.severity-mild .result-score-num,.severity-mild .result-severity{color:var(--amber)}
+.severity-moderate{background:#FEF0E8;border-color:var(--o500)}.severity-moderate .result-score-circle{background:rgba(232,106,46,.1)}.severity-moderate .result-score-num,.severity-moderate .result-severity{color:var(--o500)}
+.severity-severe{background:var(--red-bg);border-color:var(--red)}.severity-severe .result-score-circle{background:rgba(217,48,37,.1)}.severity-severe .result-score-num,.severity-severe .result-severity{color:var(--red)}
+.ai-section{padding:1.25rem 1.5rem;border-top:1px solid var(--g100)}
+.ai-label{display:flex;align-items:center;gap:8px;font-family:'Kanit',sans-serif;font-size:.9rem;font-weight:600;color:var(--o500);margin-bottom:.875rem}
+.ai-bubble{background:var(--o50);border:1px solid rgba(232,106,46,.15);border-radius:var(--r-lg);padding:1rem 1.25rem;font-size:.875rem;line-height:1.8;color:var(--g700);min-height:80px}
+.ai-bubble.loading{display:flex;align-items:center;gap:10px;color:var(--g400)}
+.dot-pulse{display:inline-flex;gap:4px}
+.dot-pulse span{width:6px;height:6px;border-radius:50%;background:var(--o500);animation:pulse 1.2s ease-in-out infinite}
+.dot-pulse span:nth-child(2){animation-delay:.2s}.dot-pulse span:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+.adhd-ai-section .ai-label{color:var(--teal)}
+.adhd-ai-section .ai-bubble{background:var(--teal-bg);border-color:rgba(0,121,107,.15)}
+.adhd-ai-section .dot-pulse span{background:var(--teal)}
+.score-breakdown{padding:1rem 1.5rem;border-top:1px solid var(--g100)}
+.breakdown-title{font-size:.8rem;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem}
+.breakdown-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;font-size:.85rem}
+.breakdown-qnum{color:var(--g400);width:32px;flex-shrink:0}
+.breakdown-qtext{flex:1;color:var(--g600);font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.breakdown-badge{flex-shrink:0;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem}
+.score-0{background:var(--green-bg);color:var(--green)}.score-1{background:var(--amber-bg);color:var(--amber)}.score-2{background:#FEF0E8;color:var(--o500)}.score-3{background:var(--red-bg);color:var(--red)}
+.result-actions{display:flex;gap:.75rem;padding:1rem 1.5rem;border-top:1px solid var(--g100);flex-wrap:wrap}
+.btn-action{flex:1;min-width:120px;padding:.75rem 1rem;border-radius:var(--r-md);font-family:'Sarabun',sans-serif;font-size:.875rem;font-weight:600;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all var(--transition)}
+.btn-ghost-sm{background:var(--white);color:var(--g500);border:1.5px solid var(--g200)}.btn-ghost-sm:hover{border-color:var(--g400);color:var(--g700)}
+/* SUCCESS */
+.success-page{display:none;text-align:center;padding:3rem 1.5rem;animation:slideUp .4s ease}
+.success-ring{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--o100),var(--o50));display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;box-shadow:0 0 0 12px rgba(232,106,46,.08),0 0 0 24px rgba(232,106,46,.04)}
+.success-title{font-family:'Kanit',sans-serif;font-size:1.75rem;font-weight:700;color:var(--g900);margin-bottom:.5rem}
+.success-desc{font-size:.95rem;color:var(--g500);max-width:420px;margin:0 auto 1.5rem;line-height:1.75}
+.success-meta{display:inline-flex;gap:.75rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem}
+.meta-chip{background:var(--g100);border:1px solid var(--g200);border-radius:var(--r-sm);padding:6px 14px;font-size:.85rem;color:var(--g600)}
+.meta-chip strong{color:var(--o500)}.meta-chip.phq-chip strong{color:var(--purple)}.meta-chip.adhd-chip strong{color:var(--teal)}
+/* NAV BAR */
+.form-nav-bar{position:sticky;bottom:0;z-index:150;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--g200);box-shadow:0 -4px 20px rgba(0,0,0,.08);padding:.875rem 1.25rem}
+.form-nav-inner{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav-section-name{font-size:.8rem;color:var(--g400);text-align:center;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-section-name strong{display:block;font-size:.875rem;color:var(--g700);font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--r-md);font-family:'Sarabun',sans-serif;font-size:.9rem;font-weight:600;border:none;cursor:pointer;transition:all var(--transition);white-space:nowrap;min-width:90px;justify-content:center}
+.btn-primary{background:var(--o500);color:var(--white);box-shadow:0 2px 10px rgba(232,106,46,.3)}
+.btn-primary:hover{background:#C05520;box-shadow:0 4px 16px rgba(232,106,46,.4);transform:translateY(-1px)}
+.btn-ghost{background:var(--white);color:var(--g500);border:1.5px solid var(--g200)}
+.btn-ghost:hover{border-color:var(--g300);color:var(--g700)}
+/* FOOTER */
+.footer{text-align:center;padding:1.25rem;font-size:.8rem;color:var(--g400);border-top:1px solid var(--g200);background:var(--white);display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-logo"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3L3 8v11h6v-5h4v5h6V8L11 3z" fill="white" opacity=".9"/></svg></div>
+      <div class="brand-text"><span class="brand-school">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="brand-dept">แผนกเทคโนโลยีธุรกิจดิจิทัล</span></div>
+    </a>
+    <nav class="header-nav">
+      <a href="index.html" class="nav-pill active">📋 แบบสำรวจ</a>
+      <a href="dashboard.html" class="nav-pill">📊 แดชบอร์ด</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="heroSurvey">
+  <div class="hero-inner">
+    <div class="hero-badge">📋 การวิเคราะห์ผู้เรียนรายบุคคล</div>
+    <h1 class="hero-title">แบบสำรวจข้อมูล<em>นักเรียน</em><br>ประจำภาคเรียน</h1>
+    <p class="hero-desc">กรอกข้อมูลให้ครบถ้วนตามความเป็นจริง เพื่อให้ครูดูแลและออกแบบการเรียนรู้ที่เหมาะกับคุณ 🎯</p>
+    <div class="steps-wrap">
+      <div class="steps-track" id="stepsTrack"></div>
+      <div class="progress-bar-outer"><div class="progress-bar-fill" id="progressFill"></div></div>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+<form id="surveyForm">
+
+<!-- S0: ข้อมูลทั่วไป -->
+<div class="form-section active" data-section="0">
+  <div class="form-card">
+    <div class="card-header"><div class="card-icon" style="background:#FEF0E8">🏫</div><div class="card-header-text"><div class="card-num">ส่วนที่ 01 / 09</div><div class="card-title">ข้อมูลส่วนตัว</div><div class="card-desc">ข้อมูลพื้นฐานสำหรับระบุตัวตน</div></div></div>
+    <div class="card-body"><div class="form-grid">
+      <div class="field fg-full"><label class="field-label">ชื่อ – นามสกุล <span class="req">*</span></label><input class="f-input" type="text" name="fullname" placeholder="กรอกชื่อ-นามสกุลจริง (ภาษาไทย)" required></div>
+      <div class="field"><label class="field-label">ระดับชั้น <span class="req">*</span></label><select class="f-select" name="level" required><option value="">-- เลือกระดับชั้น --</option><optgroup label="ปวช."><option value="ปวช.1">ปวช. 1</option><option value="ปวช.2">ปวช. 2</option><option value="ปวช.3">ปวช. 3</option></optgroup><optgroup label="ปวส."><option value="ปวส.1">ปวส. 1</option><option value="ปวส.2">ปวส. 2</option></optgroup></select></div>
+      <div class="field"><label class="field-label">ห้องเรียน <span class="req">*</span></label><input class="f-input" type="text" name="classroom" placeholder="เช่น ทดธ.1/1"></div>
+      <div class="field"><label class="field-label">รหัสนักเรียน</label><input class="f-input" type="number" name="student_no" placeholder="เช่น 692191000XX"></div>
+      <div class="field"><label class="field-label">เพศ</label><div class="radio-row"><label class="r-card"><input type="radio" name="gender" value="ชาย"><span class="emoji">👦</span><span>ชาย</span></label><label class="r-card"><input type="radio" name="gender" value="หญิง"><span class="emoji">👧</span><span>หญิง</span></label><label class="r-card"><input type="radio" name="gender" value="อื่นๆ"><span class="emoji">🌈</span><span>อื่นๆ</span></label></div></div>
+      <div class="field"><label class="field-label">เกรดเฉลี่ยสะสม (GPAX)</label><select class="f-select" name="gpax"><option value="">-- เลือก --</option><option value="3.5-4.0">🌟 3.50 – 4.00</option><option value="3.0-3.49">⭐ 3.00 – 3.49</option><option value="2.5-2.99">👍 2.50 – 2.99</option><option value="2.0-2.49">📚 2.00 – 2.49</option><option value="below2">💪 ต่ำกว่า 2.00</option><option value="new">🆕 นักเรียนใหม่</option></select></div>
+      <div class="field"><label class="field-label">เบอร์โทรนักเรียน</label><input class="f-input" type="tel" name="phone" placeholder="08X-XXX-XXXX"></div>
+      <div class="field"><label class="field-label">เบอร์โทรผู้ปกครอง</label><input class="f-input" type="tel" name="parent_phone" placeholder="08X-XXX-XXXX"></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- S1: ทักษะ/ความรู้ -->
+<div class="form-section" data-section="1">
+  <div class="form-card">
+    <div class="card-header"><div class="card-icon" style="background:#E8F0FE">💻</div><div class="card-header-text"><div class="card-num">ส่วนที่ 02 / 09</div><div class="card-title">ความรู้และทักษะพื้นฐาน</div><div class="card-desc">ประเมินความพร้อมด้านดิจิทัล</div></div></div>
+    <div class="card-body"><div class="form-grid">
+      <div class="field fg-full"><label class="field-label"><span class="q-num">Q 1.1</span> ระดับทักษะคอมพิวเตอร์โดยรวม</label><div class="scale-labels"><span>😟 ไม่มีพื้นฐานเลย</span><span>😎 ชำนาญ/สอนคนอื่นได้</span></div><div class="scale-btns"><label class="sc-btn"><input type="radio" name="computer_skill_level" value="1"><span>1</span></label><label class="sc-btn"><input type="radio" name="computer_skill_level" value="2"><span>2</span></label><label class="sc-btn"><input type="radio" name="computer_skill_level" value="3"><span>3</span></label><label class="sc-btn"><input type="radio" name="computer_skill_level" value="4"><span>4</span></label><label class="sc-btn"><input type="radio" name="computer_skill_level" value="5"><span>5</span></label></div></div>
+      <div class="field fg-full"><label class="field-label"><span class="q-num">Q 1.2</span> โปรแกรมที่เคยใช้</label><div class="check-grid"><label class="c-card"><input type="checkbox" name="programs_used" value="word"><span class="emoji">📝</span><span>MS Word</span></label><label class="c-card"><input type="checkbox" name="programs_used" value="excel"><span class="emoji">📊</span><span>MS Excel</span></label><label class="c-card"><input type="checkbox" name="programs_used" value="powerpoint"><span class="emoji">📑</span><span>PowerPoint</span></label><label class="c-card"><input type="checkbox" name="programs_used" value="gdocs"><span class="emoji">🔵</span><span>Google Docs/Sheets</span></label><label class="c-card"><input type="checkbox" name="programs_used" value="canva"><span class="emoji">🎨</span><span>Canva</span></label><label class="c-card"><input type="checkbox" name="programs_used" value="photoshop"><span class="emoji">🖼️</span><span>Photoshop/AI</span></label><label class="c-card"><input type="checkbox" name="programs_used" value="video"><span class="emoji">🎬</span><span>ตัดต่อวิดีโอ</span></label><label class="c-card"><input type="checkbox" name="programs_used" value="code"><span class="emoji">👨‍💻</span><span>เขียนโค้ด</span></label><label class="c-card"><input type="checkbox" name="programs_used" value="none"><span class="emoji">🆕</span><span>ยังไม่เคยใช้</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 1.3</span> ความเร็วพิมพ์ดีด</label><div class="radio-stack"><label class="r-card"><input type="radio" name="typing_speed" value="under20"><span class="emoji">🐢</span><span>น้อยกว่า 20 คำ/นาที</span></label><label class="r-card"><input type="radio" name="typing_speed" value="20-40"><span class="emoji">🚶</span><span>20 – 40 คำ/นาที</span></label><label class="r-card"><input type="radio" name="typing_speed" value="40-60"><span class="emoji">🏃</span><span>40 – 60 คำ/นาที</span></label><label class="r-card"><input type="radio" name="typing_speed" value="over60"><span class="emoji">🚀</span><span>มากกว่า 60 คำ/นาที</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 1.4</span> ภาษาอังกฤษด้านเทคโนโลยี</label><div class="radio-stack"><label class="r-card"><input type="radio" name="english_tech" value="1"><span class="emoji">😓</span><span>ไม่เข้าใจเลย</span></label><label class="r-card"><input type="radio" name="english_tech" value="2"><span class="emoji">🤔</span><span>เดาความหมายได้บ้าง</span></label><label class="r-card"><input type="radio" name="english_tech" value="3"><span class="emoji">🙂</span><span>อ่านเข้าใจได้</span></label><label class="r-card"><input type="radio" name="english_tech" value="4"><span class="emoji">😎</span><span>ใช้งานได้คล่อง</span></label></div></div>
+      <div class="field fg-full"><label class="field-label"><span class="q-num">Q 1.5</span> ประสบการณ์ด้านธุรกิจดิจิทัล</label><div class="check-grid"><label class="c-card"><input type="checkbox" name="digital_biz_exp" value="sell_online"><span class="emoji">🛒</span><span>ขายของออนไลน์</span></label><label class="c-card"><input type="checkbox" name="digital_biz_exp" value="content"><span class="emoji">🎥</span><span>ทำคอนเทนต์/วิดีโอ</span></label><label class="c-card"><input type="checkbox" name="digital_biz_exp" value="design"><span class="emoji">✏️</span><span>ออกแบบโลโก้/สื่อ</span></label><label class="c-card"><input type="checkbox" name="digital_biz_exp" value="social"><span class="emoji">📱</span><span>ดูแลเพจ/Social</span></label><label class="c-card"><input type="checkbox" name="digital_biz_exp" value="web"><span class="emoji">🌐</span><span>เขียนโปรแกรม/เว็บ</span></label><label class="c-card"><input type="checkbox" name="digital_biz_exp" value="none"><span class="emoji">🆕</span><span>ยังไม่เคย</span></label></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- S2: การคิด/เรียนรู้ -->
+<div class="form-section" data-section="2">
+  <div class="form-card">
+    <div class="card-header"><div class="card-icon" style="background:#EDE7F6">🧠</div><div class="card-header-text"><div class="card-num">ส่วนที่ 03 / 09</div><div class="card-title">รูปแบบการคิดและการเรียนรู้</div><div class="card-desc">ไม่มีคำตอบถูกหรือผิด ตอบตามความเป็นจริง</div></div></div>
+    <div class="card-body"><div class="form-grid">
+      <div class="field fg-full"><label class="field-label"><span class="q-num">Q 2.1</span> เมื่อพบปัญหาที่ไม่รู้วิธีแก้ คุณทำอะไรเป็นอันดับแรก?</label><div class="radio-stack"><label class="r-card"><input type="radio" name="problem_solving" value="try"><span class="emoji">🔧</span><span>ลองผิดลองถูกด้วยตัวเอง</span></label><label class="r-card"><input type="radio" name="problem_solving" value="search"><span class="emoji">🔍</span><span>ค้นหาใน Google / YouTube</span></label><label class="r-card"><input type="radio" name="problem_solving" value="ask"><span class="emoji">🙋</span><span>ถามเพื่อนหรือครูทันที</span></label><label class="r-card"><input type="radio" name="problem_solving" value="wait"><span class="emoji">⏳</span><span>หยุดรอจนมีคนช่วย</span></label></div></div>
+      <div class="field fg-full"><label class="field-label"><span class="q-num">Q 2.2</span> รูปแบบการเรียนที่ชอบที่สุด</label><div class="check-grid"><label class="c-card"><input type="checkbox" name="learning_style" value="video"><span class="emoji">📺</span><span>ดูวิดีโอ/สาธิต</span></label><label class="c-card"><input type="checkbox" name="learning_style" value="practice"><span class="emoji">💪</span><span>ลงมือปฏิบัติทันที</span></label><label class="c-card"><input type="checkbox" name="learning_style" value="read"><span class="emoji">📖</span><span>อ่านเอกสาร/คู่มือ</span></label><label class="c-card"><input type="checkbox" name="learning_style" value="listen"><span class="emoji">👂</span><span>ฟังครูบรรยาย</span></label><label class="c-card"><input type="checkbox" name="learning_style" value="group"><span class="emoji">👥</span><span>เรียนกลุ่มกับเพื่อน</span></label></div></div>
+      <div class="field fg-full"><label class="field-label"><span class="q-num">Q 2.3</span> เมื่อได้รับงานที่ยากมาก รู้สึกอย่างไร?</label><div class="radio-stack"><label class="r-card"><input type="radio" name="challenge_attitude" value="excited"><span class="emoji">🔥</span><span>ตื่นเต้น อยากลองสู้ดู</span></label><label class="r-card"><input type="radio" name="challenge_attitude" value="try_first"><span class="emoji">💡</span><span>พยายามก่อน ถ้าไม่ไหวค่อยขอช่วย</span></label><label class="r-card"><input type="radio" name="challenge_attitude" value="worry"><span class="emoji">😰</span><span>รู้สึกกังวล แต่ยังทำต่อ</span></label><label class="r-card"><input type="radio" name="challenge_attitude" value="avoid"><span class="emoji">😞</span><span>ไม่อยากทำเลย</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 2.4</span> นิสัยการวางแผน</label><div class="radio-stack"><label class="r-card"><input type="radio" name="planning_habit" value="always"><span class="emoji">📋</span><span>วางแผนละเอียดทุกครั้ง</span></label><label class="r-card"><input type="radio" name="planning_habit" value="sometimes"><span class="emoji">📝</span><span>วางแผนบ้างบางครั้ง</span></label><label class="r-card"><input type="radio" name="planning_habit" value="rarely"><span class="emoji">😅</span><span>ไม่ค่อยวางแผน</span></label><label class="r-card"><input type="radio" name="planning_habit" value="never"><span class="emoji">⚡</span><span>ลงมือทันที ไม่วางแผน</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 2.5</span> Multitasking</label><div class="scale-labels"><span>ทำทีละอย่างดีกว่า</span><span>เก่ง Multitasking มาก</span></div><div class="scale-btns"><label class="sc-btn"><input type="radio" name="multitasking" value="1"><span>1</span></label><label class="sc-btn"><input type="radio" name="multitasking" value="2"><span>2</span></label><label class="sc-btn"><input type="radio" name="multitasking" value="3"><span>3</span></label><label class="sc-btn"><input type="radio" name="multitasking" value="4"><span>4</span></label><label class="sc-btn"><input type="radio" name="multitasking" value="5"><span>5</span></label></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- S3: พฤติกรรม -->
+<div class="form-section" data-section="3">
+  <div class="form-card">
+    <div class="card-header"><div class="card-icon" style="background:#E8F5E9">✅</div><div class="card-header-text"><div class="card-num">ส่วนที่ 04 / 09</div><div class="card-title">พฤติกรรมและความรับผิดชอบ</div><div class="card-desc">ประเมินนิสัยการเรียนและการทำงาน</div></div></div>
+    <div class="card-body"><div class="form-grid">
+      <div class="field"><label class="field-label"><span class="q-num">Q 3.1</span> การส่งงาน/ชิ้นงาน</label><div class="radio-stack"><label class="r-card"><input type="radio" name="submission_habit" value="5"><span class="emoji">⭐</span><span>ส่งตรงเวลาเสมอ</span></label><label class="r-card"><input type="radio" name="submission_habit" value="4"><span class="emoji">👍</span><span>ส่งตรงเวลาเป็นส่วนใหญ่</span></label><label class="r-card"><input type="radio" name="submission_habit" value="3"><span class="emoji">🙂</span><span>บางครั้งส่งช้า</span></label><label class="r-card"><input type="radio" name="submission_habit" value="2"><span class="emoji">😅</span><span>ส่งช้าบ่อยๆ</span></label><label class="r-card"><input type="radio" name="submission_habit" value="1"><span class="emoji">😓</span><span>มักไม่ส่งงาน</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 3.2</span> จำนวนครั้งที่ขาดเรียน (ต่อภาคเรียน)</label><div class="radio-stack"><label class="r-card"><input type="radio" name="absence" value="0"><span class="emoji">🏆</span><span>ไม่ขาดเลย</span></label><label class="r-card"><input type="radio" name="absence" value="1-3"><span class="emoji">✅</span><span>1 – 3 ครั้ง</span></label><label class="r-card"><input type="radio" name="absence" value="4-6"><span class="emoji">⚠️</span><span>4 – 6 ครั้ง</span></label><label class="r-card"><input type="radio" name="absence" value="7+"><span class="emoji">🚨</span><span>7 ครั้งขึ้นไป</span></label></div></div>
+      <div class="field fg-full"><label class="field-label"><span class="q-num">Q 3.3</span> เมื่อไม่เข้าใจเนื้อหา คุณทำอย่างไร?</label><div class="radio-stack"><label class="r-card"><input type="radio" name="help_seeking" value="ask_teacher"><span class="emoji">🙋</span><span>ถามครูหลังเลิกเรียน</span></label><label class="r-card"><input type="radio" name="help_seeking" value="ask_friend"><span class="emoji">👫</span><span>ถามเพื่อนหรือรุ่นพี่</span></label><label class="r-card"><input type="radio" name="help_seeking" value="self_study"><span class="emoji">📚</span><span>หาข้อมูลเองทางอินเทอร์เน็ต</span></label><label class="r-card"><input type="radio" name="help_seeking" value="skip"><span class="emoji">😶</span><span>ข้ามไปก่อน ทำอย่างอื่น</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 3.4</span> ทำงานพิเศษ/Part-time</label><div class="radio-stack"><label class="r-card"><input type="radio" name="part_time" value="none"><span class="emoji">📚</span><span>ไม่ทำงานพิเศษ</span></label><label class="r-card"><input type="radio" name="part_time" value="weekend"><span class="emoji">📅</span><span>เฉพาะวันหยุด</span></label><label class="r-card"><input type="radio" name="part_time" value="weekly"><span class="emoji">⏰</span><span>ทุกสัปดาห์ (มีวันเรียนด้วย)</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 3.5</span> ชั่วโมงการนอนเฉลี่ย</label><div class="radio-stack"><label class="r-card"><input type="radio" name="sleep_hours" value="under5"><span class="emoji">😵</span><span>น้อยกว่า 5 ชม.</span></label><label class="r-card"><input type="radio" name="sleep_hours" value="5-6"><span class="emoji">😴</span><span>5 – 6 ชม.</span></label><label class="r-card"><input type="radio" name="sleep_hours" value="7-8"><span class="emoji">😊</span><span>7 – 8 ชม. (เพียงพอ)</span></label><label class="r-card"><input type="radio" name="sleep_hours" value="over8"><span class="emoji">😪</span><span>มากกว่า 8 ชม.</span></label></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- S4: อุปกรณ์ -->
+<div class="form-section" data-section="4">
+  <div class="form-card">
+    <div class="card-header"><div class="card-icon" style="background:#E3F2FD">📱</div><div class="card-header-text"><div class="card-num">ส่วนที่ 05 / 09</div><div class="card-title">ความพร้อมด้านอุปกรณ์และอินเทอร์เน็ต</div><div class="card-desc">ช่วยให้ครูวางแผนการเรียนรู้ได้เหมาะสม</div></div></div>
+    <div class="card-body"><div class="form-grid">
+      <div class="field"><label class="field-label"><span class="q-num">Q 4.1</span> คอมพิวเตอร์/แล็ปท็อป</label><div class="radio-stack"><label class="r-card"><input type="radio" name="has_computer" value="own"><span class="emoji">💻</span><span>มีส่วนตัว</span></label><label class="r-card"><input type="radio" name="has_computer" value="shared"><span class="emoji">🤝</span><span>ใช้ร่วมกับคนในบ้าน</span></label><label class="r-card"><input type="radio" name="has_computer" value="school_only"><span class="emoji">🏫</span><span>ใช้ได้เฉพาะที่โรงเรียน</span></label><label class="r-card"><input type="radio" name="has_computer" value="none"><span class="emoji">❌</span><span>ไม่มีเลย</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 4.2</span> อินเทอร์เน็ตที่บ้าน</label><div class="radio-stack"><label class="r-card"><input type="radio" name="home_internet" value="fast_wifi"><span class="emoji">⚡</span><span>WiFi ความเร็วสูง</span></label><label class="r-card"><input type="radio" name="home_internet" value="slow_wifi"><span class="emoji">📶</span><span>WiFi ความเร็วต่ำ/ไม่เสถียร</span></label><label class="r-card"><input type="radio" name="home_internet" value="mobile_data"><span class="emoji">📱</span><span>ใช้เน็ตมือถือเท่านั้น</span></label><label class="r-card"><input type="radio" name="home_internet" value="none"><span class="emoji">❌</span><span>ไม่มีอินเทอร์เน็ต</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 4.3</span> สมาร์ทโฟน</label><div class="radio-stack"><label class="r-card"><input type="radio" name="smartphone_os" value="android"><span class="emoji">🤖</span><span>Android</span></label><label class="r-card"><input type="radio" name="smartphone_os" value="ios"><span class="emoji">🍎</span><span>iOS (iPhone)</span></label><label class="r-card"><input type="radio" name="smartphone_os" value="none"><span class="emoji">❌</span><span>ไม่มีสมาร์ทโฟน</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 4.4</span> ใช้โปรแกรม AI ช่วยเรียน?</label><div class="radio-stack"><label class="r-card"><input type="radio" name="uses_ai" value="often"><span class="emoji">🤖</span><span>ใช้บ่อยมาก (ChatGPT, Gemini ฯลฯ)</span></label><label class="r-card"><input type="radio" name="uses_ai" value="sometimes"><span class="emoji">💡</span><span>ใช้บ้างในบางครั้ง</span></label><label class="r-card"><input type="radio" name="uses_ai" value="never"><span class="emoji">🤷</span><span>ยังไม่เคยใช้</span></label></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- S5: สังคม/ครอบครัว -->
+<div class="form-section" data-section="5">
+  <div class="form-card">
+    <div class="card-header"><div class="card-icon" style="background:#FFF3E0">🏠</div><div class="card-header-text"><div class="card-num">ส่วนที่ 06 / 09</div><div class="card-title">สังคมและครอบครัว</div><div class="card-desc">ข้อมูลเพื่อดูแลนักเรียนอย่างรอบด้าน 🔒</div></div></div>
+    <div class="card-body"><div class="form-grid">
+      <div class="field"><label class="field-label"><span class="q-num">Q 5.1</span> การสนับสนุนจากครอบครัวด้านการเรียน</label><div class="scale-labels"><span>ไม่ได้รับการสนับสนุนเลย</span><span>ได้รับการสนับสนุนอย่างดี</span></div><div class="scale-btns"><label class="sc-btn"><input type="radio" name="family_support" value="1"><span>1</span></label><label class="sc-btn"><input type="radio" name="family_support" value="2"><span>2</span></label><label class="sc-btn"><input type="radio" name="family_support" value="3"><span>3</span></label><label class="sc-btn"><input type="radio" name="family_support" value="4"><span>4</span></label><label class="sc-btn"><input type="radio" name="family_support" value="5"><span>5</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 5.2</span> สถานะการอยู่อาศัย</label><div class="radio-stack"><label class="r-card"><input type="radio" name="living_status" value="parents"><span class="emoji">🏠</span><span>อยู่กับพ่อแม่/ผู้ปกครอง</span></label><label class="r-card"><input type="radio" name="living_status" value="relative"><span class="emoji">👨‍👩‍👦</span><span>อยู่กับญาติ</span></label><label class="r-card"><input type="radio" name="living_status" value="dorm"><span class="emoji">🏢</span><span>หอพัก/คอนโด</span></label><label class="r-card"><input type="radio" name="living_status" value="alone"><span class="emoji">🧍</span><span>อยู่คนเดียว</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 5.3</span> เป้าหมายหลังเรียนจบ</label><div class="radio-stack"><label class="r-card"><input type="radio" name="career_goal" value="study_more"><span class="emoji">🎓</span><span>เรียนต่อระดับสูงขึ้น</span></label><label class="r-card"><input type="radio" name="career_goal" value="company"><span class="emoji">🏢</span><span>สมัครงานบริษัท</span></label><label class="r-card"><input type="radio" name="career_goal" value="own_biz"><span class="emoji">🚀</span><span>เปิดธุรกิจส่วนตัว</span></label><label class="r-card"><input type="radio" name="career_goal" value="freelance"><span class="emoji">💻</span><span>ทำงานออนไลน์/Freelance</span></label><label class="r-card"><input type="radio" name="career_goal" value="unsure"><span class="emoji">🤷</span><span>ยังไม่แน่ใจ</span></label></div></div>
+      <div class="field"><label class="field-label"><span class="q-num">Q 5.4</span> ความเครียดโดยรวมในช่วงนี้</label><div class="scale-labels"><span>แทบไม่มีความเครียด</span><span>เครียดมาก</span></div><div class="scale-btns"><label class="sc-btn"><input type="radio" name="stress_level" value="1"><span>1</span></label><label class="sc-btn"><input type="radio" name="stress_level" value="2"><span>2</span></label><label class="sc-btn"><input type="radio" name="stress_level" value="3"><span>3</span></label><label class="sc-btn"><input type="radio" name="stress_level" value="4"><span>4</span></label><label class="sc-btn"><input type="radio" name="stress_level" value="5"><span>5</span></label></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- S6: ทักษะพิเศษ -->
+<div class="form-section" data-section="6">
+  <div class="form-card">
+    <div class="card-header"><div class="card-icon" style="background:#FCE4EC">⭐</div><div class="card-header-text"><div class="card-num">ส่วนที่ 07 / 09</div><div class="card-title">ทักษะพิเศษและสิ่งที่ชอบ</div><div class="card-desc">ให้ครูรู้จักความสามารถที่แท้จริงของคุณ</div></div></div>
+    <div class="card-body">
+      <div class="notice info" style="margin-bottom:1.25rem"><span>💡</span><span>ข้อมูลส่วนนี้จะช่วยให้ครูออกแบบกิจกรรมที่เหมาะกับคุณ</span></div>
+      <div class="form-grid">
+        <div class="field fg-full"><label class="field-label"><span class="q-num">Q 6.1</span> ทักษะพิเศษด้านดิจิทัล</label><div class="check-grid"><label class="c-card"><input type="checkbox" name="special_skills" value="video_edit"><span class="emoji">🎬</span><span>ตัดต่อวิดีโอ</span></label><label class="c-card"><input type="checkbox" name="special_skills" value="graphic"><span class="emoji">🎨</span><span>ออกแบบกราฟิก</span></label><label class="c-card"><input type="checkbox" name="special_skills" value="photo"><span class="emoji">📷</span><span>ถ่ายภาพ/วิดีโอ</span></label><label class="c-card"><input type="checkbox" name="special_skills" value="code"><span class="emoji">👨‍💻</span><span>เขียนโค้ด/เว็บ</span></label><label class="c-card"><input type="checkbox" name="special_skills" value="ads"><span class="emoji">📢</span><span>ยิงโฆษณา Ads</span></label><label class="c-card"><input type="checkbox" name="special_skills" value="seo"><span class="emoji">🔍</span><span>SEO/คอนเทนต์</span></label><label class="c-card"><input type="checkbox" name="special_skills" value="accounting"><span class="emoji">📊</span><span>บัญชี/การเงินดิจิทัล</span></label><label class="c-card"><input type="checkbox" name="special_skills" value="none"><span class="emoji">🌱</span><span>ยังไม่มีทักษะพิเศษ</span></label></div></div>
+        <div class="field fg-full"><label class="field-label"><span class="q-num">Q 6.2</span> Social Media ที่ใช้งานจริง</label><div class="check-grid"><label class="c-card"><input type="checkbox" name="social_platforms" value="tiktok"><span class="emoji">🎵</span><span>TikTok</span></label><label class="c-card"><input type="checkbox" name="social_platforms" value="facebook"><span class="emoji">📘</span><span>Facebook</span></label><label class="c-card"><input type="checkbox" name="social_platforms" value="instagram"><span class="emoji">📸</span><span>Instagram</span></label><label class="c-card"><input type="checkbox" name="social_platforms" value="youtube"><span class="emoji">▶️</span><span>YouTube</span></label><label class="c-card"><input type="checkbox" name="social_platforms" value="x"><span class="emoji">🐦</span><span>X (Twitter)</span></label><label class="c-card"><input type="checkbox" name="social_platforms" value="lineoa"><span class="emoji">💚</span><span>Line OA</span></label><label class="c-card"><input type="checkbox" name="social_platforms" value="shopee"><span class="emoji">🛒</span><span>Shopee/Lazada</span></label></div></div>
+        <div class="field fg-full"><label class="field-label"><span class="q-num">Q 6.3</span> อยากให้ครูรู้อะไรเกี่ยวกับตัวคุณอีกบ้าง?</label><textarea class="f-textarea" name="student_note" placeholder="เช่น ความฝัน สิ่งที่กังวลเรื่องเรียน หรือสิ่งที่ต้องการความช่วยเหลือจากครู..."></textarea></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S7: PHQ-A — ไม่มี q9warn ในหน้านักเรียน (Bug 4 Fix) -->
+<div class="form-section" data-section="7">
+  <div class="form-card phq-card">
+    <div class="card-header"><div class="card-icon" style="background:var(--purple-bg)">🧠</div><div class="card-header-text"><div class="card-num" style="color:var(--purple)">ส่วนที่ 08 / 09 — แบบประเมิน PHQ-A</div><div class="card-title">ใน 2 สัปดาห์ที่ผ่านมา คุณรู้สึกแบบนี้บ่อยแค่ไหน?</div><div class="card-desc">Patient Health Questionnaire for Adolescents · 9 ข้อ · วิเคราะห์ผลโดย AI</div></div></div>
+    <div class="card-body">
+      <div class="notice phq-info" style="margin-bottom:1.25rem"><span>💜</span><span>คำตอบของคุณจะถูกเก็บเป็นความลับ และช่วยให้ครูดูแลคุณได้ดียิ่งขึ้น ตอบตามความรู้สึกที่แท้จริง</span></div>
+      <div id="phqBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- S8: ADHD -->
+<div class="form-section" data-section="8">
+  <div class="form-card adhd-card">
+    <div class="card-header"><div class="card-icon" style="background:var(--teal-bg)">🧩</div><div class="card-header-text"><div class="card-num" style="color:var(--teal)">ส่วนที่ 09 / 09 — แบบประเมิน ADHD</div><div class="card-title">แบบประเมินสมาธิและพฤติกรรม (ADHD)</div><div class="card-desc">สำหรับอายุ 14–20 ปี · 18 ข้อ · วิเคราะห์โดย AI</div></div></div>
+    <div class="card-body">
+      <div class="notice adhd-info" style="margin-bottom:1.25rem"><span>🧩</span><span>ช่วยให้ครูเข้าใจรูปแบบการเรียนรู้ของคุณ ตอบตามพฤติกรรมจริงใน 6 เดือนที่ผ่านมา</span></div>
+      <div id="adhdBody"></div>
+    </div>
+  </div>
+</div>
+
+</form>
+
+<!-- SUCCESS PAGE -->
+<div class="success-page" id="successPage">
+  <div class="success-ring"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M10 20l8 8 12-16" stroke="#E86A2E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <h2 class="success-title">บันทึกข้อมูลสำเร็จแล้ว! 🎉</h2>
+  <p class="success-desc">ขอบคุณที่กรอกข้อมูลนะคะ/ครับ ครูจะนำข้อมูลไปใช้ดูแลและออกแบบการเรียนรู้ที่เหมาะกับคุณ</p>
+  <div class="success-meta" id="successMeta"></div>
+  <!-- PHQ-A และ ADHD result แสดงเฉพาะในแดชบอร์ดครู ไม่แสดงที่นี่ -->
+  <!-- Hidden elements สำหรับ AI fetch ทำงานเบื้องหลัง -->
+  <div id="aiBubble" style="display:none"></div>
+  <div id="adhdAiBubble" style="display:none"></div>
+  <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:1rem">
+    <button class="btn btn-primary" onclick="resetForm()">➕ กรอกข้อมูลนักเรียนคนต่อไป</button>
+    <button class="btn btn-ghost" onclick="window.location.href='dashboard.html'">📊 ดูแดชบอร์ด</button>
+  </div>
+</div>
+</main>
+
+<div class="form-nav-bar" id="formNavBar">
+  <div class="form-nav-inner">
+    <button class="btn btn-ghost" id="btnBack" onclick="prevSection()" style="visibility:hidden"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>ย้อนกลับ</button>
+    <div class="nav-section-name"><span id="navSectionLabel">ข้อมูลส่วนตัว</span><strong id="navSectionNum">1 / 9</strong></div>
+    <button class="btn btn-primary" id="btnNext" onclick="nextSection()">ถัดไป <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  </div>
+</div>
+
+<footer class="footer"><span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span><span style="opacity:.3">●</span><span>วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span style="opacity:.3">●</span><span style="opacity:.5">ระบบวิเคราะห์ผู้เรียน v6.0</span></footer>
+
+<script>
+// ================================================================
+// SECTIONS CONFIG
+// ================================================================
+const SECTIONS = [
+  { label:'ข้อมูลส่วนตัว',   icon:'🏫' },
+  { label:'ทักษะ/ความรู้',   icon:'💻' },
+  { label:'การคิด/เรียนรู้', icon:'🧠' },
+  { label:'พฤติกรรม',        icon:'✅' },
+  { label:'อุปกรณ์',         icon:'📱' },
+  { label:'สังคม/ครอบครัว',  icon:'🏠' },
+  { label:'ทักษะพิเศษ',      icon:'⭐' },
+  { label:'PHQ-A',            icon:'💜', phq: true },
+  { label:'ADHD',             icon:'🧩', adhd: true },
+];
+let currentSection = 0;
+const TOTAL = SECTIONS.length;
+
+// ================================================================
+// PHQ-A
+// ================================================================
+const PHQ_QUESTIONS = [
+  'รู้สึกหดหู่ เศร้า หรือสิ้นหวัง',
+  'ไม่สนใจหรือไม่มีความสุขกับสิ่งที่เคยสนุก',
+  'นอนหลับยาก หลับไม่หลับ หรือนอนมากเกินไป',
+  'รู้สึกอ่อนเพลีย หรือไม่มีแรงทำอะไร',
+  'รับประทานอาหารไม่อยาก หรือกินมากเกินไป',
+  'รู้สึกแย่กับตัวเอง รู้สึกว่าตัวเองเป็นภาระ หรือทำให้ตัวเองหรือครอบครัวผิดหวัง',
+  'มีปัญหาในการมีสมาธิ เช่น อ่านหนังสือ หรือดูโทรทัศน์ไม่รู้เรื่อง',
+  'พูดหรือเคลื่อนไหวช้าจนคนอื่นสังเกตเห็น หรือกระวนกระวาย อยู่ไม่นิ่ง',
+  'มีความคิดทำร้ายตัวเองหรืออยากตาย',
+];
+const PHQ_OPTS = [{score:0,label:'ไม่มีเลย'},{score:1,label:'บางวัน'},{score:2,label:'บ่อยกว่าครึ่ง'},{score:3,label:'แทบทุกวัน'}];
+
+// ================================================================
+// ADHD — DSM-5 18 items
+// ================================================================
+const ADHD_QUESTIONS = [
+  {q:'ไม่สามารถจดจ่อกับรายละเอียด หรือทำผิดพลาดบ่อยในงาน/การเรียน',type:'I'},
+  {q:'ยากที่จะรักษาสมาธิในงานหรือกิจกรรมต่างๆ',type:'I'},
+  {q:'ดูเหมือนไม่ฟังเมื่อมีคนพูดคุยด้วยโดยตรง',type:'I'},
+  {q:'ไม่ปฏิบัติตามคำสั่งหรือทำงานไม่เสร็จ (ไม่ใช่เพราะไม่เข้าใจ)',type:'I'},
+  {q:'มีปัญหาในการจัดระเบียบงานหรือกิจกรรม',type:'I'},
+  {q:'หลีกเลี่ยงงานที่ต้องใช้ความคิดต่อเนื่อง',type:'I'},
+  {q:'ทำของหาย เช่น กุญแจ โทรศัพท์ หนังสือ อุปกรณ์การเรียน',type:'I'},
+  {q:'วอกแวกง่ายจากสิ่งรอบข้าง',type:'I'},
+  {q:'ลืมสิ่งที่ต้องทำประจำวันบ่อยๆ',type:'I'},
+  {q:'อยู่ไม่นิ่ง ขยับมือเท้าหรือนั่งพลุกพล่านบนเก้าอี้',type:'H'},
+  {q:'ลุกจากที่นั่งในสถานการณ์ที่ควรนั่งอยู่',type:'H'},
+  {q:'วิ่งหรือปีนป่ายในสถานการณ์ที่ไม่เหมาะสม (หรือรู้สึกกระสับกระส่าย)',type:'H'},
+  {q:'ไม่สามารถทำกิจกรรมผ่อนคลายอย่างเงียบๆ ได้',type:'H'},
+  {q:'มักวุ่นวายตลอดเวลา เหมือน "ถ่านไฟฉาย" ที่ขับเคลื่อนตลอด',type:'H'},
+  {q:'พูดมากเกินไป',type:'H'},
+  {q:'พูดขัดหรือตอบก่อนที่คำถามจะจบ',type:'H'},
+  {q:'รอคิวยากหรือรอไม่ได้',type:'H'},
+  {q:'ขัดจังหวะหรือยุ่งกับผู้อื่น',type:'H'},
+];
+const ADHD_OPTS = [{score:0,label:'ไม่เคยเลย'},{score:1,label:'บางครั้ง'},{score:2,label:'บ่อยครั้ง'},{score:3,label:'บ่อยมาก'}];
+
+// ================================================================
+// INIT
+// ================================================================
+window.addEventListener('DOMContentLoaded', () => {
+  buildSteps();
+  buildPHQ();   // Bug 3 Fix: event listeners bound inside buildPHQ after DOM creation
+  buildADHD();
+  updateUI();
+});
+
+function buildSteps() {
+  const track = document.getElementById('stepsTrack');
+  track.innerHTML = SECTIONS.map((s, i) => `
+    <div class="step-item${s.phq?' phq-step':''}${s.adhd?' adhd-step':''}" data-step="${i}" onclick="jumpTo(${i})">
+      <div class="step-dot">${i+1}</div>
+      <div class="step-label">${s.label}</div>
+    </div>`).join('');
+}
+
+// Bug 3 Fix: buildPHQ generates HTML then immediately binds change events
+// No q9warn banner in the student form at all — warning only shown in dashboard
+function buildPHQ() {
+  const body = document.getElementById('phqBody');
+  body.innerHTML = PHQ_QUESTIONS.map((q, i) => `
+    <div class="phq-question">
+      <div class="phq-q-num">ข้อ ${i+1}</div>
+      <div class="phq-q-text">${q}</div>
+      <div class="phq-options">
+        ${PHQ_OPTS.map(o => `
+          <div class="phq-opt">
+            <input type="radio" name="phq_${i}" id="phq_${i}_${o.score}" value="${o.score}">
+            <label for="phq_${i}_${o.score}">
+              <span class="phq-opt-score">${o.score}</span>
+              <span class="phq-opt-txt">${o.label}</span>
+            </label>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+  // No q9warn binding here — warning belongs in dashboard only
+}
+
+function buildADHD() {
+  const body = document.getElementById('adhdBody');
+  const inatt = ADHD_QUESTIONS.filter(q=>q.type==='I');
+  const hyper = ADHD_QUESTIONS.filter(q=>q.type==='H');
+  const renderGroup = (qs, startIdx, title) => `
+    <div style="margin-bottom:1.5rem">
+      <div style="font-size:.85rem;font-weight:700;color:var(--teal);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1rem;padding:.5rem .75rem;background:rgba(0,121,107,.08);border-radius:8px">${title}</div>
+      ${qs.map((q, j) => {
+        const gi = startIdx + j;
+        return `<div class="adhd-question">
+          <div class="adhd-q-num">ข้อ ${gi+1}</div>
+          <div class="adhd-q-text">${q.q}</div>
+          <div class="adhd-options">
+            ${ADHD_OPTS.map(o => `
+              <div class="adhd-opt">
+                <input type="radio" name="adhd_${gi}" id="adhd_${gi}_${o.score}" value="${o.score}">
+                <label for="adhd_${gi}_${o.score}">
+                  <span class="adhd-opt-score">${o.score}</span>
+                  <span class="adhd-opt-txt">${o.label}</span>
+                </label>
+              </div>`).join('')}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  body.innerHTML =
+    renderGroup(inatt, 0, '🎯 ด้านสมาธิ (Inattention) — 9 ข้อ') +
+    renderGroup(hyper, 9, '⚡ ด้านซนอยู่ไม่นิ่ง/หุนหันพลันแล่น (Hyperactivity) — 9 ข้อ');
+}
+
+// ================================================================
+// NAVIGATION
+// ================================================================
+function nextSection() {
+  if (currentSection < TOTAL - 1) { currentSection++; updateUI(true); window.scrollTo({top:0,behavior:'smooth'}); }
+  else submitForm();
+}
+function prevSection() {
+  if (currentSection > 0) { currentSection--; updateUI(false); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function jumpTo(idx) {
+  if (idx <= currentSection) { currentSection = idx; updateUI(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+
+function updateUI() {
+  document.querySelectorAll('.form-section').forEach((el, i) => el.classList.toggle('active', i === currentSection));
+  document.querySelectorAll('.step-item').forEach((el, i) => {
+    el.classList.remove('active','done');
+    if (i < currentSection) { el.classList.add('done'); el.querySelector('.step-dot').innerHTML = '✓'; }
+    else { el.classList.toggle('active', i === currentSection); el.querySelector('.step-dot').textContent = i+1; }
+  });
+  document.getElementById('progressFill').style.width = (currentSection/(TOTAL-1)*100)+'%';
+  document.getElementById('btnBack').style.visibility = currentSection===0 ? 'hidden' : 'visible';
+  const s = SECTIONS[currentSection];
+  document.getElementById('navSectionLabel').textContent = s.icon+' '+s.label;
+  document.getElementById('navSectionNum').textContent = `${currentSection+1} / ${TOTAL}`;
+  const btnNext = document.getElementById('btnNext');
+  if (currentSection === TOTAL-1) {
+    btnNext.innerHTML = '✅ บันทึกข้อมูลทั้งหมด';
+    btnNext.style.background = 'var(--green)';
+    btnNext.style.boxShadow = '0 2px 10px rgba(30,126,78,.3)';
+  } else {
+    btnNext.innerHTML = 'ถัดไป <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+    btnNext.style.background = ''; btnNext.style.boxShadow = '';
+  }
+}
+
+// ================================================================
+// SUBMIT
+// ================================================================
+function submitForm() {
+  const form = document.getElementById('surveyForm');
+  const fn = form.querySelector('[name="fullname"]').value.trim();
+  const lv = form.querySelector('[name="level"]').value;
+  const cl = form.querySelector('[name="classroom"]').value.trim();
+  if (!fn || !lv || !cl) { alert('กรุณากรอกชื่อ ระดับชั้น และห้องเรียน'); currentSection=0; updateUI(); return; }
+
+  // Collect survey
+  const sd = { _id: Date.now().toString(36)+Math.random().toString(36).slice(2,6), _ts: new Date().toLocaleString('th-TH') };
+  form.querySelectorAll('input[type=text],input[type=number],input[type=tel],select,textarea').forEach(el=>{
+    if(el.name&&el.value&&!el.name.startsWith('phq_')&&!el.name.startsWith('adhd_')) sd[el.name]=el.value;
+  });
+  form.querySelectorAll('input[type=radio]:checked').forEach(el=>{
+    if(!el.name.startsWith('phq_')&&!el.name.startsWith('adhd_')) sd[el.name]=el.value;
+  });
+  const cbNames=[...new Set([...form.querySelectorAll('input[type=checkbox]')].map(e=>e.name))];
+  cbNames.forEach(name=>{ const c=[...form.querySelectorAll(`input[type=checkbox][name="${name}"]:checked`)].map(e=>e.value); if(c.length) sd[name]=c; });
+  sd._risk = calcRisk(sd);
+
+  // PHQ — collect answers (no Q9 warning in student form)
+  const phqAnswers=[]; let phqOk=true;
+  for(let i=0;i<9;i++){ const s=form.querySelector(`input[name="phq_${i}"]:checked`); if(!s){phqOk=false;break;} phqAnswers.push(parseInt(s.value)); }
+  const phqTotal = phqOk ? phqAnswers.reduce((a,b)=>a+b,0) : null;
+  const phqSev = phqOk ? getSeverity(phqTotal) : null;
+  const phqRecord = phqOk ? { _id:sd._id, _ts:sd._ts, fullname:fn, level:lv, classroom:cl, gender:sd.gender||'', answers:phqAnswers, total:phqTotal, severity:phqSev.key } : null;
+
+  // ADHD
+  const adhdAnswers=[]; let adhdOk=true;
+  for(let i=0;i<18;i++){ const s=form.querySelector(`input[name="adhd_${i}"]:checked`); if(!s){adhdOk=false;break;} adhdAnswers.push(parseInt(s.value)); }
+  const adhdTotal = adhdOk ? adhdAnswers.reduce((a,b)=>a+b,0) : null;
+  const adhdInatt = adhdOk ? adhdAnswers.slice(0,9).reduce((a,b)=>a+b,0) : null;
+  const adhdHyper = adhdOk ? adhdAnswers.slice(9).reduce((a,b)=>a+b,0) : null;
+  const adhdSev = adhdOk ? getAdhdSeverity(adhdTotal, adhdInatt, adhdHyper) : null;
+  const adhdRecord = adhdOk ? { _id:sd._id, _ts:sd._ts, fullname:fn, level:lv, classroom:cl, gender:sd.gender||'', answers:adhdAnswers, total:adhdTotal, inatt:adhdInatt, hyper:adhdHyper, severity:adhdSev.key } : null;
+
+  // Save
+  const ld=JSON.parse(localStorage.getItem('learner_data')||'[]'); ld.push(sd); localStorage.setItem('learner_data',JSON.stringify(ld));
+  if(phqRecord){ const pd=JSON.parse(localStorage.getItem('phq_data')||'[]'); pd.push(phqRecord); localStorage.setItem('phq_data',JSON.stringify(pd)); }
+  if(adhdRecord){ const ad=JSON.parse(localStorage.getItem('adhd_data')||'[]'); ad.push(adhdRecord); localStorage.setItem('adhd_data',JSON.stringify(ad)); }
+
+  showSuccess(sd, phqRecord, phqSev, phqAnswers, adhdRecord, adhdSev, adhdAnswers);
+  if(phqRecord) fetchAIPHQ(phqRecord, phqSev);
+  if(adhdRecord) fetchAIADHD(adhdRecord, adhdSev);
+}
+
+function calcRisk(d) {
+  let s=0;
+  if(d.has_computer==='none')s+=3; if(d.has_computer==='school_only')s+=1;
+  if(d.home_internet==='none')s+=3; if(d.home_internet==='mobile_data')s+=1;
+  if(d.absence==='7+')s+=3; if(d.absence==='4-6')s+=2;
+  if(d.submission_habit==='1')s+=2; if(d.submission_habit==='2')s+=1;
+  if(d.computer_skill_level==='1')s+=2;
+  // Bug 2 Fix: part_time correct values none/weekend/weekly
+  if(d.part_time==='weekly')s+=2;
+  if(d.family_support==='1')s+=2; if(d.sleep_hours==='under5')s+=1;
+  if(d.challenge_attitude==='avoid')s+=2; if(d.help_seeking==='skip')s+=2;
+  if(d.gpax==='below2')s+=2;
+  return s;
+}
+
+function getSeverity(score) {
+  if(score<=4) return{key:'none',label:'ไม่มีภาวะซึมเศร้า',sub:`คะแนน ${score}/27 — อยู่ในเกณฑ์ปกติ`,cls:'severity-none'};
+  if(score<=9) return{key:'mild',label:'ซึมเศร้าระดับน้อย',sub:`คะแนน ${score}/27 — ควรติดตามอาการ`,cls:'severity-mild'};
+  if(score<=14) return{key:'moderate',label:'ซึมเศร้าระดับปานกลาง',sub:`คะแนน ${score}/27 — แนะนำพบผู้เชี่ยวชาญ`,cls:'severity-moderate'};
+  if(score<=19) return{key:'moderately_severe',label:'ซึมเศร้าระดับค่อนข้างรุนแรง',sub:`คะแนน ${score}/27 — ต้องการการดูแลเร่งด่วน`,cls:'severity-severe'};
+  return{key:'severe',label:'ซึมเศร้าระดับรุนแรง',sub:`คะแนน ${score}/27 — ควรพบผู้เชี่ยวชาญโดยเร็ว`,cls:'severity-severe'};
+}
+
+function getAdhdSeverity(total, inatt, hyper) {
+  const iHigh=inatt>=12, hHigh=hyper>=12, iMid=inatt>=6, hMid=hyper>=6;
+  if(iHigh&&hHigh) return{key:'combined',label:'แนวโน้ม ADHD แบบรวม (Combined)',sub:`รวม ${total}/54 | ขาดสมาธิ ${inatt}/27 | ซน/หุนหัน ${hyper}/27`};
+  if(iHigh) return{key:'inattentive',label:'แนวโน้ม ADHD ด้านขาดสมาธิ',sub:`รวม ${total}/54 | ขาดสมาธิสูง ${inatt}/27`};
+  if(hHigh) return{key:'hyperactive',label:'แนวโน้ม ADHD ด้านซน/หุนหัน',sub:`รวม ${total}/54 | ซน/หุนหันสูง ${hyper}/27`};
+  if(total>=18) return{key:'subclinical',label:'มีบางอาการ (ต้องติดตาม)',sub:`รวม ${total}/54 — บางอาการที่ควรสังเกต`};
+  return{key:'none',label:'ไม่พบแนวโน้ม ADHD',sub:`รวม ${total}/54 — อยู่ในเกณฑ์ปกติ`};
+}
+
+function showSuccess(sd, phqRecord, phqSev, phqAnswers, adhdRecord, adhdSev) {
+  // ซ่อนฟอร์ม
+  document.getElementById('surveyForm').style.display='none';
+  document.getElementById('formNavBar').style.display='none';
+  document.getElementById('heroSurvey').style.display='none';
+  // แสดงเฉพาะชื่อ ห้อง วันที่ — ไม่แสดงผล PHQ/ADHD (อยู่ที่ Dashboard ครูเท่านั้น)
+  const risk=sd._risk;
+  document.getElementById('successMeta').innerHTML=`
+    <div class="meta-chip">ชื่อ: <strong>${sd.fullname||'—'}</strong></div>
+    <div class="meta-chip">ห้อง: <strong>${sd.classroom||''} ${sd.level||''}</strong></div>
+    <div class="meta-chip">วันที่: <strong>${sd._ts||'—'}</strong></div>
+  `;
+  document.getElementById('successPage').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ================================================================
+// AI
+// ================================================================
+async function fetchAIPHQ(record, severity) {
+  const bubble=document.getElementById('aiBubble');
+  const sevNames={none:'ไม่มีภาวะซึมเศร้า',mild:'ซึมเศร้าระดับน้อย',moderate:'ซึมเศร้าระดับปานกลาง',moderately_severe:'ซึมเศร้าระดับค่อนข้างรุนแรง',severe:'ซึมเศร้าระดับรุนแรง'};
+  const highItems=record.answers.map((s,i)=>({s,q:PHQ_QUESTIONS[i]})).filter(x=>x.s>=2);
+  const prompt=`คุณเป็นนักจิตวิทยาโรงเรียน วิเคราะห์ผล PHQ-A ของนักเรียนอาชีวศึกษาไทย\nชื่อ: ${record.fullname} ชั้น: ${record.level} ${record.classroom} เพศ: ${record.gender||'ไม่ระบุ'}\nคะแนน PHQ-A: ${record.total}/27 ระดับ: ${sevNames[record.severity]||record.severity}\nข้อที่มีคะแนนสูง (2-3): ${highItems.length?highItems.map(x=>`"${x.q}"(${x.s})`).join(', '):'ไม่มี'}\nข้อ 9 (ความคิดทำร้ายตัวเอง): ${record.answers[8]}\n\nให้วิเคราะห์เป็นภาษาไทย กระชับ ไม่เกิน 180 คำ:\n1. **สรุปภาพรวม**\n2. **จุดที่ควรให้ความสนใจ**\n3. **คำแนะนำสำหรับครู** (2-3 ข้อ)\n4. **ขั้นตอนต่อไป**`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const text=data.content?.map(c=>c.text||'').join('')||'ไม่สามารถวิเคราะห์ได้';
+    // Bubble hidden on student page — only save to localStorage for dashboard
+    const all=JSON.parse(localStorage.getItem('phq_data')||'[]');
+    const idx=all.findIndex(r=>r._id===record._id);
+    if(idx>=0){all[idx].ai_analysis=text;localStorage.setItem('phq_data',JSON.stringify(all));}
+  }catch(e){ console.error('PHQ AI error:', e); }
+}
+
+async function fetchAIADHD(record, severity) {
+  const bubble=document.getElementById('adhdAiBubble');
+  const prompt=`คุณเป็นนักจิตวิทยาการศึกษา วิเคราะห์ผลแบบประเมิน ADHD ของนักเรียนอาชีวศึกษาไทย อายุ 14-20 ปี\nชื่อ: ${record.fullname} ชั้น: ${record.level} ${record.classroom} เพศ: ${record.gender||'ไม่ระบุ'}\nคะแนนรวม: ${record.total}/54 ด้านสมาธิ: ${record.inatt}/27 ด้านซน/หุนหัน: ${record.hyper}/27\nระดับ: ${severity.label}\n\nวิเคราะห์เป็นภาษาไทย ไม่เกิน 200 คำ:\n1. **สรุปภาพรวม**\n2. **จุดเด่นที่ต้องดูแล**\n3. **แนวทางการสอนที่เหมาะสม** (3 ข้อ)\n4. **ข้อแนะนำเพิ่มเติม**\n\nหมายเหตุ: ผลนี้เป็นการคัดกรองเบื้องต้น ไม่ใช่การวินิจฉัยทางคลินิก`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const text=data.content?.map(c=>c.text||'').join('')||'ไม่สามารถวิเคราะห์ได้';
+    // Bubble hidden on student page — only save to localStorage for dashboard
+    const all=JSON.parse(localStorage.getItem('adhd_data')||'[]');
+    const idx=all.findIndex(r=>r._id===record._id);
+    if(idx>=0){all[idx].ai_analysis=text;localStorage.setItem('adhd_data',JSON.stringify(all));}
+  }catch(e){ console.error('ADHD AI error:', e); }
+}
+
+// resetForm: resetForm clears q9warn (which no longer exists in student form,
+// but guard added for safety), resets all AI bubbles, rebuilds generated forms
+function resetForm() {
+  currentSection=0;
+  document.getElementById('surveyForm').reset();
+  document.getElementById('surveyForm').style.display='block';
+  document.getElementById('formNavBar').style.display='block';
+  document.getElementById('heroSurvey').style.display='block';
+  document.getElementById('successPage').style.display='none';
+  buildPHQ(); buildADHD(); updateUI();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

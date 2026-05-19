@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แดชบอร์ดครู | แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล วิทยาลัยเทคนิคประจวบคีรีขันธ์</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;min-height:100vh}
+:root{
+  --o500:#E86A2E;--o400:#F07C42;--o300:#F5A070;--o100:#FEF0E8;--o50:#FFF8F4;
+  --g900:#1A1714;--g700:#3D3830;--g600:#524D47;--g500:#6B6560;--g400:#9C978F;
+  --g300:#C8C3BC;--g200:#E5E2DC;--g100:#F0EDE8;--g50:#F7F5F3;
+  --white:#FFFFFF;
+  --red:#D93025;--red-bg:#FEE9E7;
+  --amber:#C8760A;--amber-bg:#FEF5E4;
+  --green:#1E7E4E;--green-bg:#E6F5EC;
+  --blue:#1565C0;--blue-bg:#E3F2FD;
+  --purple:#6A0DAD;--purple-bg:#F3E8FF;
+  --teal:#00796B;--teal-bg:#E0F2F1;
+  --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:28px;
+  --shadow-sm:0 2px 6px rgba(0,0,0,.06);--shadow-md:0 6px 24px rgba(0,0,0,.09);--shadow-lg:0 16px 48px rgba(0,0,0,.15);
+  --tr:.18s cubic-bezier(.4,0,.2,1);
+}
+
+/* LOGIN */
+#loginOverlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--g900) 0%,#2A2118 100%);display:flex;align-items:center;justify-content:center;padding:1.25rem}
+.login-box{background:var(--white);border-radius:var(--r-xl);padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:0 32px 80px rgba(0,0,0,.35);text-align:center}
+.login-logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,var(--o500),var(--o300));display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;box-shadow:0 6px 20px rgba(232,106,46,.35)}
+.login-title{font-family:'Kanit',sans-serif;font-size:1.3rem;font-weight:700;color:var(--g900);margin-bottom:.25rem}
+.login-sub{font-size:.85rem;color:var(--g400);margin-bottom:1.75rem}
+.login-field{text-align:left;margin-bottom:1rem}
+.login-field label{display:block;font-size:.8rem;font-weight:600;color:var(--g500);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.375rem}
+.login-field input{width:100%;padding:11px 14px;border:1.5px solid var(--g200);border-radius:var(--r-md);font-family:'Sarabun',sans-serif;font-size:.95rem;color:var(--g900);outline:none;transition:border-color var(--tr)}
+.login-field input:focus{border-color:var(--o500);box-shadow:0 0 0 3px rgba(232,106,46,.12)}
+.login-err{font-size:.82rem;color:var(--red);margin-top:.5rem;display:none}
+.login-btn{width:100%;padding:12px;border-radius:var(--r-md);background:var(--o500);color:#fff;font-family:'Kanit',sans-serif;font-size:1rem;font-weight:600;border:none;cursor:pointer;transition:var(--tr);box-shadow:0 4px 14px rgba(232,106,46,.3);margin-top:.25rem}
+.login-btn:hover{background:#C05520}
+.login-footer{font-size:.75rem;color:var(--g400);margin-top:1.25rem}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--g200);box-shadow:var(--shadow-sm)}
+.header-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;height:60px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.brand-logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--o500),#F5A070);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(232,106,46,.3)}
+.brand-text{display:flex;flex-direction:column;line-height:1.2}
+.brand-school{font-family:'Kanit',sans-serif;font-size:13px;font-weight:600;color:var(--g900)}
+.brand-dept{font-size:11px;color:var(--g400)}
+.header-nav{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.nav-pill{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:500;color:var(--g500);text-decoration:none;border:1.5px solid transparent;transition:var(--tr);white-space:nowrap}
+.nav-pill:hover{color:var(--o500);background:var(--o100)}
+.nav-pill.active{color:var(--o500);background:var(--o100);border-color:rgba(232,106,46,.25)}
+.header-actions{display:flex;gap:5px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.btn-xs{padding:7px 11px;border-radius:var(--r-sm);font-size:11.5px;font-weight:600;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:var(--tr);font-family:'Sarabun',sans-serif;white-space:nowrap}
+.btn-export{background:var(--o500);color:#fff;box-shadow:0 2px 6px rgba(232,106,46,.25)}.btn-export:hover{background:#C05520}
+.btn-export-phq{background:var(--purple);color:#fff}.btn-export-phq:hover{background:#56099E}
+.btn-export-adhd{background:var(--teal);color:#fff}.btn-export-adhd:hover{background:#004D40}
+.btn-clear{background:var(--white);color:var(--g500);border:1.5px solid var(--g200)}.btn-clear:hover{border-color:var(--red);color:var(--red)}
+.btn-logout{background:var(--g100);color:var(--g500);border:1.5px solid var(--g200)}.btn-logout:hover{background:var(--red-bg);color:var(--red);border-color:var(--red)}
+
+/* DASH MODE TABS */
+.dash-tabs{background:var(--white);border-bottom:2px solid var(--g200)}
+.dash-tabs-inner{max-width:1280px;margin:0 auto;display:flex;padding:0 1.25rem;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.dtab-btn{padding:.875rem 1.125rem;font-family:'Kanit',sans-serif;font-size:.875rem;font-weight:600;color:var(--g400);border:none;background:transparent;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:var(--tr);white-space:nowrap}
+.dtab-btn.active{color:var(--o500);border-bottom-color:var(--o500)}
+.dtab-btn:hover:not(.active){color:var(--g700)}
+
+/* MAIN */
+.main{max-width:1280px;margin:0 auto;padding:1.5rem 1.25rem 2rem}
+.dash-panel{display:none}.dash-panel.active{display:block}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.page-title{font-family:'Kanit',sans-serif;font-size:1.4rem;font-weight:700;color:var(--g900)}
+.page-sub{font-size:.82rem;color:var(--g400);margin-top:3px}
+.filter-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.filter-select{padding:8px 32px 8px 12px;border-radius:var(--r-md);border:1.5px solid var(--g200);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M3 5l4 4 4-4' stroke='%239C978F' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;font-size:.875rem;color:var(--g700);font-family:'Sarabun',sans-serif;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.filter-select:focus{border-color:var(--o500)}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat-grid-5{grid-template-columns:repeat(5,1fr)}
+.stat-grid-6{grid-template-columns:repeat(6,1fr)}
+@media(max-width:1000px){.stat-grid-6{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:800px){.stat-grid,.stat-grid-5,.stat-grid-6{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:400px){.stat-grid,.stat-grid-5,.stat-grid-6{grid-template-columns:1fr}}
+.stat-card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--g200);padding:1.125rem 1.125rem .875rem;box-shadow:var(--shadow-sm);transition:var(--tr);display:flex;align-items:flex-start;gap:11px}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.stat-icon{width:42px;height:42px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.stat-body{flex:1;min-width:0}
+.stat-num{font-family:'Kanit',sans-serif;font-size:1.875rem;font-weight:700;color:var(--g900);line-height:1}
+.stat-label{font-size:.76rem;color:var(--g400);margin-top:4px;font-weight:500}
+.stat-sub{font-size:.7rem;color:var(--g300);margin-top:2px}
+.num-red{color:var(--red)}.num-amber{color:var(--amber)}.num-green{color:var(--green)}.num-blue{color:var(--blue)}.num-purple{color:var(--purple)}.num-teal{color:var(--teal)}.num-orange{color:var(--o500)}
+
+/* TABS */
+.tab-bar{display:flex;gap:4px;margin-bottom:1rem;background:var(--white);border:1px solid var(--g200);border-radius:var(--r-md);padding:5px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab-btn{display:flex;align-items:center;gap:5px;white-space:nowrap;padding:8px 13px;border-radius:var(--r-sm);font-size:.855rem;font-weight:500;color:var(--g500);border:none;background:transparent;cursor:pointer;transition:var(--tr);font-family:'Sarabun',sans-serif}
+.tab-btn:hover{background:var(--g100);color:var(--g700)}
+.tab-btn.active{background:var(--o100);color:var(--o500);font-weight:600}
+.phq-tab-btn.active{background:var(--purple-bg);color:var(--purple)}
+.adhd-tab-btn.active{background:var(--teal-bg);color:var(--teal)}
+
+/* PANEL */
+.panel{display:none}.panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.panel-card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--g200);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.25rem}
+.panel-head{padding:1.125rem 1.5rem;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.panel-title{font-family:'Kanit',sans-serif;font-size:1rem;font-weight:600;color:var(--g900)}
+.panel-note{font-size:.8rem;color:var(--g400)}
+.panel-body{padding:1.125rem 1.5rem}
+
+/* GROUP CARDS */
+.group-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.25rem}
+@media(max-width:700px){.group-grid{grid-template-columns:1fr}}
+.group-card{border-radius:var(--r-lg);border:2px solid;overflow:hidden}
+.group-card.advanced{border-color:var(--green);background:var(--green-bg)}
+.group-card.intermediate{border-color:var(--amber);background:var(--amber-bg)}
+.group-card.struggling{border-color:var(--red);background:var(--red-bg)}
+.group-card-head{padding:.875rem 1.125rem;display:flex;align-items:center;gap:10px}
+.group-card-icon{width:38px;height:38px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(255,255,255,.6);flex-shrink:0}
+.group-card-title{font-family:'Kanit',sans-serif;font-size:.95rem;font-weight:700}
+.advanced .group-card-title{color:var(--green)}.intermediate .group-card-title{color:var(--amber)}.struggling .group-card-title{color:var(--red)}
+.group-card-count{font-size:1.75rem;font-weight:700;font-family:'Kanit',sans-serif;margin-left:auto}
+.advanced .group-card-count{color:var(--green)}.intermediate .group-card-count{color:var(--amber)}.struggling .group-card-count{color:var(--red)}
+.group-card-body{padding:0 1.125rem .875rem;font-size:.8rem;color:var(--g600);line-height:1.6}
+.group-name-list{display:flex;flex-wrap:wrap;gap:5px;margin-top:.5rem}
+.g-name-tag{font-size:.75rem;padding:2px 9px;border-radius:10px;background:rgba(255,255,255,.7);font-weight:500}
+.advanced .g-name-tag{color:var(--green)}.intermediate .g-name-tag{color:var(--amber)}.struggling .g-name-tag{color:var(--red)}
+
+/* RISK LIST */
+.risk-item{display:flex;align-items:flex-start;gap:12px;padding:.875rem 1rem;border-radius:var(--r-md);border:1.5px solid var(--g200);margin-bottom:8px;background:var(--white);transition:var(--tr)}
+.risk-item:hover{border-color:var(--g300);box-shadow:var(--shadow-sm)}
+.risk-level-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.risk-info{flex:1;min-width:0}
+.risk-name{font-size:.9rem;font-weight:600;color:var(--g900)}
+.risk-class{font-size:.79rem;color:var(--g400);margin-left:6px}
+.risk-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.risk-tag{font-size:.73rem;padding:2px 8px;border-radius:10px;background:var(--red-bg);color:var(--red);font-weight:500}
+.risk-tag.warn{background:var(--amber-bg);color:var(--amber)}
+.risk-tag.q9{background:#4A0E0E;color:#FFB3B0;font-weight:700}
+.risk-tag.phq-alert{background:var(--purple-bg);color:var(--purple)}
+.risk-tag.adhd-alert{background:var(--teal-bg);color:var(--teal)}
+.risk-score{font-size:.75rem;font-weight:700;color:var(--g400);flex-shrink:0;text-align:right;line-height:1.6}
+
+/* SKILL BARS */
+.skill-row{margin-bottom:12px}
+.skill-meta{display:flex;justify-content:space-between;font-size:.8rem;color:var(--g500);margin-bottom:5px;font-weight:500}
+.bar-track{height:10px;background:var(--g100);border-radius:5px;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* TAGS */
+.tag-cloud{display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem}
+.t-tag{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:.8rem;font-weight:500;background:var(--g100);color:var(--g600);border:1px solid var(--g200)}
+.t-tag .cnt{background:var(--white);border-radius:10px;padding:0 6px;font-size:.7rem;font-weight:700;color:var(--g500)}
+
+/* DEVICE */
+.device-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.d-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--r-md);padding:1.125rem}
+.d-label{font-size:.8rem;color:var(--g500);margin-bottom:.75rem;font-weight:600}
+.d-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.d-bar-label{font-size:.8rem;color:var(--g600);min-width:110px}
+.d-bar-track{flex:1;height:8px;background:var(--g100);border-radius:4px;overflow:hidden}
+.d-bar-fill{height:100%;border-radius:4px;background:var(--o500)}
+.d-pct{font-size:.75rem;font-weight:700;color:var(--g500);min-width:28px;text-align:right}
+
+/* TABLE */
+.search-input{width:100%;max-width:240px;padding:9px 14px;border-radius:var(--r-md);border:1.5px solid var(--g200);font-size:.875rem;font-family:'Sarabun',sans-serif;color:var(--g900);outline:none;transition:border-color var(--tr);background:var(--white)}
+.search-input:focus{border-color:var(--o500)}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.855rem;min-width:600px}
+th{padding:.75rem 1rem;text-align:left;font-size:.73rem;font-weight:600;color:var(--g400);letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid var(--g200);white-space:nowrap;background:var(--g50)}
+td{padding:.75rem 1rem;border-bottom:1px solid var(--g100);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--o50);cursor:pointer}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:10px;font-size:.73rem;font-weight:600}
+.badge-red{background:var(--red-bg);color:var(--red)}.badge-amber{background:var(--amber-bg);color:var(--amber)}.badge-green{background:var(--green-bg);color:var(--green)}.badge-gray{background:var(--g100);color:var(--g500)}.badge-blue{background:var(--blue-bg);color:var(--blue)}.badge-purple{background:var(--purple-bg);color:var(--purple)}.badge-orange{background:var(--o100);color:var(--o500)}.badge-teal{background:var(--teal-bg);color:var(--teal)}
+.b-none{background:var(--green-bg);color:var(--green)}.b-mild{background:var(--amber-bg);color:var(--amber)}.b-moderate{background:var(--o100);color:var(--o500)}.b-severe{background:var(--red-bg);color:var(--red)}.b-gray{background:var(--g100);color:var(--g500)}
+
+/* SKILLS LAYOUT */
+.skills-layout{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:700px){.skills-layout{grid-template-columns:1fr}}
+.sub-card{background:var(--g50);border:1px solid var(--g200);border-radius:var(--r-md);padding:1.125rem;margin-bottom:1rem}
+.sub-card-title{font-size:.85rem;font-weight:600;color:var(--g700);margin-bottom:1rem;display:flex;align-items:center;gap:6px}
+.career-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.career-label{font-size:.8rem;color:var(--g600);min-width:140px}
+.career-bar{flex:1;height:8px;background:var(--g100);border-radius:4px;overflow:hidden}
+.career-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--o500),var(--o400))}
+.career-cnt{font-size:.75rem;color:var(--g400);min-width:30px;text-align:right;font-weight:600}
+
+/* PHQ STYLES */
+.sev-row{display:grid;grid-template-columns:130px 1fr 48px;align-items:center;gap:.75rem;margin-bottom:.75rem;font-size:.875rem}
+.sev-label{color:var(--g600);font-weight:500}
+.sev-track{height:12px;background:var(--g100);border-radius:6px;overflow:hidden}
+.sev-fill{height:100%;border-radius:6px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.sev-cnt{font-weight:700;text-align:right;color:var(--g700)}
+.fill-none{background:var(--green)}.fill-mild{background:var(--amber)}.fill-moderate{background:var(--o500)}.fill-ms{background:var(--red)}.fill-severe{background:#8B0000}
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.room-card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--g200);box-shadow:var(--shadow-sm);padding:1.125rem;transition:var(--tr)}
+.room-card:hover{box-shadow:var(--shadow-md)}
+.room-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.875rem}
+.room-name{font-family:'Kanit',sans-serif;font-weight:700;font-size:1rem;color:var(--g900)}
+.room-avg{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.82rem;font-weight:700}
+.room-bar-stack{display:flex;height:10px;border-radius:5px;overflow:hidden;margin-bottom:.5rem}
+.stack-seg{transition:width .5s ease}
+.room-legend{display:flex;gap:.75rem;flex-wrap:wrap}
+.legend-item{display:inline-flex;align-items:center;gap:4px;font-size:.75rem;color:var(--g500)}
+.legend-dot-el{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.q-heatmap{display:grid;gap:.625rem}
+.q-row{display:flex;align-items:center;gap:.75rem;font-size:.85rem}
+.q-num{width:30px;flex-shrink:0;color:var(--g400);font-size:.78rem}
+.q-text{flex:1;color:var(--g700);font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.q-bar-wrap{width:140px;flex-shrink:0}
+.q-bar-track{height:8px;background:var(--g100);border-radius:4px;overflow:hidden}
+.q-bar-fill{height:100%;border-radius:4px;background:var(--o500)}
+.q-avg{width:30px;text-align:right;flex-shrink:0;font-weight:600;font-size:.8rem;color:var(--g700)}
+.trend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.75rem}
+.trend-point{background:var(--g50);border:1px solid var(--g200);border-radius:var(--r-md);padding:.75rem;text-align:center}
+.trend-date{font-size:.72rem;color:var(--g400);margin-bottom:.375rem}
+.trend-avg{font-family:'Kanit',sans-serif;font-size:1.4rem;font-weight:700}
+.trend-n{font-size:.72rem;color:var(--g400);margin-top:2px}
+.report-controls{display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center}
+.report-select{padding:9px 32px 9px 12px;border-radius:var(--r-md);border:1.5px solid var(--g200);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M3 5l4 4 4-4' stroke='%239C978F' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;font-size:.875rem;color:var(--g700);font-family:'Sarabun',sans-serif;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.btn-print{padding:9px 18px;border-radius:var(--r-md);background:var(--o500);color:#fff;font-size:.875rem;font-weight:600;border:none;cursor:pointer;font-family:'Sarabun',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:var(--tr)}
+.btn-print:hover{background:#C05520}
+.report-block{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--g200);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.25rem}
+.report-block-head{padding:1rem 1.5rem;background:var(--o100);border-bottom:1px solid rgba(232,106,46,.15);display:flex;justify-content:space-between;align-items:center}
+.report-block-title{font-family:'Kanit',sans-serif;font-weight:600;font-size:.95rem;color:var(--o500)}
+.report-block-meta{font-size:.8rem;color:var(--o500);opacity:.8}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:1.25rem;animation:fadeIn .2s ease}
+.modal-box{background:var(--white);border-radius:var(--r-xl);max-width:680px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+.modal-head{padding:1.25rem 1.5rem;border-bottom:1px solid var(--g200);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:1}
+.modal-title{font-family:'Kanit',sans-serif;font-size:1.1rem;font-weight:700;color:var(--g900)}
+.modal-close{width:32px;height:32px;border-radius:50%;border:none;background:var(--g100);color:var(--g500);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.modal-close:hover{background:var(--red-bg);color:var(--red)}
+.modal-body{padding:1.25rem 1.5rem}
+.modal-section{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--g100)}
+.modal-section:last-child{border-bottom:none;margin-bottom:0}
+.modal-section-title{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem}
+.phq-color{color:var(--purple)}.adhd-color{color:var(--teal)}.note-color{color:var(--o500)}
+.score-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--r-md);font-size:.9rem;font-weight:600;margin-bottom:.75rem}
+.ai-bubble{background:var(--o50);border:1px solid rgba(232,106,46,.15);border-radius:var(--r-md);padding:.875rem 1rem;font-size:.85rem;line-height:1.75;color:var(--g700)}
+.ai-bubble.purple{background:var(--purple-bg);border-color:rgba(106,13,173,.15)}
+.ai-bubble.teal{background:var(--teal-bg);border-color:rgba(0,121,107,.15)}
+.ai-loading{display:flex;align-items:center;gap:8px;color:var(--g400);font-size:.85rem}
+.dot-pulse{display:inline-flex;gap:4px}
+.dot-pulse span{width:5px;height:5px;border-radius:50%;background:var(--o500);animation:pulse 1.2s ease-in-out infinite}
+.dot-pulse span:nth-child(2){animation-delay:.2s}.dot-pulse span:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+.breakdown-mini{display:flex;flex-wrap:wrap;gap:4px;margin-top:.5rem}
+.breakdown-mini-item{font-size:.72rem;padding:2px 7px;border-radius:6px;font-weight:600}
+
+/* ADHD DASHBOARD */
+.adhd-score-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-bottom:1rem}
+.adhd-student-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--r-md);padding:1rem;cursor:pointer;transition:var(--tr)}
+.adhd-student-card:hover{border-color:var(--teal);box-shadow:var(--shadow-sm)}
+.adhd-card-name{font-size:.9rem;font-weight:600;color:var(--g900);margin-bottom:.375rem}
+.adhd-card-class{font-size:.78rem;color:var(--g400);margin-bottom:.625rem}
+.adhd-score-bars{display:flex;flex-direction:column;gap:6px}
+.adhd-bar-row{display:flex;align-items:center;gap:8px;font-size:.78rem}
+.adhd-bar-label{min-width:80px;color:var(--g500)}
+.adhd-bar-track{flex:1;height:7px;background:var(--g100);border-radius:4px;overflow:hidden}
+.adhd-bar-fill-i{height:100%;border-radius:4px;background:var(--blue)}
+.adhd-bar-fill-h{height:100%;border-radius:4px;background:var(--o500)}
+.adhd-bar-num{min-width:32px;text-align:right;font-weight:600;color:var(--g600)}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--g400);font-size:.9rem}
+.empty-icon{font-size:2.5rem;margin-bottom:.75rem}
+
+/* FOOTER */
+.footer{text-align:center;padding:1.25rem;font-size:.8rem;color:var(--g400);border-top:1px solid var(--g200);background:var(--white);display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-top:2rem}
+
+/* RESPONSIVE */
+@media(max-width:600px){.brand-dept{display:none}.page-title{font-size:1.1rem}.header-actions{gap:3px}.btn-xs{padding:5px 7px;font-size:10.5px}.stat-num{font-size:1.5rem}}
+@media print{#loginOverlay,.header,.dash-tabs,.tab-bar,.filter-wrap,.header-actions,.report-controls,.btn-print{display:none!important}.dash-panel,.panel{display:block!important}.panel-card,.report-block{box-shadow:none;break-inside:avoid}body{background:white}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginOverlay">
+  <div class="login-box">
+    <div class="login-logo"><svg width="30" height="30" viewBox="0 0 30 30" fill="none"><path d="M15 4L4 11v15h8v-7h6v7h8V11L15 4z" fill="white" opacity=".95"/></svg></div>
+    <div class="login-title">แดชบอร์ดครูผู้สอน</div>
+    <div class="login-sub">แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล<br>วิทยาลัยเทคนิคประจวบคีรีขันธ์</div>
+    <div class="login-field"><label>ชื่อผู้ใช้</label><input type="text" id="loginUser" placeholder="กรอกชื่อผู้ใช้" autocomplete="username"></div>
+    <div class="login-field"><label>รหัสผ่าน</label><input type="password" id="loginPass" placeholder="กรอกรหัสผ่าน" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="login-err" id="loginErr">⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
+    <button class="login-btn" onclick="doLogin()">🔐 เข้าสู่ระบบ</button>
+    <div class="login-footer">ระบบวิเคราะห์ผู้เรียน v6.0 — สำหรับครูผู้สอนเท่านั้น</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-logo"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3L3 8v1.5h16V8L11 3z" fill="white" opacity=".95"/><rect x="4" y="10" width="3" height="7" rx="1" fill="white" opacity=".9"/><rect x="9.5" y="10" width="3" height="7" rx="1" fill="white" opacity=".9"/><rect x="15" y="10" width="3" height="7" rx="1" fill="white" opacity=".9"/><rect x="3" y="17" width="16" height="2" rx="1" fill="white" opacity=".9"/></svg></div>
+      <div class="brand-text"><span class="brand-school">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="brand-dept">แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span></div>
+    </a>
+    <nav class="header-nav">
+      <a href="index.html" class="nav-pill">📋 แบบสำรวจ</a>
+      <a href="dashboard.html" class="nav-pill active">📊 แดชบอร์ด</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-xs btn-export" onclick="exportExcelLearner()">📥 Excel ผู้เรียน</button>
+      <button class="btn-xs btn-export-phq" onclick="exportExcelPHQ()">📥 Excel PHQ</button>
+      <button class="btn-xs btn-export-adhd" onclick="exportExcelADHD()">📥 Excel ADHD</button>
+      <button class="btn-xs btn-clear" onclick="showClearMenu()">🗑️</button>
+      <button class="btn-xs btn-logout" onclick="doLogout()">🚪 ออก</button>
+    </div>
+  </div>
+</header>
+
+<!-- DASH MODE TABS -->
+<div class="dash-tabs">
+  <div class="dash-tabs-inner">
+    <button class="dtab-btn active" id="dtab-learner" onclick="switchDash('learner')">📊 แดชบอร์ดผู้เรียน</button>
+    <button class="dtab-btn" id="dtab-phq" onclick="switchDash('phq')">💜 รายงาน PHQ-A</button>
+    <button class="dtab-btn" id="dtab-adhd" onclick="switchDash('adhd')">🧩 รายงาน ADHD</button>
+  </div>
+</div>
+
+<main class="main">
+
+<!-- ===== LEARNER DASHBOARD ===== -->
+<div class="dash-panel active" id="dash-learner">
+  <div class="page-head">
+    <div><h1 class="page-title">📊 แดชบอร์ดวิเคราะห์ผู้เรียน</h1><p class="page-sub" id="learnerSubtext">ปีการศึกษา 2569</p></div>
+    <div class="filter-wrap"><select class="filter-select" id="filterClass" onchange="renderLearner()"><option value="all">ทุกห้อง</option></select></div>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="stat-grid stat-grid-6" id="statGrid">
+    <div class="stat-card"><div class="stat-icon" style="background:var(--o100)">👥</div><div class="stat-body"><div class="stat-num" id="sTotalStudents">0</div><div class="stat-label">นักเรียนทั้งหมด</div><div class="stat-sub" id="sTotalSub">ยังไม่มีข้อมูล</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">🏆</div><div class="stat-body"><div class="stat-num num-green" id="sAdvanced">0</div><div class="stat-label">กลุ่มเก่ง</div><div class="stat-sub">Advanced</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">📚</div><div class="stat-body"><div class="stat-num num-amber" id="sIntermediate">0</div><div class="stat-label">กลุ่มกลาง</div><div class="stat-sub">Intermediate</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--red-bg)">🚨</div><div class="stat-body"><div class="stat-num num-red" id="sStruggling">0</div><div class="stat-label">กลุ่มต้องดูแล</div><div class="stat-sub">Struggling</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">💻</div><div class="stat-body"><div class="stat-num num-amber" id="sNoDevice">0</div><div class="stat-label">ขาดอุปกรณ์</div><div class="stat-sub">ไม่มีคอมส่วนตัว</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">⭐</div><div class="stat-body"><div class="stat-num num-green" id="sSpecial">0</div><div class="stat-label">มีทักษะพิเศษ</div><div class="stat-sub">ทักษะดิจิทัล</div></div></div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showLTab('groups',this)">🎯 จัดกลุ่มผู้เรียน</button>
+    <button class="tab-btn" onclick="showLTab('risk',this)">🚨 กลุ่มเสี่ยง</button>
+    <button class="tab-btn" onclick="showLTab('skills',this)">⭐ ทักษะ</button>
+    <button class="tab-btn" onclick="showLTab('devices',this)">📱 อุปกรณ์</button>
+    <button class="tab-btn" onclick="showLTab('students',this)">📋 รายชื่อ</button>
+  </div>
+
+  <!-- Panel: กลุ่มผู้เรียน (Bug 1 + Bug 5 Fix: renderGroups defined and called) -->
+  <div class="panel active" id="lpanel-groups">
+    <div class="group-grid" id="groupGrid">
+      <div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📊</div>ยังไม่มีข้อมูล</div>
+    </div>
+    <div class="panel-card">
+      <div class="panel-head"><div class="panel-title">📋 รายละเอียดการจัดกลุ่ม</div><div class="panel-note">คะแนนทักษะคอม + GPAX + ส่งงาน</div></div>
+      <div class="panel-body"><div class="tbl-wrap"><table id="groupTable"><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ห้อง</th><th>ทักษะคอม</th><th>GPAX</th><th>ส่งงาน</th><th>กลุ่ม</th><th>PHQ-A</th><th>ADHD</th></tr></thead><tbody id="groupTbody"><tr><td colspan="9" class="empty-state">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div>
+    </div>
+  </div>
+
+  <!-- Panel: Risk -->
+  <div class="panel" id="lpanel-risk">
+    <div class="panel-card">
+      <div class="panel-head"><div class="panel-title">🚨 นักเรียนกลุ่มเสี่ยง</div><div class="panel-note">เรียงจากความเสี่ยงมากไปน้อย · Q9 ≥1 = แจ้งครูแนะแนว</div></div>
+      <div class="panel-body" id="riskBody"><div class="empty-state"><div class="empty-icon">📋</div>ยังไม่มีข้อมูล</div></div>
+    </div>
+  </div>
+
+  <!-- Panel: Skills -->
+  <div class="panel" id="lpanel-skills">
+    <div class="panel-card">
+      <div class="panel-head"><div class="panel-title">⭐ ภาพรวมทักษะและความสามารถ</div></div>
+      <div class="panel-body">
+        <div class="skills-layout">
+          <div class="sub-card"><div class="sub-card-title">📊 ค่าเฉลี่ยทักษะหลัก (1–5)</div><div id="skillBars"></div></div>
+          <div>
+            <div class="sub-card"><div class="sub-card-title">✨ ทักษะพิเศษในห้องเรียน</div><div class="tag-cloud" id="specialSkillTags"><span class="t-tag">ยังไม่มีข้อมูล</span></div></div>
+            <div class="sub-card"><div class="sub-card-title">📱 Social Media ที่ใช้งาน</div><div class="tag-cloud" id="platformTags"><span class="t-tag">ยังไม่มีข้อมูล</span></div></div>
+            <div class="sub-card"><div class="sub-card-title">🎯 เป้าหมายอาชีพ</div><div id="careerChart"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Devices -->
+  <div class="panel" id="lpanel-devices">
+    <div class="panel-card"><div class="panel-head"><div class="panel-title">📱 ความพร้อมด้านอุปกรณ์</div></div><div class="panel-body"><div class="device-grid" id="deviceGrid"><div class="empty-state"><div class="empty-icon">💻</div>ยังไม่มีข้อมูล</div></div></div></div>
+  </div>
+
+  <!-- Panel: Students -->
+  <div class="panel" id="lpanel-students">
+    <div class="panel-card">
+      <div class="panel-head"><div class="panel-title">📋 รายชื่อนักเรียนทั้งหมด</div><input type="text" class="search-input" placeholder="🔍 ค้นหาชื่อ..." oninput="filterLearnerTable(this.value)"></div>
+      <div class="panel-body" style="padding:0"><div class="tbl-wrap"><table id="studentTable"><thead><tr><th>#</th><th>ชื่อ–นามสกุล</th><th>ระดับ/ห้อง</th><th>ทักษะคอม</th><th>อุปกรณ์</th><th>อินเทอร์เน็ต</th><th>ความเสี่ยง</th><th>กลุ่ม</th><th>PHQ-A</th><th>ADHD</th></tr></thead><tbody id="studentTbody"><tr><td colspan="10" class="empty-state">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PHQ DASHBOARD ===== -->
+<div class="dash-panel" id="dash-phq">
+  <div class="page-head">
+    <div><h1 class="page-title">💜 รายงาน PHQ-A</h1><p class="page-sub" id="phqSubtext">กำลังโหลดข้อมูล...</p></div>
+    <div class="filter-wrap">
+      <select class="filter-select" id="filterLevel" onchange="applyPHQFilters()"><option value="">ทุกชั้นปี</option><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></select>
+      <select class="filter-select" id="filterRoom" onchange="applyPHQFilters()"><option value="">ทุกห้อง</option></select>
+    </div>
+  </div>
+  <div class="stat-grid stat-grid-5">
+    <div class="stat-card"><div class="stat-icon" style="background:var(--purple-bg)">👥</div><div class="stat-body"><div class="stat-num num-purple" id="sTotal">0</div><div class="stat-label">นักเรียนทั้งหมด</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">✅</div><div class="stat-body"><div class="stat-num num-green" id="sNone">0</div><div class="stat-label">ปกติ (0–4)</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">⚠️</div><div class="stat-body"><div class="stat-num num-amber" id="sMild">0</div><div class="stat-label">น้อย (5–9)</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--o100)">🔶</div><div class="stat-body"><div class="stat-num num-orange" id="sModerate">0</div><div class="stat-label">ปานกลาง (10–19)</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--red-bg)">🔴</div><div class="stat-body"><div class="stat-num num-red" id="sSevere">0</div><div class="stat-label">รุนแรง (20+)</div></div></div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn phq-tab-btn active" onclick="showPTab('overview',this)">📊 ภาพรวม</button>
+    <button class="tab-btn phq-tab-btn" onclick="showPTab('q9risk',this)">🔴 ผู้มีความเสี่ยง Q9</button>
+    <button class="tab-btn phq-tab-btn" onclick="showPTab('byroom',this)">🏫 แยกห้อง</button>
+    <button class="tab-btn phq-tab-btn" onclick="showPTab('questions',this)">❓ รายข้อ</button>
+    <button class="tab-btn phq-tab-btn" onclick="showPTab('students',this)">📋 รายชื่อ</button>
+    <button class="tab-btn phq-tab-btn" onclick="showPTab('report',this)">📄 รีพอร์ต</button>
+  </div>
+  <div class="panel active" id="ppanel-overview">
+    <div class="panel-card"><div class="panel-head"><div class="panel-title">การกระจายระดับความรุนแรง</div><div class="panel-note" id="overviewNote">—</div></div><div class="panel-body" id="severityBars"><div class="empty-state"><div class="empty-icon">💜</div>ยังไม่มีข้อมูล<br><a href="index.html" style="color:var(--o500);font-weight:600">→ ไปกรอกแบบประเมิน PHQ-A</a></div></div></div>
+    <div class="panel-card"><div class="panel-head"><div class="panel-title">แนวโน้มคะแนนเฉลี่ย</div></div><div class="panel-body"><div id="trendChart" class="trend-grid"></div></div></div>
+  </div>
+  <!-- Q9 RISK PANEL (Bug fix: warning shown here for teacher, not student form) -->
+  <div class="panel" id="ppanel-q9risk">
+    <div class="panel-card" style="border-color:#8B0000">
+      <div class="panel-head" style="background:#FEE9E7">
+        <div class="panel-title" style="color:var(--red)">🔴 นักเรียนที่ตอบข้อ 9 (ความคิดทำร้ายตัวเอง) ≥ 1</div>
+        <div class="panel-note" style="color:var(--red)">ควรแจ้งครูแนะแนวหรือผู้บริหารทันที</div>
+      </div>
+      <div class="panel-body">
+        <div style="background:#FEE9E7;border:1px solid #C62828;border-radius:var(--r-md);padding:.875rem 1rem;margin-bottom:1rem;font-size:.875rem;color:#B71C1C;line-height:1.6">
+          <strong>⚠️ คำแนะนำสำหรับครู:</strong> นักเรียนด้านล่างนี้ตอบว่ามีความคิดทำร้ายตัวเอง กรุณาพูดคุยและประเมินความปลอดภัยก่อน แจ้งครูแนะแนวและผู้บริหาร หากจำเป็นให้ติดต่อผู้ปกครองและแนะนำสายด่วนสุขภาพจิต 1323
+        </div>
+        <div id="q9RiskList"><div class="empty-state"><div class="empty-icon">✅</div>ไม่พบนักเรียนที่มีคะแนนข้อ 9 ≥ 1</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel" id="ppanel-byroom"><div class="room-grid" id="roomGrid"><div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏫</div>ยังไม่มีข้อมูล</div></div></div>
+  <div class="panel" id="ppanel-questions"><div class="panel-card"><div class="panel-head"><div class="panel-title">คะแนนเฉลี่ยรายข้อ (0–3)</div><div class="panel-note">ข้อที่มีคะแนนสูง = พบบ่อยกว่า</div></div><div class="panel-body"><div id="qHeatmap" class="q-heatmap"></div></div></div></div>
+  <div class="panel" id="ppanel-students">
+    <div class="panel-card">
+      <div class="panel-head"><div class="panel-title">รายชื่อนักเรียน (คลิกเพื่อดูรายละเอียด)</div><div style="display:flex;gap:8px;flex-wrap:wrap"><input class="search-input" style="max-width:200px" type="text" placeholder="🔍 ค้นหาชื่อ..." oninput="filterPHQTable(this.value)"><select class="filter-select" id="filterSeverity" onchange="filterPHQTable('')"><option value="">ทุกระดับ</option><option value="none">ปกติ</option><option value="mild">น้อย</option><option value="moderate">ปานกลาง</option><option value="moderately_severe">ค่อนข้างรุนแรง</option><option value="severe">รุนแรง</option></select></div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ชั้น/ห้อง</th><th>เพศ</th><th>คะแนน</th><th>ระดับ</th><th>Q9⚠️</th><th>ADHD</th><th>วันที่</th></tr></thead><tbody id="phqStudentTbody"><tr><td colspan="9" class="empty-state">ยังไม่มีข้อมูล</td></tr></tbody></table></div>
+    </div>
+  </div>
+  <div class="panel" id="ppanel-report">
+    <div class="report-controls">
+      <select class="report-select" id="reportRoom" onchange="renderReport()"><option value="">ทุกห้อง</option></select>
+      <select class="report-select" id="reportLevel" onchange="renderReport()"><option value="">ทุกชั้นปี</option><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></select>
+      <select class="report-select" id="reportSev" onchange="renderReport()"><option value="">ทุกระดับ</option><option value="need_attention">ต้องติดตาม (≥5)</option><option value="moderate">ปานกลางขึ้นไป (≥10)</option><option value="severe">รุนแรง (≥20)</option></select>
+      <button class="btn-print" onclick="window.print()">🖨️ พิมพ์/PDF</button>
+    </div>
+    <div id="reportContent"><div class="empty-state"><div class="empty-icon">📄</div>เลือกตัวกรองด้านบนเพื่อสร้างรีพอร์ต</div></div>
+  </div>
+</div>
+
+<!-- ===== ADHD DASHBOARD ===== -->
+<div class="dash-panel" id="dash-adhd">
+  <div class="page-head">
+    <div><h1 class="page-title">🧩 รายงาน ADHD</h1><p class="page-sub" id="adhdSubtext">กำลังโหลดข้อมูล...</p></div>
+    <div class="filter-wrap">
+      <select class="filter-select" id="adhdFilterLevel" onchange="applyADHDFilters()"><option value="">ทุกชั้นปี</option><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></select>
+      <select class="filter-select" id="adhdFilterRoom" onchange="applyADHDFilters()"><option value="">ทุกห้อง</option></select>
+    </div>
+  </div>
+  <div class="stat-grid stat-grid-5">
+    <div class="stat-card"><div class="stat-icon" style="background:var(--teal-bg)">👥</div><div class="stat-body"><div class="stat-num num-teal" id="sAdhdTotal">0</div><div class="stat-label">กรอกแบบประเมิน</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">✅</div><div class="stat-body"><div class="stat-num num-green" id="sAdhdNone">0</div><div class="stat-label">ไม่พบแนวโน้ม</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">👁️</div><div class="stat-body"><div class="stat-num num-amber" id="sAdhdSub">0</div><div class="stat-label">ต้องติดตาม</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--blue-bg)">🎯</div><div class="stat-body"><div class="stat-num num-blue" id="sAdhdInatt">0</div><div class="stat-label">ขาดสมาธิ</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--red-bg)">⚡</div><div class="stat-body"><div class="stat-num num-red" id="sAdhdHigh">0</div><div class="stat-label">มีแนวโน้ม ADHD</div></div></div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn adhd-tab-btn active" onclick="showATab('list',this)">📋 รายชื่อ (คลิกดูรายละเอียด)</button>
+    <button class="tab-btn adhd-tab-btn" onclick="showATab('summary',this)">📊 สรุปภาพรวม</button>
+  </div>
+  <div class="panel active" id="apanel-list">
+    <div class="panel-card">
+      <div class="panel-head"><div class="panel-title">รายชื่อนักเรียนที่กรอกแบบประเมิน ADHD</div><input class="search-input" style="max-width:200px" type="text" placeholder="🔍 ค้นหา..." oninput="filterADHDTable(this.value)"></div>
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ชั้น/ห้อง</th><th>รวม/54</th><th>สมาธิ/27</th><th>ซน/27</th><th>ระดับ</th><th>AI วิเคราะห์</th><th>วันที่</th></tr></thead><tbody id="adhdTbody"><tr><td colspan="9" class="empty-state">ยังไม่มีข้อมูล</td></tr></tbody></table></div>
+    </div>
+  </div>
+  <div class="panel" id="apanel-summary">
+    <div class="panel-card"><div class="panel-head"><div class="panel-title">📊 สรุปแนวโน้ม ADHD ทั้งหมด</div></div><div class="panel-body" id="adhdSummaryBody"><div class="empty-state"><div class="empty-icon">🧩</div>ยังไม่มีข้อมูล</div></div></div>
+  </div>
+</div>
+
+</main>
+
+<!-- STUDENT DETAIL MODAL -->
+<div id="studentModal" style="display:none"></div>
+
+<footer class="footer"><span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span><span style="opacity:.3">●</span><span>วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span style="opacity:.3">●</span><span style="opacity:.5">ระบบวิเคราะห์ผู้เรียน v6.0</span></footer>
+
+<script>
+// ================================================================
+// LOGIN
+// ================================================================
+const ADMIN_USER='admin', ADMIN_PASS='admin1234';
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  if(u===ADMIN_USER&&p===ADMIN_PASS){sessionStorage.setItem('dash_auth','1');document.getElementById('loginOverlay').style.display='none';init();}
+  else{document.getElementById('loginErr').style.display='block';document.getElementById('loginPass').value='';}
+}
+function doLogout(){sessionStorage.removeItem('dash_auth');location.reload();}
+if(sessionStorage.getItem('dash_auth')==='1'){document.getElementById('loginOverlay').style.display='none';window.addEventListener('DOMContentLoaded',init);}
+
+// ================================================================
+// DASH SWITCHER
+// ================================================================
+function switchDash(tab){
+  ['learner','phq','adhd'].forEach(t=>{
+    document.getElementById('dash-'+t).classList.toggle('active',t===tab);
+    document.getElementById('dtab-'+t).classList.toggle('active',t===tab);
+  });
+}
+
+// ================================================================
+// DATA STORE
+// ================================================================
+let ALL_DATA=[], FILTERED=[];
+let PHQ_ALL=[], PHQ_FILTERED=[];
+let ADHD_ALL=[], ADHD_FILTERED=[];
+
+const PHQ_QUESTIONS_DB=['รู้สึกหดหู่ เศร้า หรือสิ้นหวัง','ไม่สนใจหรือไม่มีความสุขกับสิ่งที่เคยสนุก','นอนหลับยาก หลับไม่หลับ หรือนอนมากเกินไป','รู้สึกอ่อนเพลีย หรือไม่มีแรงทำอะไร','รับประทานอาหารไม่อยาก หรือกินมากเกินไป','รู้สึกแย่กับตัวเอง รู้สึกว่าตัวเองเป็นภาระ','มีปัญหาในการมีสมาธิ','พูดหรือเคลื่อนไหวช้าหรือกระวนกระวาย','มีความคิดทำร้ายตัวเองหรืออยากตาย'];
+
+// ================================================================
+// LEARNER HELPERS
+// ================================================================
+function classifyStudent(d) {
+  // Advanced: ทักษะคอม ≥4 AND GPAX ≥3.0 AND ส่งงาน ≥4
+  const skill = parseInt(d.computer_skill_level||0);
+  const gpaxMap = {'3.5-4.0':4,'3.0-3.49':3,'2.5-2.99':2,'2.0-2.49':1,'below2':0,'new':2};
+  const gpax = gpaxMap[d.gpax]??2;
+  const submit = parseInt(d.submission_habit||3);
+  const score = skill + gpax + submit; // max=4+4+5=13
+  if(skill>=4 && gpax>=3 && submit>=4) return 'advanced';
+  if(score<=5 || (skill<=1&&gpax<=1)) return 'struggling';
+  return 'intermediate';
+}
+
+function loadLearnerData(){
+  // Reload all stores so PHQ/ADHD lookups are always fresh when renderGroups/renderRisk run
+  ALL_DATA  = JSON.parse(localStorage.getItem('learner_data') || '[]');
+  PHQ_ALL   = JSON.parse(localStorage.getItem('phq_data')     || '[]');
+  ADHD_ALL  = JSON.parse(localStorage.getItem('adhd_data')    || '[]');
+  const classes=[...new Set(ALL_DATA.map(d=>d.classroom).filter(Boolean))].sort();
+  const sel=document.getElementById('filterClass');
+  const cur=sel.value;
+  sel.innerHTML='<option value="all">ทุกห้อง</option>'+classes.map(c=>`<option value="${c}"${c===cur?' selected':''}>${c}</option>`).join('');
+}
+
+function renderLearner(){
+  loadLearnerData();
+  const cls=document.getElementById('filterClass').value;
+  FILTERED=cls==='all'?ALL_DATA:ALL_DATA.filter(d=>d.classroom===cls);
+  const n=FILTERED.length;
+  document.getElementById('sTotalStudents').textContent=n;
+  document.getElementById('sTotalSub').textContent=n?`กรอกแล้ว ${n} คน`:'ยังไม่มีข้อมูล';
+  const adv=FILTERED.filter(d=>classifyStudent(d)==='advanced').length;
+  const mid=FILTERED.filter(d=>classifyStudent(d)==='intermediate').length;
+  const str=FILTERED.filter(d=>classifyStudent(d)==='struggling').length;
+  document.getElementById('sAdvanced').textContent=adv;
+  document.getElementById('sIntermediate').textContent=mid;
+  document.getElementById('sStruggling').textContent=str;
+  document.getElementById('sNoDevice').textContent=FILTERED.filter(d=>d.has_computer==='none').length;
+  document.getElementById('sSpecial').textContent=FILTERED.filter(d=>d.special_skills&&!d.special_skills.includes('none')).length;
+  document.getElementById('learnerSubtext').textContent=n?`ข้อมูลล่าสุด: ${FILTERED[FILTERED.length-1]?._ts||'—'}`:'ยังไม่มีข้อมูล';
+  // Bug 1 + 5 Fix: renderGroups is defined and called
+  renderGroups();
+  renderRisk();
+  renderSkills();
+  renderDevices();
+  renderLearnerTable(FILTERED);
+}
+
+// Bug 1 Fix: renderGroups defined
+function renderGroups(){
+  const gg=document.getElementById('groupGrid');
+  if(!FILTERED.length){gg.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📊</div>ยังไม่มีข้อมูล</div>';renderGroupTable([]);return;}
+  const groups={advanced:[],intermediate:[],struggling:[]};
+  FILTERED.forEach(d=>groups[classifyStudent(d)].push(d));
+  const defs=[
+    {key:'advanced',label:'🏆 กลุ่มเก่ง (Advanced)',desc:'ทักษะคอม ≥4, GPAX ≥3.0, ส่งงานดี — เหมาะกับงานโปรเจกต์และเป็นพี่เลี้ยง'},
+    {key:'intermediate',label:'📚 กลุ่มกลาง (Intermediate)',desc:'มีพื้นฐานพอใช้ — เน้นฝึกทักษะจุดอ่อน เพิ่มความมั่นใจ'},
+    {key:'struggling',label:'🚨 กลุ่มต้องดูแล (Struggling)',desc:'ต้องการการช่วยเหลือพิเศษ — ปรับการสอน ลดโจทย์ ติดตามใกล้ชิด'},
+  ];
+  gg.innerHTML=defs.map(d=>`
+    <div class="group-card ${d.key}">
+      <div class="group-card-head">
+        <div class="group-card-icon">${d.key==='advanced'?'🏆':d.key==='intermediate'?'📚':'🚨'}</div>
+        <div style="flex:1"><div class="group-card-title">${d.label}</div></div>
+        <div class="group-card-count">${groups[d.key].length}</div>
+      </div>
+      <div class="group-card-body">
+        ${d.desc}
+        <div class="group-name-list">${groups[d.key].slice(0,6).map(s=>`<span class="g-name-tag">${s.fullname||'—'}</span>`).join('')}${groups[d.key].length>6?`<span class="g-name-tag">+${groups[d.key].length-6}</span>`:''}</div>
+      </div>
+    </div>`).join('');
+  renderGroupTable(FILTERED);
+}
+
+function renderGroupTable(data){
+  const tbody=document.getElementById('groupTbody');
+  if(!data.length){tbody.innerHTML='<tr><td colspan="9" class="empty-state">ยังไม่มีข้อมูล</td></tr>';return;}
+  const gpaxLabel={'3.5-4.0':'3.5+','3.0-3.49':'3.0+','2.5-2.99':'2.5+','2.0-2.49':'2.0+','below2':'<2.0','new':'ใหม่'};
+  const submitLabel={5:'⭐ เสมอ',4:'👍 ส่วนใหญ่',3:'🙂 บางครั้ง',2:'😅 ช้า',1:'😓 ไม่ส่ง'};
+  tbody.innerHTML=data.map((d,i)=>{
+    const g=classifyStudent(d);
+    const gBadge=g==='advanced'?'badge-green':g==='intermediate'?'badge-amber':'badge-red';
+    const gLabel=g==='advanced'?'🏆 เก่ง':g==='intermediate'?'📚 กลาง':'🚨 อ่อน';
+    // Look up PHQ and ADHD
+    const phq=PHQ_ALL.find(p=>p._id===d._id)||PHQ_ALL.find(p=>p.fullname===d.fullname&&p.classroom===d.classroom);
+    const adhd=ADHD_ALL.find(a=>a._id===d._id)||ADHD_ALL.find(a=>a.fullname===d.fullname&&a.classroom===d.classroom);
+    const phqBadge=phq?`<span class="badge ${phq.total<=4?'badge-green':phq.total<=9?'badge-amber':phq.total<=14?'badge-orange':'badge-red'}" onclick="openStudentModal('${d._id}',event)">${phq.total}/27</span>`:'<span class="badge badge-gray">—</span>';
+    const adhdBadge=adhd?`<span class="badge ${adhd.severity==='none'?'badge-green':adhd.severity==='subclinical'?'badge-amber':'badge-red'}" onclick="openStudentModal('${d._id}',event)">${adhd.total}/54</span>`:'<span class="badge badge-gray">—</span>';
+    return`<tr onclick="openStudentModal('${d._id}',event)"><td style="color:var(--g400);font-size:.78rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge badge-gray">${d.level||''} ${d.classroom||''}</span></td><td>${d.computer_skill_level?`${d.computer_skill_level}/5`:'—'}</td><td>${gpaxLabel[d.gpax]||d.gpax||'—'}</td><td>${submitLabel[parseInt(d.submission_habit)]||d.submission_habit||'—'}</td><td><span class="badge ${gBadge}">${gLabel}</span></td><td>${phqBadge}</td><td>${adhdBadge}</td></tr>`;
+  }).join('');
+}
+
+function renderRisk(){
+  const body=document.getElementById('riskBody');
+  // Join PHQ Q9 and ADHD info into risk
+  const risky=[...FILTERED].map(d=>{
+    const phq=PHQ_ALL.find(p=>p._id===d._id)||PHQ_ALL.find(p=>p.fullname===d.fullname&&p.classroom===d.classroom);
+    const adhd=ADHD_ALL.find(a=>a._id===d._id)||ADHD_ALL.find(a=>a.fullname===d.fullname&&a.classroom===d.classroom);
+    return{...d,_phq:phq,_adhd:adhd,_q9:phq?.answers?.[8]||0};
+  }).sort((a,b)=>(b._risk||0)-(a._risk||0)).filter(d=>(d._risk||0)>=3||d._q9>0||['combined','inattentive','hyperactive'].includes(d._adhd?.severity));
+  if(!risky.length){body.innerHTML=`<div class="empty-state"><div class="empty-icon">${FILTERED.length?'🟢':'📋'}</div>${FILTERED.length?'ยอดเยี่ยม! ยังไม่มีนักเรียนกลุ่มเสี่ยง':'ยังไม่มีข้อมูล'}</div>`;return;}
+  body.innerHTML=risky.map(d=>{
+    const level=d._risk>=8||d._q9>=2?'#D93025':d._risk>=5||d._q9>=1?'#C8760A':'#6B6560';
+    const tags=[];
+    if(d._q9>=2)tags.push({t:'⚠️ Q9 คะแนนสูง แจ้งครูแนะแนว',cls:'q9'});
+    else if(d._q9===1)tags.push({t:'Q9 มีคะแนน ควรติดตาม',cls:'phq-alert'});
+    if(d._phq&&d._phq.total>=10)tags.push({t:`PHQ-A ${d._phq.total}/27`,cls:'phq-alert'});
+    if(d._adhd&&['combined','inattentive','hyperactive'].includes(d._adhd.severity))tags.push({t:`ADHD ${d._adhd.severity}`,cls:'adhd-alert'});
+    if(d.has_computer==='none')tags.push({t:'ไม่มีคอมพิวเตอร์',cls:''});
+    if(d.home_internet==='none')tags.push({t:'ไม่มีอินเทอร์เน็ต',cls:''});
+    if(d.absence==='7+')tags.push({t:'ขาดเรียนบ่อย',cls:''});
+    if(d.submission_habit==='1'||d.submission_habit==='2')tags.push({t:'ส่งงานไม่ตรงเวลา',cls:'warn'});
+    if(d.part_time==='weekly')tags.push({t:'ทำงานพิเศษทุกสัปดาห์',cls:'warn'});
+    if(d.computer_skill_level==='1')tags.push({t:'ทักษะคอมต่ำมาก',cls:'warn'});
+    if(d.sleep_hours==='under5')tags.push({t:'นอนน้อย',cls:'warn'});
+    return`<div class="risk-item" onclick="openStudentModal('${d._id}',event)" style="cursor:pointer">
+      <div class="risk-level-dot" style="background:${level}"></div>
+      <div class="risk-info">
+        <span class="risk-name">${d.fullname||'—'}</span><span class="risk-class">${d.level||''} ${d.classroom||''}</span>
+        <div class="risk-tags">${tags.map(t=>`<span class="risk-tag ${t.cls||''}">${t.t}</span>`).join('')}</div>
+      </div>
+      <div class="risk-score">เสี่ยง<br><strong style="font-size:1.1rem">${d._risk||0}</strong>${d._q9>0?`<br><span style="color:var(--red);font-size:.75rem">Q9:${d._q9}</span>`:''}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderSkills(){
+  const metrics=[{key:'computer_skill_level',label:'💻 ทักษะคอมพิวเตอร์',color:'#E86A2E'},{key:'submission_habit',label:'📬 การส่งงาน',color:'#1E7E4E'},{key:'family_support',label:'🏠 การสนับสนุนครอบครัว',color:'#1565C0'},{key:'multitasking',label:'⚡ Multitasking',color:'#6A1B9A'}];
+  const sbEl=document.getElementById('skillBars');
+  if(!FILTERED.length){sbEl.innerHTML='<div style="color:var(--g400);font-size:.85rem">ยังไม่มีข้อมูล</div>';return;}
+  sbEl.innerHTML=metrics.map(m=>{const vals=FILTERED.map(d=>parseInt(d[m.key]||0)).filter(Boolean);const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):'—';const pct=vals.length?(parseFloat(avg)/5*100):0;return`<div class="skill-row"><div class="skill-meta"><span>${m.label}</span><span>${avg}/5</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${m.color}"></div></div></div>`;}).join('');
+  const skillLabels={video_edit:'🎬 ตัดต่อวิดีโอ',graphic:'🎨 ออกแบบกราฟิก',photo:'📷 ถ่ายภาพ/วิดีโอ',code:'👨‍💻 เขียนโค้ด',ads:'📢 ยิงโฆษณา',seo:'🔍 SEO',accounting:'📊 บัญชีดิจิทัล'};
+  const skillCount={};FILTERED.forEach(d=>{if(Array.isArray(d.special_skills))d.special_skills.filter(s=>s!=='none').forEach(s=>{skillCount[s]=(skillCount[s]||0)+1})});
+  document.getElementById('specialSkillTags').innerHTML=Object.entries(skillCount).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="t-tag">${skillLabels[k]||k}<span class="cnt">${v}</span></span>`).join('')||'<span class="t-tag">ยังไม่มีข้อมูล</span>';
+  const platLabels={tiktok:'🎵 TikTok',facebook:'📘 Facebook',instagram:'📸 Instagram',youtube:'▶️ YouTube',x:'🐦 X',lineoa:'💚 Line OA',shopee:'🛒 Shopee/Lazada'};
+  const platCount={};FILTERED.forEach(d=>{if(Array.isArray(d.social_platforms))d.social_platforms.forEach(s=>{platCount[s]=(platCount[s]||0)+1})});
+  document.getElementById('platformTags').innerHTML=Object.entries(platCount).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="t-tag">${platLabels[k]||k}<span class="cnt">${v}</span></span>`).join('')||'<span class="t-tag">ยังไม่มีข้อมูล</span>';
+  const careerLabels={study_more:'🎓 เรียนต่อ',company:'🏢 สมัครงาน',own_biz:'🚀 เปิดธุรกิจ',freelance:'💻 Freelance',unsure:'🤷 ยังไม่แน่ใจ'};
+  const careerCount={};FILTERED.forEach(d=>{if(d.career_goal)careerCount[d.career_goal]=(careerCount[d.career_goal]||0)+1});
+  const max=Math.max(1,...Object.values(careerCount));
+  document.getElementById('careerChart').innerHTML=Object.entries(careerCount).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="career-row"><div class="career-label">${careerLabels[k]||k}</div><div class="career-bar"><div class="career-fill" style="width:${v/max*100}%"></div></div><div class="career-cnt">${v}</div></div>`).join('')||'<div style="color:var(--g400);font-size:.85rem">ยังไม่มีข้อมูล</div>';
+}
+
+function renderDevices(){
+  const el=document.getElementById('deviceGrid');
+  if(!FILTERED.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">💻</div>ยังไม่มีข้อมูล</div>';return;}
+  const n=FILTERED.length,pct=(k,v)=>Math.round(FILTERED.filter(d=>d[k]===v).length/n*100);
+  const sections=[{label:'💻 คอมพิวเตอร์',rows:[{l:'มีส่วนตัว',pct:pct('has_computer','own')},{l:'ใช้ร่วม',pct:pct('has_computer','shared')},{l:'ใช้ของโรงเรียน',pct:pct('has_computer','school_only')},{l:'ไม่มีเลย',pct:pct('has_computer','none')}]},{label:'🌐 อินเทอร์เน็ตที่บ้าน',rows:[{l:'WiFi เร็ว',pct:pct('home_internet','fast_wifi')},{l:'WiFi ช้า',pct:pct('home_internet','slow_wifi')},{l:'Data มือถือ',pct:pct('home_internet','mobile_data')},{l:'ไม่มีอินเทอร์เน็ต',pct:pct('home_internet','none')}]},{label:'📱 สมาร์ทโฟน',rows:[{l:'Android',pct:pct('smartphone_os','android')},{l:'iOS (iPhone)',pct:pct('smartphone_os','ios')},{l:'ไม่มีสมาร์ทโฟน',pct:pct('smartphone_os','none')}]},{label:'😴 ชั่วโมงนอน',rows:[{l:'< 5 ชม.',pct:pct('sleep_hours','under5')},{l:'5–6 ชม.',pct:pct('sleep_hours','5-6')},{l:'7–8 ชม.',pct:pct('sleep_hours','7-8')},{l:'> 8 ชม.',pct:pct('sleep_hours','over8')}]}];
+  el.innerHTML=sections.map(s=>`<div class="d-card"><div class="d-label">${s.label}</div>${s.rows.map(r=>`<div class="d-bar-row"><div class="d-bar-label">${r.l}</div><div class="d-bar-track"><div class="d-bar-fill" style="width:${r.pct}%"></div></div><div class="d-pct">${r.pct}%</div></div>`).join('')}</div>`).join('');
+}
+
+function renderLearnerTable(data){
+  const tbody=document.getElementById('studentTbody');
+  if(!data.length){tbody.innerHTML='<tr><td colspan="10" class="empty-state">ยังไม่มีข้อมูล</td></tr>';return;}
+  const devLabels={own:'✅ มีส่วนตัว',shared:'🤝 ใช้ร่วม',school_only:'🏫 โรงเรียน',none:'❌ ไม่มี'};
+  const netLabels={fast_wifi:'⚡ เร็ว',slow_wifi:'📶 ช้า',mobile_data:'📱 Data',none:'❌ ไม่มี'};
+  tbody.innerHTML=data.map((d,i)=>{
+    const risk=d._risk||0,rBadge=risk>=8?'badge-red':risk>=5?'badge-amber':risk>=3?'badge-gray':'badge-green';
+    const rLabel=risk>=8?'🔴 สูง':risk>=5?'🟡 กลาง':risk>=3?'⚪ ต่ำ':'🟢 ปลอดภัย';
+    const g=classifyStudent(d);
+    const gBadge=g==='advanced'?'badge-green':g==='intermediate'?'badge-amber':'badge-red';
+    const gLabel=g==='advanced'?'🏆 เก่ง':g==='intermediate'?'📚 กลาง':'🚨 อ่อน';
+    const phq=PHQ_ALL.find(p=>p._id===d._id)||PHQ_ALL.find(p=>p.fullname===d.fullname&&p.classroom===d.classroom);
+    const adhd=ADHD_ALL.find(a=>a._id===d._id)||ADHD_ALL.find(a=>a.fullname===d.fullname&&a.classroom===d.classroom);
+    const phqBadge=phq?`<span class="badge ${phq.total<=4?'badge-green':phq.total<=9?'badge-amber':phq.total<=14?'badge-orange':'badge-red'}">${phq.total}/27${phq.answers?.[8]>0?' ⚠️':''}</span>`:'<span class="badge badge-gray">—</span>';
+    const adhdBadge=adhd?`<span class="badge badge-teal">${adhd.total}/54</span>`:'<span class="badge badge-gray">—</span>';
+    return`<tr onclick="openStudentModal('${d._id}',event)" style="cursor:pointer"><td style="color:var(--g400);font-size:.78rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge badge-gray">${d.level||''} ${d.classroom||''}</span></td><td>${d.computer_skill_level?`${d.computer_skill_level}/5`:'—'}</td><td style="font-size:.82rem">${devLabels[d.has_computer]||'—'}</td><td style="font-size:.82rem">${netLabels[d.home_internet]||'—'}</td><td><span class="badge ${rBadge}">${rLabel}</span></td><td><span class="badge ${gBadge}">${gLabel}</span></td><td>${phqBadge}</td><td>${adhdBadge}</td></tr>`;
+  }).join('');
+}
+
+function filterLearnerTable(q){const lq=q.toLowerCase();renderLearnerTable(FILTERED.filter(d=>(d.fullname||'').toLowerCase().includes(lq)));}
+function showLTab(id,btn){document.querySelectorAll('#dash-learner .panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('#dash-learner .tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('lpanel-'+id).classList.add('active');btn.classList.add('active');}
+
+// ================================================================
+// STUDENT MODAL — Bug 6 Fix: student_note AI analysis included
+// ================================================================
+function openStudentModal(id, event) {
+  if(event) event.stopPropagation();
+  // Match by _id first; fallback to clicked row's strong text
+  let d = id ? ALL_DATA.find(s=>s._id===id) : null;
+  if(!d && event) {
+    const _tr = event.target?.closest('tr');
+    const _nc = _tr?.querySelector('strong');
+    if(_nc) d = ALL_DATA.find(s=>s.fullname===_nc.textContent.trim());
+  }
+  if(!d) { console.warn('No learner record found for id:', id); return; }
+  const phq = PHQ_ALL.find(p=>p._id===d._id)||PHQ_ALL.find(p=>p.fullname===d.fullname&&p.classroom===d.classroom);
+  const adhd = ADHD_ALL.find(a=>a._id===d._id)||ADHD_ALL.find(a=>a.fullname===d.fullname&&a.classroom===d.classroom);
+  const g = classifyStudent(d);
+  const gLabel = g==='advanced'?'🏆 กลุ่มเก่ง':g==='intermediate'?'📚 กลุ่มกลาง':'🚨 กลุ่มต้องดูแล';
+  const gColor = g==='advanced'?'var(--green)':g==='intermediate'?'var(--amber)':'var(--red)';
+  const sevBadge = s=>{if(s<=4)return['b-none','ปกติ'];if(s<=9)return['b-mild','น้อย'];if(s<=14)return['b-moderate','ปานกลาง'];if(s<=19)return['b-moderate','ค่อนข้างรุนแรง'];return['b-severe','รุนแรง'];};
+  const skillLabels={video_edit:'🎬 ตัดต่อ',graphic:'🎨 กราฟิก',photo:'📷 ถ่ายภาพ',code:'👨‍💻 โค้ด',ads:'📢 Ads',seo:'🔍 SEO',accounting:'📊 บัญชี'};
+
+  let phqSection = '';
+  if(phq){
+    const [cls,lbl]=sevBadge(phq.total);
+    const q9 = phq.answers?.[8]||0;
+    phqSection = `<div class="modal-section">
+      <div class="modal-section-title phq-color">💜 ผลประเมิน PHQ-A</div>
+      <div class="score-chip" style="background:var(--purple-bg);color:var(--purple)">คะแนน ${phq.total}/27 — <span class="badge ${cls}" style="margin-left:4px">${lbl}</span>${q9>0?`<span class="risk-tag q9" style="margin-left:6px">⚠️ Q9: ${q9}</span>`:''}</div>
+      ${q9>0?`<div style="background:#FEE9E7;border:1px solid var(--red);border-radius:var(--r-sm);padding:.75rem;font-size:.83rem;color:#B71C1C;margin-bottom:.75rem">⚠️ นักเรียนรายนี้ตอบข้อ 9 (ความคิดทำร้ายตัวเอง) = ${q9} — กรุณาพูดคุยและแจ้งครูแนะแนว</div>`:''}
+      <div class="breakdown-mini">${(phq.answers||[]).map((s,i)=>`<span class="breakdown-mini-item score-${s}" title="ข้อ ${i+1}">ข${i+1}:${s}</span>`).join('')}</div>
+      <div style="margin-top:.75rem;font-size:.8rem;font-weight:600;color:var(--g500);margin-bottom:.375rem">AI วิเคราะห์ PHQ-A:</div>
+      <div class="ai-bubble purple" id="modal-phq-ai">${phq.ai_analysis?phq.ai_analysis.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'):'<div class="ai-loading"><div class="dot-pulse"><span></span><span></span><span></span></div><span>กำลังโหลด...</span></div>'}</div>
+    </div>`;
+  }
+
+  let adhdSection = '';
+  if(adhd){
+    const adhdSevLabel={none:'ไม่พบแนวโน้ม',subclinical:'ต้องติดตาม',inattentive:'ขาดสมาธิ',hyperactive:'ซน/หุนหัน',combined:'แบบรวม'};
+    adhdSection = `<div class="modal-section">
+      <div class="modal-section-title adhd-color">🧩 ผลประเมิน ADHD</div>
+      <div class="score-chip" style="background:var(--teal-bg);color:var(--teal)">รวม ${adhd.total}/54 · สมาธิ ${adhd.inatt}/27 · ซน ${adhd.hyper}/27</div>
+      <div class="badge badge-teal" style="margin-bottom:.75rem">${adhdSevLabel[adhd.severity]||adhd.severity}</div>
+      <div style="font-size:.8rem;font-weight:600;color:var(--g500);margin-bottom:.375rem">AI วิเคราะห์ ADHD:</div>
+      <div class="ai-bubble teal" id="modal-adhd-ai">${adhd.ai_analysis?adhd.ai_analysis.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'):'<div class="ai-loading"><div class="dot-pulse"><span></span><span></span><span></span></div><span>กำลังโหลด...</span></div>'}</div>
+    </div>`;
+  }
+
+  // Bug 6 Fix: student_note AI analysis shown in modal
+  let noteSection = '';
+  if(d.student_note&&d.student_note.trim()){
+    noteSection = `<div class="modal-section">
+      <div class="modal-section-title note-color">📝 สิ่งที่นักเรียนอยากให้ครูรู้</div>
+      <div style="background:var(--o50);border:1px solid rgba(232,106,46,.2);border-radius:var(--r-md);padding:.875rem 1rem;font-size:.9rem;color:var(--g700);line-height:1.75;white-space:pre-wrap">${escapeHTML(d.student_note)}</div>
+      <div style="margin-top:.75rem;font-size:.8rem;font-weight:600;color:var(--g500);margin-bottom:.375rem">AI แนะนำแนวทางสำหรับครู:</div>
+      <div class="ai-bubble" id="modal-note-ai"><div class="ai-loading"><div class="dot-pulse"><span></span><span></span><span></span></div><span>กำลังวิเคราะห์...</span></div></div>
+    </div>`;
+  }
+
+  const html=`<div class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-head">
+        <div>
+          <div class="modal-title">${d.fullname||'—'}</div>
+          <div style="font-size:.82rem;color:var(--g400);margin-top:2px">${d.level||''} ${d.classroom||''} ${d.gender?'· '+d.gender:''}</div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section">
+          <div class="modal-section-title" style="color:var(--o500)">📊 ข้อมูลทั่วไป</div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem">
+            <span class="badge badge-gray">GPAX: ${d.gpax||'—'}</span>
+            <span class="badge" style="background:${gColor+'22'};color:${gColor}">${gLabel}</span>
+            <span class="badge ${d._risk>=8?'badge-red':d._risk>=5?'badge-amber':'badge-green'}">ความเสี่ยง: ${d._risk||0}</span>
+            ${d.computer_skill_level?`<span class="badge badge-blue">คอม: ${d.computer_skill_level}/5</span>`:''}
+          </div>
+          <div style="font-size:.85rem;color:var(--g600);line-height:1.8">
+            ${d.has_computer?`💻 ${d.has_computer==='own'?'มีคอมส่วนตัว':d.has_computer==='shared'?'ใช้ร่วม':d.has_computer==='school_only'?'ใช้ของโรงเรียน':'ไม่มีคอม'} &nbsp;`:''}
+            ${d.home_internet?`🌐 ${d.home_internet==='fast_wifi'?'WiFi เร็ว':d.home_internet==='slow_wifi'?'WiFi ช้า':d.home_internet==='mobile_data'?'Data มือถือ':'ไม่มีเน็ต'} &nbsp;`:''}
+            ${d.sleep_hours?`😴 นอน${d.sleep_hours==='under5'?'<5':d.sleep_hours==='5-6'?'5-6':d.sleep_hours==='7-8'?'7-8':'>8'} ชม. &nbsp;`:''}
+            ${d.part_time?`💼 ${d.part_time==='none'?'ไม่ทำงานพิเศษ':d.part_time==='weekend'?'ทำงานวันหยุด':'ทำงานทุกสัปดาห์'} &nbsp;`:''}
+          </div>
+          ${Array.isArray(d.special_skills)&&d.special_skills.filter(s=>s!=='none').length?`<div style="margin-top:.5rem;display:flex;gap:5px;flex-wrap:wrap">${d.special_skills.filter(s=>s!=='none').map(s=>`<span class="badge badge-blue">${{video_edit:'🎬 ตัดต่อ',graphic:'🎨 กราฟิก',photo:'📷 ถ่าย',code:'👨‍💻 โค้ด',ads:'📢 Ads',seo:'🔍 SEO',accounting:'📊 บัญชี'}[s]||s}</span>`).join('')}</div>`:''}
+        </div>
+        ${phqSection}
+        ${adhdSection}
+        ${noteSection}
+      </div>
+    </div>
+  </div>`;
+
+  const container=document.getElementById('studentModal');
+  container.innerHTML=html;container.style.display='block';
+
+  // Bug 6 Fix: fetch AI for student_note if present
+  if(d.student_note&&d.student_note.trim()) {
+    fetchNoteAI(d, document.getElementById('modal-note-ai'));
+  }
+}
+
+async function fetchNoteAI(d, el) {
+  const prompt=`คุณเป็นครูอาชีวศึกษา นักเรียนได้เขียนข้อความถึงครูว่า:\n"${d.student_note}"\n\nนักเรียน: ${d.fullname} ชั้น: ${d.level} ${d.classroom}\n\nกรุณาให้คำแนะนำสำหรับครูในการดูแลนักเรียนรายนี้ เป็นภาษาไทย ไม่เกิน 120 คำ กระชับและเป็นประโยชน์`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const text=data.content?.map(c=>c.text||'').join('')||'ไม่สามารถวิเคราะห์ได้';
+    if(el) el.innerHTML=text.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  }catch(e){if(el) el.innerHTML='⚠️ ไม่สามารถเชื่อมต่อ AI ได้';}
+}
+
+function closeModal(event) {
+  if(!event||event.target===event.currentTarget){
+    document.getElementById('studentModal').style.display='none';
+    document.getElementById('studentModal').innerHTML='';
+  }
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+function escapeHTML(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ================================================================
+// PHQ DASHBOARD
+// ================================================================
+function loadPHQData(){
+  PHQ_ALL=JSON.parse(localStorage.getItem('phq_data')||'[]');
+  const rooms=[...new Set(PHQ_ALL.map(d=>d.classroom).filter(Boolean))].sort();
+  ['filterRoom','reportRoom'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">ทุกห้อง</option>'+rooms.map(r=>`<option value="${r}"${r===cur?' selected':''}>${r}</option>`).join('');});
+  applyPHQFilters();
+}
+function applyPHQFilters(){const level=document.getElementById('filterLevel').value,room=document.getElementById('filterRoom').value;PHQ_FILTERED=PHQ_ALL.filter(d=>(!level||d.level===level)&&(!room||d.classroom===room));renderPHQ();}
+function renderPHQ(){
+  const n=PHQ_FILTERED.length;
+  document.getElementById('phqSubtext').textContent=`ข้อมูลทั้งหมด ${PHQ_ALL.length} คน | กำลังแสดง ${n} คน`;
+  const counts={none:0,mild:0,moderate:0,severe:0};
+  PHQ_FILTERED.forEach(d=>{const s=d.total;if(s<=4)counts.none++;else if(s<=9)counts.mild++;else if(s<=19)counts.moderate++;else counts.severe++;});
+  document.getElementById('sTotal').textContent=n;
+  document.getElementById('sNone').textContent=counts.none;
+  document.getElementById('sMild').textContent=counts.mild;
+  document.getElementById('sModerate').textContent=counts.moderate;
+  document.getElementById('sSevere').textContent=counts.severe;
+  renderPHQOverview(counts,n);renderTrend();renderByRoom();renderQuestions();renderPHQTable(PHQ_FILTERED);renderQ9Risk();renderReport();
+}
+function renderPHQOverview(counts,n){
+  const el=document.getElementById('severityBars');
+  if(!n){el.innerHTML=`<div class="empty-state"><div class="empty-icon">💜</div>ยังไม่มีข้อมูล PHQ-A<br><a href="index.html" style="color:var(--o500);font-weight:600">→ ไปกรอกแบบประเมิน PHQ-A</a></div>`;return;}
+  document.getElementById('overviewNote').textContent=`ค่าเฉลี่ย ${(PHQ_FILTERED.reduce((a,d)=>a+d.total,0)/n).toFixed(1)} / 27`;
+  const rows=[{label:'ปกติ (0–4)',cnt:counts.none,cls:'fill-none'},{label:'น้อย (5–9)',cnt:counts.mild,cls:'fill-mild'},{label:'ปานกลาง (10–19)',cnt:counts.moderate,cls:'fill-moderate'},{label:'รุนแรง (20+)',cnt:counts.severe,cls:'fill-severe'}];
+  el.innerHTML=rows.map(r=>`<div class="sev-row"><div class="sev-label">${r.label}</div><div class="sev-track"><div class="sev-fill ${r.cls}" style="width:${n?r.cnt/n*100:0}%"></div></div><div class="sev-cnt">${r.cnt}</div></div>`).join('');
+}
+// Bug fix: Q9 warning now shown in dashboard panel, NOT in student form
+function renderQ9Risk(){
+  const el=document.getElementById('q9RiskList');
+  const q9students=PHQ_FILTERED.filter(d=>(d.answers?.[8]||0)>=1).sort((a,b)=>(b.answers?.[8]||0)-(a.answers?.[8]||0));
+  if(!q9students.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">✅</div>ไม่พบนักเรียนที่มีคะแนนข้อ 9 ≥ 1</div>';return;}
+  el.innerHTML=q9students.map(d=>`<div class="risk-item" style="border-color:#C62828">
+    <div class="risk-level-dot" style="background:${d.answers[8]>=2?'#8B0000':'var(--red)'}"></div>
+    <div class="risk-info">
+      <span class="risk-name">${d.fullname||'—'}</span><span class="risk-class">${d.level||''} ${d.classroom||''} ${d.gender?'· '+d.gender:''}</span>
+      <div class="risk-tags"><span class="risk-tag q9">ข้อ 9: ${d.answers[8]} ${d.answers[8]>=2?'(สูงมาก — แจ้งด่วน)':'(ควรติดตาม)'}</span><span class="risk-tag">คะแนนรวม ${d.total}/27</span></div>
+      ${d.ai_analysis?`<div style="margin-top:.5rem;font-size:.8rem;color:var(--g600);line-height:1.5;max-height:60px;overflow:hidden">${d.ai_analysis.replace(/<[^>]*>/g,'').slice(0,150)}...</div>`:''}
+    </div>
+    <div style="font-size:.78rem;color:var(--g400)">${d._ts||'—'}</div>
+  </div>`).join('');
+}
+function renderTrend(){const el=document.getElementById('trendChart');if(!PHQ_FILTERED.length){el.innerHTML='<div style="color:var(--g400);font-size:.85rem">ยังไม่มีข้อมูล</div>';return;}const byDay={};PHQ_FILTERED.forEach(d=>{const day=d._ts?d._ts.split(' ')[0]:'ไม่ระบุ';if(!byDay[day])byDay[day]=[];byDay[day].push(d.total);});el.innerHTML=Object.entries(byDay).sort((a,b)=>a[0].localeCompare(b[0])).slice(-12).map(([day,scores])=>{const avg=(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);const color=avg>=10?'var(--red)':avg>=5?'var(--amber)':'var(--green)';return`<div class="trend-point"><div class="trend-date">${day}</div><div class="trend-avg" style="color:${color}">${avg}</div><div class="trend-n">${scores.length} คน</div></div>`;}).join('')||'<div style="color:var(--g400)">ยังไม่มีข้อมูล</div>';}
+function renderByRoom(){const el=document.getElementById('roomGrid');if(!PHQ_FILTERED.length){el.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏫</div>ยังไม่มีข้อมูล</div>';return;}const rooms={};PHQ_FILTERED.forEach(d=>{const k=`${d.level||''} ${d.classroom||''}`.trim()||'ไม่ระบุ';if(!rooms[k])rooms[k]=[];rooms[k].push(d);});el.innerHTML=Object.entries(rooms).sort((a,b)=>a[0].localeCompare(b[0])).map(([room,students])=>{const n=students.length,avg=(students.reduce((a,d)=>a+d.total,0)/n).toFixed(1);const none=students.filter(d=>d.total<=4).length,mild=students.filter(d=>d.total>=5&&d.total<=9).length,mod=students.filter(d=>d.total>=10&&d.total<=19).length,sev=students.filter(d=>d.total>=20).length;const avgColor=avg>=10?'var(--red)':avg>=5?'var(--amber)':'var(--green)',avgBg=avg>=10?'var(--red-bg)':avg>=5?'var(--amber-bg)':'var(--green-bg)';return`<div class="room-card"><div class="room-card-head"><div class="room-name">${room}</div><span class="room-avg" style="background:${avgBg};color:${avgColor}">เฉลี่ย ${avg}</span></div><div style="font-size:.8rem;color:var(--g400);margin-bottom:.625rem">${n} คน</div><div class="room-bar-stack"><div class="stack-seg" style="width:${none/n*100}%;background:var(--green)"></div><div class="stack-seg" style="width:${mild/n*100}%;background:var(--amber)"></div><div class="stack-seg" style="width:${mod/n*100}%;background:var(--o500)"></div><div class="stack-seg" style="width:${sev/n*100}%;background:var(--red)"></div></div><div class="room-legend"><span class="legend-item"><span class="legend-dot-el" style="background:var(--green)"></span>ปกติ ${none}</span><span class="legend-item"><span class="legend-dot-el" style="background:var(--amber)"></span>น้อย ${mild}</span><span class="legend-item"><span class="legend-dot-el" style="background:var(--o500)"></span>ปานกลาง ${mod}</span><span class="legend-item"><span class="legend-dot-el" style="background:var(--red)"></span>รุนแรง ${sev}</span></div></div>`;}).join('');}
+function renderQuestions(){const el=document.getElementById('qHeatmap');if(!PHQ_FILTERED.length){el.innerHTML='<div style="color:var(--g400)">ยังไม่มีข้อมูล</div>';return;}const avgs=PHQ_QUESTIONS_DB.map((_,i)=>{const vals=PHQ_FILTERED.map(d=>d.answers?.[i]??0);return vals.reduce((a,b)=>a+b,0)/vals.length;});el.innerHTML=PHQ_QUESTIONS_DB.map((q,i)=>{const a=avgs[i].toFixed(2),pct=(avgs[i]/3*100).toFixed(0),color=avgs[i]>=2?'var(--red)':avgs[i]>=1?'var(--amber)':'var(--o500)',isQ9=i===8;return`<div class="q-row" ${isQ9?'style="background:var(--red-bg);padding:6px 4px;border-radius:8px"':''}><div class="q-num">ข้อ ${i+1}${isQ9?' ⚠️':''}</div><div class="q-text" title="${q}">${q}</div><div class="q-bar-wrap"><div class="q-bar-track"><div class="q-bar-fill" style="width:${pct}%;background:${color}"></div></div></div><div class="q-avg" style="color:${color}">${a}</div></div>`;}).join('');}
+function renderPHQTable(data){
+  const sevFilter=document.getElementById('filterSeverity')?.value;
+  let d2=data;
+  if(sevFilter)d2=data.filter(d=>{if(sevFilter==='none')return d.total<=4;if(sevFilter==='mild')return d.total>=5&&d.total<=9;if(sevFilter==='moderate')return d.total>=10&&d.total<=14;if(sevFilter==='moderately_severe')return d.total>=15&&d.total<=19;if(sevFilter==='severe')return d.total>=20;return true;});
+  const tbody=document.getElementById('phqStudentTbody');
+  if(!d2.length){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--g400)">ไม่พบข้อมูล</td></tr>';return;}
+  const sevBadge=s=>{if(s<=4)return['b-none','ปกติ'];if(s<=9)return['b-mild','น้อย'];if(s<=14)return['b-moderate','ปานกลาง'];if(s<=19)return['b-moderate','ค่อนข้างรุนแรง'];return['b-severe','รุนแรง'];};
+  tbody.innerHTML=d2.map((d,i)=>{
+    const[cls,label]=sevBadge(d.total);const q9=d.answers?.[8]??0;
+    const adhd=ADHD_ALL.find(a=>a._id===d._id)||ADHD_ALL.find(a=>a.fullname===d.fullname&&a.classroom===d.classroom);
+    const adhdBadge=adhd?`<span class="badge badge-teal">${adhd.total}/54</span>`:'<span class="badge badge-gray">—</span>';
+    return`<tr style="cursor:pointer" onclick="openStudentModal('${d._id||''}',event)"><td style="color:var(--g400);font-size:.78rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge b-gray">${d.level||''} ${d.classroom||''}</span></td><td style="font-size:.82rem">${d.gender||'—'}</td><td><strong>${d.total}</strong></td><td><span class="badge ${cls}">${label}</span></td><td>${q9>0?`<span class="badge b-severe">${q9} ⚠️</span>`:`<span class="badge b-gray">0</span>`}</td><td>${adhdBadge}</td><td style="font-size:.78rem;color:var(--g400)">${d._ts||'—'}</td></tr>`;
+  }).join('');
+}
+function filterPHQTable(q){const lq=q.toLowerCase();renderPHQTable(PHQ_FILTERED.filter(d=>(d.fullname||'').toLowerCase().includes(lq)));}
+function renderReport(){
+  const room=document.getElementById('reportRoom')?.value,level=document.getElementById('reportLevel')?.value,sevF=document.getElementById('reportSev')?.value;
+  let data=PHQ_ALL.filter(d=>(!room||d.classroom===room)&&(!level||d.level===level));
+  if(sevF==='need_attention')data=data.filter(d=>d.total>=5);if(sevF==='moderate')data=data.filter(d=>d.total>=10);if(sevF==='severe')data=data.filter(d=>d.total>=20);
+  const el=document.getElementById('reportContent');
+  if(!data.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">📄</div>ไม่พบข้อมูลตามเงื่อนไขที่เลือก</div>';return;}
+  const byRoom={};data.forEach(d=>{const k=`${d.level||''} ${d.classroom||''}`.trim()||'ไม่ระบุ';if(!byRoom[k])byRoom[k]=[];byRoom[k].push(d);});
+  const sevBadge=s=>{if(s<=4)return['b-none','ปกติ'];if(s<=9)return['b-mild','น้อย'];if(s<=14)return['b-moderate','ปานกลาง'];if(s<=19)return['b-moderate','ค่อนข้างรุนแรง'];return['b-severe','รุนแรง'];};
+  el.innerHTML=Object.entries(byRoom).sort((a,b)=>a[0].localeCompare(b[0])).map(([roomName,students])=>{
+    const avg=(students.reduce((a,d)=>a+d.total,0)/students.length).toFixed(1);const atRisk=students.filter(d=>d.total>=10).length;const q9Alert=students.filter(d=>(d.answers?.[8]||0)>0).length;
+    const rows=students.sort((a,b)=>b.total-a.total).map((d,i)=>{const[cls,label]=sevBadge(d.total);const q9=d.answers?.[8]??0;return`<tr><td style="color:var(--g400);font-size:.78rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td style="font-size:.82rem">${d.gender||'—'}</td><td><strong>${d.total}/27</strong></td><td><span class="badge ${cls}">${label}</span></td><td>${q9>0?`<span class="badge b-severe">⚠️ ${q9}</span>`:`<span class="badge b-gray">0</span>`}</td><td style="font-size:.78rem;color:var(--g400)">${d._ts||'—'}</td></tr>`;}).join('');
+    return`<div class="report-block"><div class="report-block-head"><div class="report-block-title">🏫 ${roomName}</div><div class="report-block-meta">${students.length} คน | เฉลี่ย ${avg} | ต้องดูแล ${atRisk} คน${q9Alert>0?` | ⚠️ Q9 ${q9Alert} คน`:''}</div></div><div class="tbl-wrap"><table><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>เพศ</th><th>คะแนน</th><th>ระดับ</th><th>ข้อ 9</th><th>วันที่</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  }).join('');
+}
+function showPTab(id,btn){document.querySelectorAll('#dash-phq .panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('#dash-phq .tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('ppanel-'+id).classList.add('active');btn.classList.add('active');}
+
+// ================================================================
+// ADHD DASHBOARD
+// ================================================================
+function loadADHDData(){
+  ADHD_ALL=JSON.parse(localStorage.getItem('adhd_data')||'[]');
+  const rooms=[...new Set(ADHD_ALL.map(d=>d.classroom).filter(Boolean))].sort();
+  const sel=document.getElementById('adhdFilterRoom');if(!sel)return;
+  const cur=sel.value;
+  sel.innerHTML='<option value="">ทุกห้อง</option>'+rooms.map(r=>`<option value="${r}"${r===cur?' selected':''}>${r}</option>`).join('');
+  applyADHDFilters();
+}
+function applyADHDFilters(){
+  const level=document.getElementById('adhdFilterLevel').value,room=document.getElementById('adhdFilterRoom').value;
+  ADHD_FILTERED=ADHD_ALL.filter(d=>(!level||d.level===level)&&(!room||d.classroom===room));
+  renderADHD();
+}
+function renderADHD(){
+  const n=ADHD_FILTERED.length;
+  document.getElementById('adhdSubtext').textContent=`ข้อมูลทั้งหมด ${ADHD_ALL.length} คน | กำลังแสดง ${n} คน`;
+  const none=ADHD_FILTERED.filter(d=>d.severity==='none').length;
+  const sub=ADHD_FILTERED.filter(d=>d.severity==='subclinical').length;
+  const inatt=ADHD_FILTERED.filter(d=>d.severity==='inattentive').length;
+  const high=ADHD_FILTERED.filter(d=>['combined','inattentive','hyperactive'].includes(d.severity)).length;
+  document.getElementById('sAdhdTotal').textContent=n;
+  document.getElementById('sAdhdNone').textContent=none;
+  document.getElementById('sAdhdSub').textContent=sub;
+  document.getElementById('sAdhdInatt').textContent=inatt;
+  document.getElementById('sAdhdHigh').textContent=high;
+  renderADHDTable(ADHD_FILTERED);
+  renderADHDSummary();
+}
+function renderADHDTable(data){
+  const tbody=document.getElementById('adhdTbody');
+  if(!data.length){tbody.innerHTML='<tr><td colspan="9" class="empty-state">ยังไม่มีข้อมูล</td></tr>';return;}
+  const sevLabels={none:'🟢 ไม่พบแนวโน้ม',subclinical:'🟡 ต้องติดตาม',inattentive:'🔵 ขาดสมาธิ',hyperactive:'🟠 ซน/หุนหัน',combined:'🔴 แบบรวม'};
+  const sevBadges={none:'badge-green',subclinical:'badge-amber',inattentive:'badge-blue',hyperactive:'badge-orange',combined:'badge-red'};
+  tbody.innerHTML=data.map((d,i)=>`<tr style="cursor:pointer" onclick="openStudentModalADHD('${d._id||''}',event)">
+    <td style="color:var(--g400);font-size:.78rem">${i+1}</td>
+    <td><strong>${d.fullname||'—'}</strong></td>
+    <td><span class="badge badge-gray">${d.level||''} ${d.classroom||''}</span></td>
+    <td><strong>${d.total}/54</strong></td>
+    <td><span style="color:var(--blue);font-weight:600">${d.inatt}/27</span></td>
+    <td><span style="color:var(--o500);font-weight:600">${d.hyper}/27</span></td>
+    <td><span class="badge ${sevBadges[d.severity]||'badge-gray'}">${sevLabels[d.severity]||d.severity}</span></td>
+    <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem;color:var(--g500)">${d.ai_analysis?d.ai_analysis.replace(/<[^>]*>/g,'').slice(0,80)+'...':'—'}</td>
+    <td style="font-size:.78rem;color:var(--g400)">${d._ts||'—'}</td>
+  </tr>`).join('');
+}
+function filterADHDTable(q){const lq=q.toLowerCase();renderADHDTable(ADHD_FILTERED.filter(d=>(d.fullname||'').toLowerCase().includes(lq)));}
+function renderADHDSummary(){
+  const el=document.getElementById('adhdSummaryBody');
+  if(!ADHD_FILTERED.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">🧩</div>ยังไม่มีข้อมูล</div>';return;}
+  const n=ADHD_FILTERED.length;
+  const avgInatt=(ADHD_FILTERED.reduce((a,d)=>a+d.inatt,0)/n).toFixed(1);
+  const avgHyper=(ADHD_FILTERED.reduce((a,d)=>a+d.hyper,0)/n).toFixed(1);
+  const avgTotal=(ADHD_FILTERED.reduce((a,d)=>a+d.total,0)/n).toFixed(1);
+  el.innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1rem">
+      <div class="d-card"><div class="d-label">ค่าเฉลี่ยคะแนน</div>
+        <div class="d-bar-row"><div class="d-bar-label">สมาธิ (Inatt)</div><div class="d-bar-track"><div class="d-bar-fill" style="width:${parseFloat(avgInatt)/27*100}%;background:var(--blue)"></div></div><div class="d-pct">${avgInatt}</div></div>
+        <div class="d-bar-row"><div class="d-bar-label">ซน/หุนหัน (Hyp)</div><div class="d-bar-track"><div class="d-bar-fill" style="width:${parseFloat(avgHyper)/27*100}%;background:var(--o500)"></div></div><div class="d-pct">${avgHyper}</div></div>
+        <div class="d-bar-row"><div class="d-bar-label">รวม</div><div class="d-bar-track"><div class="d-bar-fill" style="width:${parseFloat(avgTotal)/54*100}%;background:var(--teal)"></div></div><div class="d-pct">${avgTotal}</div></div>
+      </div>
+      <div class="d-card"><div class="d-label">การกระจายระดับ</div>
+        ${['none','subclinical','inattentive','hyperactive','combined'].map(k=>{const cnt=ADHD_FILTERED.filter(d=>d.severity===k).length;const labels={none:'ไม่พบแนวโน้ม',subclinical:'ต้องติดตาม',inattentive:'ขาดสมาธิ',hyperactive:'ซน/หุนหัน',combined:'แบบรวม'};return`<div class="d-bar-row"><div class="d-bar-label">${labels[k]}</div><div class="d-bar-track"><div class="d-bar-fill" style="width:${cnt/n*100}%;background:var(--teal)"></div></div><div class="d-pct">${cnt}</div></div>`}).join('')}
+      </div>
+    </div>`;
+}
+function showATab(id,btn){document.querySelectorAll('#dash-adhd .panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('#dash-adhd .tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('apanel-'+id).classList.add('active');btn.classList.add('active');}
+
+// openStudentModalADHD — looks up learner record by _id, then opens modal
+// (needed because ADHD table rows don't have access to ALL_DATA directly)
+function openStudentModalADHD(adhdId, event) {
+  if(event) event.stopPropagation();
+  // Find the ADHD record first
+  const adhdRec = ADHD_ALL.find(a=>a._id===adhdId);
+  if(!adhdRec) { console.warn('ADHD record not found for _id:', adhdId); return; }
+  // Try to find the matching learner record
+  const learnerRec = ALL_DATA.find(d=>d._id===adhdRec._id) ||
+                     ALL_DATA.find(d=>d.fullname===adhdRec.fullname && d.classroom===adhdRec.classroom);
+  if(learnerRec) {
+    openStudentModal(learnerRec._id, event);
+  } else {
+    // No learner record: build a synthetic one from ADHD data
+    openStudentModal(adhdRec._id, event);
+  }
+}
+
+// ================================================================
+// EXCEL EXPORTS
+// ================================================================
+function exportExcelLearner(){
+  const data=ALL_DATA;if(!data.length){alert('ยังไม่มีข้อมูลแบบสำรวจ');return;}
+  const headers=['รหัส','วันที่','ชื่อ-นามสกุล','ระดับ','ห้อง','รหัสนักเรียน','เพศ','GPAX','เบอร์นักเรียน','เบอร์ผู้ปกครอง','ทักษะคอม','ความเร็วพิมพ์','ภาษาอังกฤษ','วิธีแก้ปัญหา','ทัศนคติต่องานยาก','ส่งงาน','ขาดเรียน','คอมพิวเตอร์','อินเทอร์เน็ต','สมาร์ทโฟน','Part-time','นอนหลับ','สนับสนุนครอบครัว','เป้าหมาย','ทักษะพิเศษ','Social Media','ความเครียด','คะแนนเสี่ยง','กลุ่ม','บันทึกนักเรียน'];
+  const rows=data.map(d=>[d._id||'',d._ts||'',d.fullname||'',d.level||'',d.classroom||'',d.student_no||'',d.gender||'',d.gpax||'',d.phone||'',d.parent_phone||'',d.computer_skill_level||'',d.typing_speed||'',d.english_tech||'',d.problem_solving||'',d.challenge_attitude||'',d.submission_habit||'',d.absence||'',d.has_computer||'',d.home_internet||'',d.smartphone_os||'',d.part_time||'',d.sleep_hours||'',d.family_support||'',d.career_goal||'',Array.isArray(d.special_skills)?d.special_skills.join(', '):'',Array.isArray(d.social_platforms)?d.social_platforms.join(', '):'',d.stress_level||'',d._risk||0,classifyStudent(d),d.student_note||'']);
+  const ws=XLSX.utils.aoa_to_sheet([headers,...rows]);ws['!cols']=headers.map(()=>({wch:18}));
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'แบบสำรวจผู้เรียน');
+  XLSX.writeFile(wb,`learner_data_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
+}
+function exportExcelPHQ(){
+  if(!PHQ_ALL.length){alert('ยังไม่มีข้อมูล PHQ-A');return;}
+  const headers=['รหัส','วันที่','ชื่อ','ชั้นปี','ห้อง','เพศ','คะแนนรวม','ระดับ','Q9-ทำร้ายตัวเอง',...PHQ_QUESTIONS_DB.map((_,i)=>`ข้อ ${i+1}`),'AI วิเคราะห์'];
+  const rows=PHQ_ALL.map(d=>[d._id||'',d._ts||'',d.fullname||'',d.level||'',d.classroom||'',d.gender||'',d.total||0,d.severity||'',d.answers?.[8]||0,...(d.answers||Array(9).fill(0)),d.ai_analysis||'']);
+  const ws=XLSX.utils.aoa_to_sheet([headers,...rows]);ws['!cols']=[{wch:12},{wch:18},{wch:20},{wch:8},{wch:10},{wch:8},{wch:10},{wch:16},{wch:12},...PHQ_QUESTIONS_DB.map(()=>({wch:8})),{wch:60}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'รายงาน PHQ-A');
+  XLSX.writeFile(wb,`phq_report_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
+}
+function exportExcelADHD(){
+  if(!ADHD_ALL.length){alert('ยังไม่มีข้อมูล ADHD');return;}
+  const headers=['รหัส','วันที่','ชื่อ','ชั้นปี','ห้อง','เพศ','รวม/54','สมาธิ/27','ซน/27','ระดับ',...ADHD_ALL[0]?.answers?.map((_,i)=>`ข้อ ${i+1}`)||Array.from({length:18},(_,i)=>`ข้อ ${i+1}`),'AI วิเคราะห์'];
+  const rows=ADHD_ALL.map(d=>[d._id||'',d._ts||'',d.fullname||'',d.level||'',d.classroom||'',d.gender||'',d.total||0,d.inatt||0,d.hyper||0,d.severity||'',...(d.answers||Array(18).fill(0)),d.ai_analysis||'']);
+  const ws=XLSX.utils.aoa_to_sheet([headers,...rows]);ws['!cols']=[{wch:12},{wch:18},{wch:20},{wch:8},{wch:10},{wch:8},{wch:8},{wch:8},{wch:8},{wch:16},...Array(18).fill({wch:7}),{wch:60}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'รายงาน ADHD');
+  XLSX.writeFile(wb,`adhd_report_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
+}
+
+// ================================================================
+// CLEAR
+// ================================================================
+function showClearMenu(){
+  const keys=['learner_data','phq_data','adhd_data'];
+  const labels=['แบบสำรวจผู้เรียน','PHQ-A','ADHD'];
+  const choice=prompt(`ลบข้อมูลชุดใด?\n1 = ${labels[0]}\n2 = ${labels[1]}\n3 = ${labels[2]}\n4 = ทั้งหมด\n\nพิมพ์หมายเลข:`,'');
+  const idx=parseInt(choice)-1;
+  if(choice==='4'){if(confirm('ลบข้อมูลทั้งหมดหรือไม่? (ไม่สามารถยกเลิกได้)')){keys.forEach(k=>localStorage.removeItem(k));init();}}
+  else if(idx>=0&&idx<3){if(confirm(`ลบข้อมูล ${labels[idx]} หรือไม่?`)){localStorage.removeItem(keys[idx]);init();}}
+}
+
+// ================================================================
+// INIT — Fix: load PHQ + ADHD first, THEN renderLearner so lookups work
+// ================================================================
+function init(){
+  // Load all three datasets into memory first
+  ALL_DATA   = JSON.parse(localStorage.getItem('learner_data') || '[]');
+  PHQ_ALL    = JSON.parse(localStorage.getItem('phq_data')     || '[]');
+  ADHD_ALL   = JSON.parse(localStorage.getItem('adhd_data')    || '[]');
+  // Now render everything (PHQ_ALL / ADHD_ALL already populated)
+  renderLearner();
+  loadPHQData();
+  loadADHDData();
+  setInterval(()=>{
+    ALL_DATA  = JSON.parse(localStorage.getItem('learner_data') || '[]');
+    PHQ_ALL   = JSON.parse(localStorage.getItem('phq_data')     || '[]');
+    ADHD_ALL  = JSON.parse(localStorage.getItem('adhd_data')    || '[]');
+    renderLearner();
+    loadPHQData();
+    loadADHDData();
+  }, 30000);
+}
+</script>
+</body>
+</html>
