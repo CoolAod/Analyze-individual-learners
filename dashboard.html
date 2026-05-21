@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>แดชบอร์ดครู | แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล วิทยาลัยเทคนิคประจวบคีรีขันธ์</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>แดชบอร์ดครู | ทดธ. วท.ประจวบคีรีขันธ์</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -12,1052 +12,847 @@
 html{font-size:16px}
 body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;min-height:100vh}
 :root{
-  --o500:#E86A2E;--o400:#F07C42;--o300:#F5A070;--o100:#FEF0E8;--o50:#FFF8F4;
-  --g900:#1A1714;--g700:#3D3830;--g600:#524D47;--g500:#6B6560;--g400:#9C978F;
-  --g300:#C8C3BC;--g200:#E5E2DC;--g100:#F0EDE8;--g50:#F7F5F3;
-  --white:#FFFFFF;
-  --red:#D93025;--red-bg:#FEE9E7;
-  --amber:#C8760A;--amber-bg:#FEF5E4;
-  --green:#1E7E4E;--green-bg:#E6F5EC;
-  --blue:#1565C0;--blue-bg:#E3F2FD;
-  --purple:#6A0DAD;--purple-bg:#F3E8FF;
-  --teal:#00796B;--teal-bg:#E0F2F1;
-  --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:28px;
-  --shadow-sm:0 2px 6px rgba(0,0,0,.06);--shadow-md:0 6px 24px rgba(0,0,0,.09);--shadow-lg:0 16px 48px rgba(0,0,0,.15);
+  --o:#E86A2E;--o2:#F07C42;--o3:#FEF0E8;--o4:#FFF8F4;
+  --g9:#1A1714;--g7:#3D3830;--g5:#6B6560;--g4:#9C978F;
+  --g2:#E5E2DC;--g1:#F0EDE8;--g0:#F7F5F3;--w:#FFF;
+  --red:#D93025;--rbg:#FEE9E7;--amb:#C8760A;--abg:#FEF5E4;
+  --grn:#1E7E4E;--gbg:#E6F5EC;--pur:#6A0DAD;--pbg:#F3E8FF;
+  --tel:#00796B;--tbg:#E0F2F1;--blu:#1565C0;--bbg:#E3F2FD;
+  --r:8px;--rm:14px;--rl:20px;--rxl:28px;
   --tr:.18s cubic-bezier(.4,0,.2,1);
 }
-
 /* LOGIN */
-#loginOverlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--g900) 0%,#2A2118 100%);display:flex;align-items:center;justify-content:center;padding:1.25rem}
-.login-box{background:var(--white);border-radius:var(--r-xl);padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:0 32px 80px rgba(0,0,0,.35);text-align:center}
-.login-logo{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,var(--o500),var(--o300));display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;box-shadow:0 6px 20px rgba(232,106,46,.35)}
-.login-title{font-family:'Kanit',sans-serif;font-size:1.3rem;font-weight:700;color:var(--g900);margin-bottom:.25rem}
-.login-sub{font-size:.85rem;color:var(--g400);margin-bottom:1.75rem}
-.login-field{text-align:left;margin-bottom:1rem}
-.login-field label{display:block;font-size:.8rem;font-weight:600;color:var(--g500);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.375rem}
-.login-field input{width:100%;padding:11px 14px;border:1.5px solid var(--g200);border-radius:var(--r-md);font-family:'Sarabun',sans-serif;font-size:.95rem;color:var(--g900);outline:none;transition:border-color var(--tr)}
-.login-field input:focus{border-color:var(--o500);box-shadow:0 0 0 3px rgba(232,106,46,.12)}
-.login-err{font-size:.82rem;color:var(--red);margin-top:.5rem;display:none}
-.login-btn{width:100%;padding:12px;border-radius:var(--r-md);background:var(--o500);color:#fff;font-family:'Kanit',sans-serif;font-size:1rem;font-weight:600;border:none;cursor:pointer;transition:var(--tr);box-shadow:0 4px 14px rgba(232,106,46,.3);margin-top:.25rem}
-.login-btn:hover{background:#C05520}
-.login-footer{font-size:.75rem;color:var(--g400);margin-top:1.25rem}
-
+#loginOverlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,var(--g9) 0%,#2A2118 100%);display:flex;align-items:center;justify-content:center;padding:1.25rem}
+.lb{background:var(--w);border-radius:var(--rxl);padding:2.25rem 1.875rem;width:100%;max-width:370px;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.4)}
+.l-logo{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--o),#F5A070);display:flex;align-items:center;justify-content:center;margin:0 auto 1.125rem;box-shadow:0 6px 18px rgba(232,106,46,.35)}
+.l-title{font-family:'Kanit',sans-serif;font-size:1.25rem;font-weight:700;color:var(--g9);margin-bottom:.25rem}
+.l-sub{font-size:.82rem;color:var(--g4);margin-bottom:1.625rem}
+.l-field{text-align:left;margin-bottom:.875rem}
+.l-field label{display:block;font-size:.75rem;font-weight:600;color:var(--g5);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.3rem}
+.l-field input{width:100%;padding:10px 13px;border:1.5px solid var(--g2);border-radius:var(--rm);font-family:'Sarabun',sans-serif;font-size:.9rem;color:var(--g9);outline:none;transition:border-color var(--tr)}
+.l-field input:focus{border-color:var(--o);box-shadow:0 0 0 3px rgba(232,106,46,.12)}
+.l-err{font-size:.8rem;color:var(--red);margin-top:.5rem;display:none}
+.l-btn{width:100%;padding:11px;border-radius:var(--rm);background:var(--o);color:#fff;font-family:'Kanit',sans-serif;font-size:.95rem;font-weight:600;border:none;cursor:pointer;transition:var(--tr);box-shadow:0 3px 12px rgba(232,106,46,.28);margin-top:.25rem}
+.l-btn:hover{background:#C05520}
+.l-foot{font-size:.72rem;color:var(--g4);margin-top:1.125rem}
 /* HEADER */
-.header{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--g200);box-shadow:var(--shadow-sm)}
-.header-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;height:60px;gap:12px}
+.hd{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--g2);box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.hd-i{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;height:60px;gap:12px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-.brand-logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--o500),#F5A070);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(232,106,46,.3)}
-.brand-text{display:flex;flex-direction:column;line-height:1.2}
-.brand-school{font-family:'Kanit',sans-serif;font-size:13px;font-weight:600;color:var(--g900)}
-.brand-dept{font-size:11px;color:var(--g400)}
-.header-nav{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.nav-pill{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:500;color:var(--g500);text-decoration:none;border:1.5px solid transparent;transition:var(--tr);white-space:nowrap}
-.nav-pill:hover{color:var(--o500);background:var(--o100)}
-.nav-pill.active{color:var(--o500);background:var(--o100);border-color:rgba(232,106,46,.25)}
-.header-actions{display:flex;gap:5px;align-items:center;flex-shrink:0;flex-wrap:wrap}
-.btn-xs{padding:7px 11px;border-radius:var(--r-sm);font-size:11.5px;font-weight:600;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:var(--tr);font-family:'Sarabun',sans-serif;white-space:nowrap}
-.btn-export{background:var(--o500);color:#fff;box-shadow:0 2px 6px rgba(232,106,46,.25)}.btn-export:hover{background:#C05520}
-.btn-export-phq{background:var(--purple);color:#fff}.btn-export-phq:hover{background:#56099E}
-.btn-export-adhd{background:var(--teal);color:#fff}.btn-export-adhd:hover{background:#004D40}
-.btn-clear{background:var(--white);color:var(--g500);border:1.5px solid var(--g200)}.btn-clear:hover{border-color:var(--red);color:var(--red)}
-.btn-logout{background:var(--g100);color:var(--g500);border:1.5px solid var(--g200)}.btn-logout:hover{background:var(--red-bg);color:var(--red);border-color:var(--red)}
-
-/* DASH MODE TABS */
-.dash-tabs{background:var(--white);border-bottom:2px solid var(--g200)}
-.dash-tabs-inner{max-width:1280px;margin:0 auto;display:flex;padding:0 1.25rem;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.dtab-btn{padding:.875rem 1.125rem;font-family:'Kanit',sans-serif;font-size:.875rem;font-weight:600;color:var(--g400);border:none;background:transparent;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:var(--tr);white-space:nowrap}
-.dtab-btn.active{color:var(--o500);border-bottom-color:var(--o500)}
-.dtab-btn:hover:not(.active){color:var(--g700)}
-
+.b-logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--o),#F5A070);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 7px rgba(232,106,46,.3)}
+.b-tx{display:flex;flex-direction:column;line-height:1.2}
+.b-s{font-family:'Kanit',sans-serif;font-size:12.5px;font-weight:600;color:var(--g9)}
+.b-d{font-size:11px;color:var(--g4)}
+.hn{display:flex;gap:3px;overflow-x:auto}
+.np{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;color:var(--g5);text-decoration:none;border:1.5px solid transparent;transition:var(--tr);white-space:nowrap}
+.np:hover{color:var(--o);background:var(--o3)}
+.np.act{color:var(--o);background:var(--o3);border-color:rgba(232,106,46,.25)}
+.h-act{display:flex;gap:4px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.bxs{padding:6px 10px;border-radius:var(--r);font-size:11px;font-weight:600;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:var(--tr);font-family:'Sarabun',sans-serif;white-space:nowrap}
+.bxs-o{background:var(--o);color:#fff}.bxs-o:hover{background:#C05520}
+.bxs-p{background:var(--pur);color:#fff}.bxs-p:hover{background:#56099E}
+.bxs-t{background:var(--tel);color:#fff}.bxs-t:hover{background:#004D40}
+.bxs-g{background:var(--w);color:var(--g5);border:1.5px solid var(--g2)}.bxs-g:hover{border-color:var(--red);color:var(--red)}
+.bxs-gl{background:var(--g1);color:var(--g5);border:1.5px solid var(--g2)}.bxs-gl:hover{background:var(--rbg);color:var(--red);border-color:var(--red)}
+@media(max-width:600px){.b-d{display:none}.h-act{gap:2px}.bxs{padding:5px 7px;font-size:10px}}
+/* DASH TABS */
+.dtb{background:var(--w);border-bottom:2px solid var(--g2)}
+.dtb-i{max-width:1280px;margin:0 auto;display:flex;padding:0 1.25rem;overflow-x:auto}
+.dtab{padding:.8rem 1rem;font-family:'Kanit',sans-serif;font-size:.855rem;font-weight:600;color:var(--g4);border:none;background:transparent;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:var(--tr);white-space:nowrap}
+.dtab.act{color:var(--o);border-bottom-color:var(--o)}
+.dtab:hover:not(.act){color:var(--g7)}
 /* MAIN */
-.main{max-width:1280px;margin:0 auto;padding:1.5rem 1.25rem 2rem}
-.dash-panel{display:none}.dash-panel.active{display:block}
-.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
-.page-title{font-family:'Kanit',sans-serif;font-size:1.4rem;font-weight:700;color:var(--g900)}
-.page-sub{font-size:.82rem;color:var(--g400);margin-top:3px}
-.filter-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.filter-select{padding:8px 32px 8px 12px;border-radius:var(--r-md);border:1.5px solid var(--g200);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M3 5l4 4 4-4' stroke='%239C978F' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;font-size:.875rem;color:var(--g700);font-family:'Sarabun',sans-serif;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
-.filter-select:focus{border-color:var(--o500)}
-
+.main{max-width:1280px;margin:0 auto;padding:1.375rem 1.25rem 2rem}
+.dp{display:none}.dp.act{display:block}
+/* PAGE HEAD */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.375rem;flex-wrap:wrap}
+.pt{font-family:'Kanit',sans-serif;font-size:1.375rem;font-weight:700;color:var(--g9)}
+.ps{font-size:.8rem;color:var(--g4);margin-top:3px}
+.fw{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.fsel{padding:7px 30px 7px 11px;border-radius:var(--rm);border:1.5px solid var(--g2);background:var(--w) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='M3 5l4 4 4-4' stroke='%239C978F' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 9px center;font-size:.855rem;color:var(--g7);font-family:'Sarabun',sans-serif;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.fsel:focus{border-color:var(--o)}
 /* STAT GRID */
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
-.stat-grid-5{grid-template-columns:repeat(5,1fr)}
-.stat-grid-6{grid-template-columns:repeat(6,1fr)}
-@media(max-width:1000px){.stat-grid-6{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:800px){.stat-grid,.stat-grid-5,.stat-grid-6{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:400px){.stat-grid,.stat-grid-5,.stat-grid-6{grid-template-columns:1fr}}
-.stat-card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--g200);padding:1.125rem 1.125rem .875rem;box-shadow:var(--shadow-sm);transition:var(--tr);display:flex;align-items:flex-start;gap:11px}
-.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
-.stat-icon{width:42px;height:42px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
-.stat-body{flex:1;min-width:0}
-.stat-num{font-family:'Kanit',sans-serif;font-size:1.875rem;font-weight:700;color:var(--g900);line-height:1}
-.stat-label{font-size:.76rem;color:var(--g400);margin-top:4px;font-weight:500}
-.stat-sub{font-size:.7rem;color:var(--g300);margin-top:2px}
-.num-red{color:var(--red)}.num-amber{color:var(--amber)}.num-green{color:var(--green)}.num-blue{color:var(--blue)}.num-purple{color:var(--purple)}.num-teal{color:var(--teal)}.num-orange{color:var(--o500)}
-
-/* TABS */
-.tab-bar{display:flex;gap:4px;margin-bottom:1rem;background:var(--white);border:1px solid var(--g200);border-radius:var(--r-md);padding:5px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tab-btn{display:flex;align-items:center;gap:5px;white-space:nowrap;padding:8px 13px;border-radius:var(--r-sm);font-size:.855rem;font-weight:500;color:var(--g500);border:none;background:transparent;cursor:pointer;transition:var(--tr);font-family:'Sarabun',sans-serif}
-.tab-btn:hover{background:var(--g100);color:var(--g700)}
-.tab-btn.active{background:var(--o100);color:var(--o500);font-weight:600}
-.phq-tab-btn.active{background:var(--purple-bg);color:var(--purple)}
-.adhd-tab-btn.active{background:var(--teal-bg);color:var(--teal)}
-
+.sg{display:grid;grid-template-columns:repeat(6,1fr);gap:.875rem;margin-bottom:1.375rem}
+@media(max-width:1000px){.sg{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.sg{grid-template-columns:repeat(2,1fr)}}
+.sc{background:var(--w);border-radius:var(--rl);border:1px solid var(--g2);padding:1rem 1.125rem .875rem;box-shadow:0 2px 6px rgba(0,0,0,.055);transition:var(--tr);display:flex;align-items:flex-start;gap:10px}
+.sc:hover{box-shadow:0 6px 20px rgba(0,0,0,.09);transform:translateY(-1px)}
+.si2{width:40px;height:40px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sn{font-family:'Kanit',sans-serif;font-size:1.75rem;font-weight:700;color:var(--g9);line-height:1}
+.sl2{font-size:.73rem;color:var(--g4);margin-top:3px;font-weight:500}
+.ss{font-size:.68rem;color:var(--g2);margin-top:2px}
+.c-r{color:var(--red)}.c-a{color:var(--amb)}.c-g{color:var(--grn)}.c-b{color:var(--blu)}.c-p{color:var(--pur)}.c-t{color:var(--tel)}.c-o{color:var(--o)}
+/* TAB BAR */
+.tb{display:flex;gap:4px;margin-bottom:.875rem;background:var(--w);border:1px solid var(--g2);border-radius:var(--rm);padding:4px;overflow-x:auto}
+.tbt{display:flex;align-items:center;gap:5px;white-space:nowrap;padding:7px 12px;border-radius:var(--r);font-size:.835rem;font-weight:500;color:var(--g5);border:none;background:transparent;cursor:pointer;transition:var(--tr);font-family:'Sarabun',sans-serif}
+.tbt:hover{background:var(--g1);color:var(--g7)}
+.tbt.act{background:var(--o3);color:var(--o);font-weight:600}
+.p-tbt.act{background:var(--pbg);color:var(--pur)}
+.a-tbt.act{background:var(--tbg);color:var(--tel)}
 /* PANEL */
-.panel{display:none}.panel.active{display:block;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.panel-card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--g200);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.25rem}
-.panel-head{padding:1.125rem 1.5rem;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.panel-title{font-family:'Kanit',sans-serif;font-size:1rem;font-weight:600;color:var(--g900)}
-.panel-note{font-size:.8rem;color:var(--g400)}
-.panel-body{padding:1.125rem 1.5rem}
-
-/* GROUP CARDS */
-.group-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.25rem}
-@media(max-width:700px){.group-grid{grid-template-columns:1fr}}
-.group-card{border-radius:var(--r-lg);border:2px solid;overflow:hidden}
-.group-card.advanced{border-color:var(--green);background:var(--green-bg)}
-.group-card.intermediate{border-color:var(--amber);background:var(--amber-bg)}
-.group-card.struggling{border-color:var(--red);background:var(--red-bg)}
-.group-card-head{padding:.875rem 1.125rem;display:flex;align-items:center;gap:10px}
-.group-card-icon{width:38px;height:38px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(255,255,255,.6);flex-shrink:0}
-.group-card-title{font-family:'Kanit',sans-serif;font-size:.95rem;font-weight:700}
-.advanced .group-card-title{color:var(--green)}.intermediate .group-card-title{color:var(--amber)}.struggling .group-card-title{color:var(--red)}
-.group-card-count{font-size:1.75rem;font-weight:700;font-family:'Kanit',sans-serif;margin-left:auto}
-.advanced .group-card-count{color:var(--green)}.intermediate .group-card-count{color:var(--amber)}.struggling .group-card-count{color:var(--red)}
-.group-card-body{padding:0 1.125rem .875rem;font-size:.8rem;color:var(--g600);line-height:1.6}
-.group-name-list{display:flex;flex-wrap:wrap;gap:5px;margin-top:.5rem}
-.g-name-tag{font-size:.75rem;padding:2px 9px;border-radius:10px;background:rgba(255,255,255,.7);font-weight:500}
-.advanced .g-name-tag{color:var(--green)}.intermediate .g-name-tag{color:var(--amber)}.struggling .g-name-tag{color:var(--red)}
-
-/* RISK LIST */
-.risk-item{display:flex;align-items:flex-start;gap:12px;padding:.875rem 1rem;border-radius:var(--r-md);border:1.5px solid var(--g200);margin-bottom:8px;background:var(--white);transition:var(--tr)}
-.risk-item:hover{border-color:var(--g300);box-shadow:var(--shadow-sm)}
-.risk-level-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.risk-info{flex:1;min-width:0}
-.risk-name{font-size:.9rem;font-weight:600;color:var(--g900)}
-.risk-class{font-size:.79rem;color:var(--g400);margin-left:6px}
-.risk-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
-.risk-tag{font-size:.73rem;padding:2px 8px;border-radius:10px;background:var(--red-bg);color:var(--red);font-weight:500}
-.risk-tag.warn{background:var(--amber-bg);color:var(--amber)}
-.risk-tag.q9{background:#4A0E0E;color:#FFB3B0;font-weight:700}
-.risk-tag.phq-alert{background:var(--purple-bg);color:var(--purple)}
-.risk-tag.adhd-alert{background:var(--teal-bg);color:var(--teal)}
-.risk-score{font-size:.75rem;font-weight:700;color:var(--g400);flex-shrink:0;text-align:right;line-height:1.6}
-
+.pan{display:none}.pan.act{display:block;animation:fd .22s ease}
+@keyframes fd{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.pc{background:var(--w);border-radius:var(--rl);border:1px solid var(--g2);box-shadow:0 2px 6px rgba(0,0,0,.055);overflow:hidden;margin-bottom:1.125rem}
+.ph2{padding:1rem 1.375rem;border-bottom:1px solid var(--g1);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.pt2{font-family:'Kanit',sans-serif;font-size:.975rem;font-weight:600;color:var(--g9)}
+.pn{font-size:.77rem;color:var(--g4)}
+.pb2{padding:1rem 1.375rem}
+/* GROUPS */
+.gg{display:grid;grid-template-columns:repeat(3,1fr);gap:.875rem;margin-bottom:1.125rem}
+@media(max-width:640px){.gg{grid-template-columns:1fr}}
+.gc{border-radius:var(--rl);border:2px solid;overflow:hidden}
+.gc.adv{border-color:var(--grn);background:var(--gbg)}
+.gc.int{border-color:var(--amb);background:var(--abg)}
+.gc.str{border-color:var(--red);background:var(--rbg)}
+.gc-h{padding:.8rem 1rem;display:flex;align-items:center;gap:9px}
+.gc-ic{width:36px;height:36px;border-radius:var(--r);background:rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.gc-t{font-family:'Kanit',sans-serif;font-size:.9rem;font-weight:700}
+.adv .gc-t{color:var(--grn)}.int .gc-t{color:var(--amb)}.str .gc-t{color:var(--red)}
+.gc-n{font-size:1.625rem;font-weight:700;font-family:'Kanit',sans-serif;margin-left:auto}
+.adv .gc-n{color:var(--grn)}.int .gc-n{color:var(--amb)}.str .gc-n{color:var(--red)}
+.gc-b{padding:0 1rem .8rem;font-size:.77rem;color:var(--g5);line-height:1.6}
+.ntl{display:flex;flex-wrap:wrap;gap:4px;margin-top:.4rem}
+.ntg{font-size:.72rem;padding:2px 8px;border-radius:10px;background:rgba(255,255,255,.65);font-weight:500}
+.adv .ntg{color:var(--grn)}.int .ntg{color:var(--amb)}.str .ntg{color:var(--red)}
+/* RISK */
+.ri{display:flex;align-items:flex-start;gap:10px;padding:.8rem .9rem;border-radius:var(--rm);border:1.5px solid var(--g2);margin-bottom:7px;background:var(--w);transition:var(--tr);cursor:pointer}
+.ri:hover{border-color:var(--g4);box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.rd{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.ri-i{flex:1;min-width:0}
+.rn{font-size:.875rem;font-weight:600;color:var(--g9)}
+.rc2{font-size:.77rem;color:var(--g4);margin-left:6px}
+.rts{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.rt{font-size:.71rem;padding:2px 7px;border-radius:10px;background:var(--rbg);color:var(--red);font-weight:500}
+.rt.w{background:var(--abg);color:var(--amb)}
+.rt.q9{background:#4A0E0E;color:#FFB3B0;font-weight:700}
+.rt.pp{background:var(--pbg);color:var(--pur)}
+.rt.tt{background:var(--tbg);color:var(--tel)}
+.rs2{font-size:.72rem;font-weight:700;color:var(--g4);flex-shrink:0;text-align:right;line-height:1.6}
 /* SKILL BARS */
-.skill-row{margin-bottom:12px}
-.skill-meta{display:flex;justify-content:space-between;font-size:.8rem;color:var(--g500);margin-bottom:5px;font-weight:500}
-.bar-track{height:10px;background:var(--g100);border-radius:5px;overflow:hidden}
-.bar-fill{height:100%;border-radius:5px;transition:width .6s cubic-bezier(.4,0,.2,1)}
-
+.skr{margin-bottom:11px}
+.sk-m{display:flex;justify-content:space-between;font-size:.775rem;color:var(--g5);margin-bottom:4px;font-weight:500}
+.bt{height:9px;background:var(--g1);border-radius:5px;overflow:hidden}
+.bf{height:100%;border-radius:5px;transition:width .55s cubic-bezier(.4,0,.2,1)}
 /* TAGS */
-.tag-cloud{display:flex;flex-wrap:wrap;gap:7px;margin-top:.5rem}
-.t-tag{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:.8rem;font-weight:500;background:var(--g100);color:var(--g600);border:1px solid var(--g200)}
-.t-tag .cnt{background:var(--white);border-radius:10px;padding:0 6px;font-size:.7rem;font-weight:700;color:var(--g500)}
-
+.tc{display:flex;flex-wrap:wrap;gap:6px;margin-top:.375rem}
+.tg{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:.775rem;font-weight:500;background:var(--g1);color:#524D47;border:1px solid var(--g2)}
+.tg .ct{background:var(--w);border-radius:10px;padding:0 5px;font-size:.68rem;font-weight:700;color:var(--g5)}
 /* DEVICE */
-.device-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
-.d-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--r-md);padding:1.125rem}
-.d-label{font-size:.8rem;color:var(--g500);margin-bottom:.75rem;font-weight:600}
-.d-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.d-bar-label{font-size:.8rem;color:var(--g600);min-width:110px}
-.d-bar-track{flex:1;height:8px;background:var(--g100);border-radius:4px;overflow:hidden}
-.d-bar-fill{height:100%;border-radius:4px;background:var(--o500)}
-.d-pct{font-size:.75rem;font-weight:700;color:var(--g500);min-width:28px;text-align:right}
-
+.dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.875rem}
+.dc{background:var(--w);border:1px solid var(--g2);border-radius:var(--rm);padding:1rem}
+.dl{font-size:.77rem;color:var(--g5);margin-bottom:.675rem;font-weight:600}
+.dbr{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.dbl{font-size:.775rem;color:#524D47;min-width:105px}
+.dbt{flex:1;height:7px;background:var(--g1);border-radius:4px;overflow:hidden}
+.dbf{height:100%;border-radius:4px;background:var(--o)}
+.dp2{font-size:.72rem;font-weight:700;color:var(--g5);min-width:26px;text-align:right}
 /* TABLE */
-.search-input{width:100%;max-width:240px;padding:9px 14px;border-radius:var(--r-md);border:1.5px solid var(--g200);font-size:.875rem;font-family:'Sarabun',sans-serif;color:var(--g900);outline:none;transition:border-color var(--tr);background:var(--white)}
-.search-input:focus{border-color:var(--o500)}
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{width:100%;border-collapse:collapse;font-size:.855rem;min-width:600px}
-th{padding:.75rem 1rem;text-align:left;font-size:.73rem;font-weight:600;color:var(--g400);letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid var(--g200);white-space:nowrap;background:var(--g50)}
-td{padding:.75rem 1rem;border-bottom:1px solid var(--g100);vertical-align:middle}
+.si3{width:100%;max-width:220px;padding:8px 13px;border-radius:var(--rm);border:1.5px solid var(--g2);font-size:.84rem;font-family:'Sarabun',sans-serif;color:var(--g9);outline:none;background:var(--w)}
+.si3:focus{border-color:var(--o)}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.825rem;min-width:580px}
+th{padding:.7rem .9rem;text-align:left;font-size:.71rem;font-weight:600;color:var(--g4);letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid var(--g2);white-space:nowrap;background:var(--g0)}
+td{padding:.7rem .9rem;border-bottom:1px solid var(--g1);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--o50);cursor:pointer}
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:10px;font-size:.73rem;font-weight:600}
-.badge-red{background:var(--red-bg);color:var(--red)}.badge-amber{background:var(--amber-bg);color:var(--amber)}.badge-green{background:var(--green-bg);color:var(--green)}.badge-gray{background:var(--g100);color:var(--g500)}.badge-blue{background:var(--blue-bg);color:var(--blue)}.badge-purple{background:var(--purple-bg);color:var(--purple)}.badge-orange{background:var(--o100);color:var(--o500)}.badge-teal{background:var(--teal-bg);color:var(--teal)}
-.b-none{background:var(--green-bg);color:var(--green)}.b-mild{background:var(--amber-bg);color:var(--amber)}.b-moderate{background:var(--o100);color:var(--o500)}.b-severe{background:var(--red-bg);color:var(--red)}.b-gray{background:var(--g100);color:var(--g500)}
-
+tr:hover td{background:var(--o4);cursor:pointer}
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:10px;font-size:.71rem;font-weight:600}
+.b-r{background:var(--rbg);color:var(--red)}.b-a{background:var(--abg);color:var(--amb)}.b-g{background:var(--gbg);color:var(--grn)}.b-gy{background:var(--g1);color:var(--g5)}.b-b{background:var(--bbg);color:var(--blu)}.b-p{background:var(--pbg);color:var(--pur)}.b-t{background:var(--tbg);color:var(--tel)}.b-o{background:var(--o3);color:var(--o)}
 /* SKILLS LAYOUT */
-.skills-layout{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-@media(max-width:700px){.skills-layout{grid-template-columns:1fr}}
-.sub-card{background:var(--g50);border:1px solid var(--g200);border-radius:var(--r-md);padding:1.125rem;margin-bottom:1rem}
-.sub-card-title{font-size:.85rem;font-weight:600;color:var(--g700);margin-bottom:1rem;display:flex;align-items:center;gap:6px}
-.career-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.career-label{font-size:.8rem;color:var(--g600);min-width:140px}
-.career-bar{flex:1;height:8px;background:var(--g100);border-radius:4px;overflow:hidden}
-.career-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--o500),var(--o400))}
-.career-cnt{font-size:.75rem;color:var(--g400);min-width:30px;text-align:right;font-weight:600}
-
-/* PHQ STYLES */
-.sev-row{display:grid;grid-template-columns:130px 1fr 48px;align-items:center;gap:.75rem;margin-bottom:.75rem;font-size:.875rem}
-.sev-label{color:var(--g600);font-weight:500}
-.sev-track{height:12px;background:var(--g100);border-radius:6px;overflow:hidden}
-.sev-fill{height:100%;border-radius:6px;transition:width .6s cubic-bezier(.4,0,.2,1)}
-.sev-cnt{font-weight:700;text-align:right;color:var(--g700)}
-.fill-none{background:var(--green)}.fill-mild{background:var(--amber)}.fill-moderate{background:var(--o500)}.fill-ms{background:var(--red)}.fill-severe{background:#8B0000}
-.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
-.room-card{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--g200);box-shadow:var(--shadow-sm);padding:1.125rem;transition:var(--tr)}
-.room-card:hover{box-shadow:var(--shadow-md)}
-.room-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.875rem}
-.room-name{font-family:'Kanit',sans-serif;font-weight:700;font-size:1rem;color:var(--g900)}
-.room-avg{display:inline-block;padding:3px 10px;border-radius:10px;font-size:.82rem;font-weight:700}
-.room-bar-stack{display:flex;height:10px;border-radius:5px;overflow:hidden;margin-bottom:.5rem}
-.stack-seg{transition:width .5s ease}
-.room-legend{display:flex;gap:.75rem;flex-wrap:wrap}
-.legend-item{display:inline-flex;align-items:center;gap:4px;font-size:.75rem;color:var(--g500)}
-.legend-dot-el{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.q-heatmap{display:grid;gap:.625rem}
-.q-row{display:flex;align-items:center;gap:.75rem;font-size:.85rem}
-.q-num{width:30px;flex-shrink:0;color:var(--g400);font-size:.78rem}
-.q-text{flex:1;color:var(--g700);font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.q-bar-wrap{width:140px;flex-shrink:0}
-.q-bar-track{height:8px;background:var(--g100);border-radius:4px;overflow:hidden}
-.q-bar-fill{height:100%;border-radius:4px;background:var(--o500)}
-.q-avg{width:30px;text-align:right;flex-shrink:0;font-weight:600;font-size:.8rem;color:var(--g700)}
-.trend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.75rem}
-.trend-point{background:var(--g50);border:1px solid var(--g200);border-radius:var(--r-md);padding:.75rem;text-align:center}
-.trend-date{font-size:.72rem;color:var(--g400);margin-bottom:.375rem}
-.trend-avg{font-family:'Kanit',sans-serif;font-size:1.4rem;font-weight:700}
-.trend-n{font-size:.72rem;color:var(--g400);margin-top:2px}
-.report-controls{display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center}
-.report-select{padding:9px 32px 9px 12px;border-radius:var(--r-md);border:1.5px solid var(--g200);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M3 5l4 4 4-4' stroke='%239C978F' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;font-size:.875rem;color:var(--g700);font-family:'Sarabun',sans-serif;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
-.btn-print{padding:9px 18px;border-radius:var(--r-md);background:var(--o500);color:#fff;font-size:.875rem;font-weight:600;border:none;cursor:pointer;font-family:'Sarabun',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:var(--tr)}
-.btn-print:hover{background:#C05520}
-.report-block{background:var(--white);border-radius:var(--r-lg);border:1px solid var(--g200);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:1.25rem}
-.report-block-head{padding:1rem 1.5rem;background:var(--o100);border-bottom:1px solid rgba(232,106,46,.15);display:flex;justify-content:space-between;align-items:center}
-.report-block-title{font-family:'Kanit',sans-serif;font-weight:600;font-size:.95rem;color:var(--o500)}
-.report-block-meta{font-size:.8rem;color:var(--o500);opacity:.8}
-
+.sl3{display:grid;grid-template-columns:1fr 1fr;gap:.875rem}
+@media(max-width:660px){.sl3{grid-template-columns:1fr}}
+.sub-c{background:var(--g0);border:1px solid var(--g2);border-radius:var(--rm);padding:1rem;margin-bottom:.875rem}
+.sub-t{font-size:.82rem;font-weight:600;color:var(--g7);margin-bottom:.875rem}
+.cr{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.cl{font-size:.775rem;color:#524D47;min-width:130px}
+.cb{flex:1;height:7px;background:var(--g1);border-radius:4px;overflow:hidden}
+.cbf{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--o),var(--o2))}
+.cc{font-size:.72rem;color:var(--g4);min-width:28px;text-align:right;font-weight:600}
+/* PHQ */
+.sev-r{display:grid;grid-template-columns:130px 1fr 44px;align-items:center;gap:.675rem;margin-bottom:.675rem;font-size:.855rem}
+.sev-t{height:11px;background:var(--g1);border-radius:6px;overflow:hidden}
+.sev-f{height:100%;border-radius:6px;transition:width .55s cubic-bezier(.4,0,.2,1)}
+.fn{background:var(--grn)}.fm{background:var(--amb)}.fmo{background:var(--o)}.fms{background:var(--red)}.fse{background:#8B0000}
+.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.875rem}
+.rc3{background:var(--w);border-radius:var(--rl);border:1px solid var(--g2);padding:1rem;transition:var(--tr)}
+.rc3:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
+.rc3-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+.rn2{font-family:'Kanit',sans-serif;font-weight:700;font-size:.95rem;color:var(--g9)}
+.ra{display:inline-block;padding:2px 9px;border-radius:10px;font-size:.8rem;font-weight:700}
+.rb-st{display:flex;height:9px;border-radius:5px;overflow:hidden;margin-bottom:.375rem}
+.rb-sg{flex-shrink:0;transition:width .5s ease;min-width:0}
+.rleg{display:flex;gap:.675rem;flex-wrap:wrap}
+.rli{display:inline-flex;align-items:center;gap:3px;font-size:.72rem;color:var(--g5)}
+.rld{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.qh{display:grid;gap:.55rem}
+.qr{display:flex;align-items:center;gap:.675rem;font-size:.825rem}
+.qrn{width:28px;flex-shrink:0;color:var(--g4);font-size:.76rem}
+.qrt{flex:1;color:var(--g7);font-size:.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qbw{width:130px;flex-shrink:0}
+.qbt{height:7px;background:var(--g1);border-radius:4px;overflow:hidden}
+.qbf{height:100%;border-radius:4px;background:var(--o)}
+.qa{width:28px;text-align:right;font-weight:600;font-size:.77rem;color:var(--g7)}
+.tg2{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:.625rem}
+.tp{background:var(--g0);border:1px solid var(--g2);border-radius:var(--rm);padding:.675rem;text-align:center}
+.td{font-size:.7rem;color:var(--g4);margin-bottom:.3rem}
+.ta2{font-family:'Kanit',sans-serif;font-size:1.3rem;font-weight:700}
+.tn{font-size:.7rem;color:var(--g4);margin-top:1px}
+/* ADHD */
+.ag{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.875rem}
+.ac3{background:var(--w);border:1px solid var(--g2);border-radius:var(--rm);padding:.9rem;cursor:pointer;transition:var(--tr)}
+.ac3:hover{border-color:var(--tel);box-shadow:0 2px 8px rgba(0,121,107,.08)}
+.acn{font-size:.875rem;font-weight:600;color:var(--g9);margin-bottom:.25rem}
+.acc{font-size:.76rem;color:var(--g4);margin-bottom:.55rem}
+.absb{display:flex;flex-direction:column;gap:5px}
+.abr{display:flex;align-items:center;gap:7px;font-size:.76rem}
+.abl{min-width:78px;color:var(--g5)}
+.abt{flex:1;height:6px;background:var(--g1);border-radius:4px;overflow:hidden}
+.abfi{height:100%;border-radius:4px;background:var(--blu)}
+.abfh{height:100%;border-radius:4px;background:var(--o)}
+.abn{min-width:30px;text-align:right;font-weight:600;color:var(--g5)}
+/* Q9 */
+.q9-box{background:#FEE9E7;border:1px solid #C62828;border-radius:var(--rm);padding:.8rem .9rem;margin-bottom:.75rem;font-size:.84rem;color:#B71C1C;line-height:1.6}
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:1.25rem;animation:fadeIn .2s ease}
-.modal-box{background:var(--white);border-radius:var(--r-xl);max-width:680px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
-.modal-head{padding:1.25rem 1.5rem;border-bottom:1px solid var(--g200);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:1}
-.modal-title{font-family:'Kanit',sans-serif;font-size:1.1rem;font-weight:700;color:var(--g900)}
-.modal-close{width:32px;height:32px;border-radius:50%;border:none;background:var(--g100);color:var(--g500);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
-.modal-close:hover{background:var(--red-bg);color:var(--red)}
-.modal-body{padding:1.25rem 1.5rem}
-.modal-section{margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--g100)}
-.modal-section:last-child{border-bottom:none;margin-bottom:0}
-.modal-section-title{font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem}
-.phq-color{color:var(--purple)}.adhd-color{color:var(--teal)}.note-color{color:var(--o500)}
-.score-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--r-md);font-size:.9rem;font-weight:600;margin-bottom:.75rem}
-.ai-bubble{background:var(--o50);border:1px solid rgba(232,106,46,.15);border-radius:var(--r-md);padding:.875rem 1rem;font-size:.85rem;line-height:1.75;color:var(--g700)}
-.ai-bubble.purple{background:var(--purple-bg);border-color:rgba(106,13,173,.15)}
-.ai-bubble.teal{background:var(--teal-bg);border-color:rgba(0,121,107,.15)}
-.ai-loading{display:flex;align-items:center;gap:8px;color:var(--g400);font-size:.85rem}
-.dot-pulse{display:inline-flex;gap:4px}
-.dot-pulse span{width:5px;height:5px;border-radius:50%;background:var(--o500);animation:pulse 1.2s ease-in-out infinite}
-.dot-pulse span:nth-child(2){animation-delay:.2s}.dot-pulse span:nth-child(3){animation-delay:.4s}
-@keyframes pulse{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
-.breakdown-mini{display:flex;flex-wrap:wrap;gap:4px;margin-top:.5rem}
-.breakdown-mini-item{font-size:.72rem;padding:2px 7px;border-radius:6px;font-weight:600}
-
-/* ADHD DASHBOARD */
-.adhd-score-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-bottom:1rem}
-.adhd-student-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--r-md);padding:1rem;cursor:pointer;transition:var(--tr)}
-.adhd-student-card:hover{border-color:var(--teal);box-shadow:var(--shadow-sm)}
-.adhd-card-name{font-size:.9rem;font-weight:600;color:var(--g900);margin-bottom:.375rem}
-.adhd-card-class{font-size:.78rem;color:var(--g400);margin-bottom:.625rem}
-.adhd-score-bars{display:flex;flex-direction:column;gap:6px}
-.adhd-bar-row{display:flex;align-items:center;gap:8px;font-size:.78rem}
-.adhd-bar-label{min-width:80px;color:var(--g500)}
-.adhd-bar-track{flex:1;height:7px;background:var(--g100);border-radius:4px;overflow:hidden}
-.adhd-bar-fill-i{height:100%;border-radius:4px;background:var(--blue)}
-.adhd-bar-fill-h{height:100%;border-radius:4px;background:var(--o500)}
-.adhd-bar-num{min-width:32px;text-align:right;font-weight:600;color:var(--g600)}
-
-/* EMPTY STATE */
-.empty-state{text-align:center;padding:3rem 1rem;color:var(--g400);font-size:.9rem}
-.empty-icon{font-size:2.5rem;margin-bottom:.75rem}
-
+.mo{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.52);display:flex;align-items:center;justify-content:center;padding:1.25rem;animation:fd .2s ease}
+.mb{background:var(--w);border-radius:var(--rxl);max-width:660px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.15)}
+.mh{padding:1.125rem 1.375rem;border-bottom:1px solid var(--g2);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--w);z-index:1}
+.mt3{font-family:'Kanit',sans-serif;font-size:1.05rem;font-weight:700;color:var(--g9)}
+.mx{width:30px;height:30px;border-radius:50%;border:none;background:var(--g1);color:var(--g5);cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.mx:hover{background:var(--rbg);color:var(--red)}
+.mbody{padding:1.125rem 1.375rem}
+.ms{margin-bottom:1.125rem;padding-bottom:1.125rem;border-bottom:1px solid var(--g1)}
+.ms:last-child{border-bottom:none;margin-bottom:0}
+.mst{font-size:.77rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.625rem}
+.pu{color:var(--pur)}.tu{color:var(--tel)}.ou{color:var(--o)}
+.ai-box{border-radius:var(--rm);padding:.8rem .9rem;font-size:.84rem;line-height:1.8;color:var(--g7)}
+.ai-o{background:var(--o4);border:1px solid rgba(232,106,46,.15)}
+.ai-p{background:var(--pbg);border:1px solid rgba(106,13,173,.15)}
+.ai-t{background:var(--tbg);border:1px solid rgba(0,121,107,.15)}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:var(--rm);font-size:.84rem;font-weight:600;margin-bottom:.625rem}
+.bmi{display:flex;flex-wrap:wrap;gap:3px;margin-top:.375rem}
+.bmi-i{font-size:.69rem;padding:2px 6px;border-radius:5px;font-weight:600}
+/* LOADING */
+.loading-cover{position:fixed;inset:0;z-index:999;background:rgba(247,245,243,.85);display:none;flex-direction:column;align-items:center;justify-content:center;gap:.875rem}
+.loading-cover.vis{display:flex}
+.sp2{width:44px;height:44px;border:4px solid rgba(232,106,46,.2);border-top-color:var(--o);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sp-t{font-family:'Kanit',sans-serif;font-size:.9rem;font-weight:600;color:var(--g7)}
+/* EMPTY */
+.es{text-align:center;padding:2.5rem 1rem;color:var(--g4);font-size:.875rem}
+.ei{font-size:2.25rem;margin-bottom:.625rem}
 /* FOOTER */
-.footer{text-align:center;padding:1.25rem;font-size:.8rem;color:var(--g400);border-top:1px solid var(--g200);background:var(--white);display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-top:2rem}
-
-/* RESPONSIVE */
-@media(max-width:600px){.brand-dept{display:none}.page-title{font-size:1.1rem}.header-actions{gap:3px}.btn-xs{padding:5px 7px;font-size:10.5px}.stat-num{font-size:1.5rem}}
-@media print{#loginOverlay,.header,.dash-tabs,.tab-bar,.filter-wrap,.header-actions,.report-controls,.btn-print{display:none!important}.dash-panel,.panel{display:block!important}.panel-card,.report-block{box-shadow:none;break-inside:avoid}body{background:white}}
+.footer{text-align:center;padding:1.125rem;font-size:.77rem;color:var(--g4);border-top:1px solid var(--g2);background:var(--w);display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap;margin-top:2rem}
+/* REPORT */
+.rc4{display:flex;gap:.625rem;margin-bottom:1.125rem;flex-wrap:wrap;align-items:center}
+.rsel{padding:8px 30px 8px 11px;border-radius:var(--rm);border:1.5px solid var(--g2);background:var(--w) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='M3 5l4 4 4-4' stroke='%239C978F' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 9px center;font-size:.84rem;color:var(--g7);font-family:'Sarabun',sans-serif;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.rsel:focus{border-color:var(--o)}
+.r-blk{background:var(--w);border-radius:var(--rl);border:1px solid var(--g2);box-shadow:0 2px 6px rgba(0,0,0,.055);overflow:hidden;margin-bottom:1.125rem}
+.r-bh{padding:.9rem 1.375rem;background:var(--o3);border-bottom:1px solid rgba(232,106,46,.15);display:flex;justify-content:space-between;align-items:center}
+.r-bt{font-family:'Kanit',sans-serif;font-weight:600;font-size:.9rem;color:var(--o)}
+.r-bm{font-size:.77rem;color:var(--o);opacity:.75}
+@media print{#loginOverlay,.hd,.dtb,.tb,.fw,.h-act,.rc4 button,button{display:none!important}.dp,.pan{display:block!important}.pc,.r-blk{box-shadow:none;break-inside:avoid}body{background:white}}
 </style>
 </head>
 <body>
 
+<!-- Loading -->
+<div class="loading-cover" id="loadCover">
+  <div class="sp2"></div>
+  <div class="sp-t" id="loadMsg">กำลังโหลดข้อมูล...</div>
+</div>
+
 <!-- LOGIN -->
 <div id="loginOverlay">
-  <div class="login-box">
-    <div class="login-logo"><svg width="30" height="30" viewBox="0 0 30 30" fill="none"><path d="M15 4L4 11v15h8v-7h6v7h8V11L15 4z" fill="white" opacity=".95"/></svg></div>
-    <div class="login-title">แดชบอร์ดครูผู้สอน</div>
-    <div class="login-sub">แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล<br>วิทยาลัยเทคนิคประจวบคีรีขันธ์</div>
-    <div class="login-field"><label>ชื่อผู้ใช้</label><input type="text" id="loginUser" placeholder="กรอกชื่อผู้ใช้" autocomplete="username"></div>
-    <div class="login-field"><label>รหัสผ่าน</label><input type="password" id="loginPass" placeholder="กรอกรหัสผ่าน" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div class="login-err" id="loginErr">⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
-    <button class="login-btn" onclick="doLogin()">🔐 เข้าสู่ระบบ</button>
-    <div class="login-footer">ระบบวิเคราะห์ผู้เรียน v6.0 — สำหรับครูผู้สอนเท่านั้น</div>
+  <div class="lb">
+    <div class="l-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4L4 10v14h7v-6h6v6h7V10L14 4z" fill="white" opacity=".92"/></svg></div>
+    <div class="l-title">แดชบอร์ดครูผู้สอน</div>
+    <div class="l-sub">แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล<br>วิทยาลัยเทคนิคประจวบคีรีขันธ์</div>
+    <div class="l-field"><label>ชื่อผู้ใช้</label><input type="text" id="lUser" placeholder="username" autocomplete="username"></div>
+    <div class="l-field"><label>รหัสผ่าน</label><input type="password" id="lPass" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="l-err" id="lErr">⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
+    <button class="l-btn" onclick="doLogin()">🔐 เข้าสู่ระบบ</button>
+    <div class="l-foot">ระบบวิเคราะห์ผู้เรียน v7.0 — สำหรับครูผู้สอนเท่านั้น</div>
   </div>
 </div>
 
 <!-- HEADER -->
-<header class="header">
-  <div class="header-inner">
+<header class="hd">
+  <div class="hd-i">
     <a class="brand" href="index.html">
-      <div class="brand-logo"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3L3 8v1.5h16V8L11 3z" fill="white" opacity=".95"/><rect x="4" y="10" width="3" height="7" rx="1" fill="white" opacity=".9"/><rect x="9.5" y="10" width="3" height="7" rx="1" fill="white" opacity=".9"/><rect x="15" y="10" width="3" height="7" rx="1" fill="white" opacity=".9"/><rect x="3" y="17" width="16" height="2" rx="1" fill="white" opacity=".9"/></svg></div>
-      <div class="brand-text"><span class="brand-school">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="brand-dept">แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span></div>
+      <div class="b-logo"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2.5L2.5 7.5v10h5v-4.5h5V17.5h5v-10L10 2.5z" fill="white" opacity=".9"/></svg></div>
+      <div class="b-tx"><span class="b-s">วท.ประจวบคีรีขันธ์</span><span class="b-d">แผนก ทดธ.</span></div>
     </a>
-    <nav class="header-nav">
-      <a href="index.html" class="nav-pill">📋 แบบสำรวจ</a>
-      <a href="dashboard.html" class="nav-pill active">📊 แดชบอร์ด</a>
+    <nav class="hn">
+      <a href="index.html" class="np">📋 แบบสำรวจ</a>
+      <a href="dashboard.html" class="np act">📊 แดชบอร์ด</a>
     </nav>
-    <div class="header-actions">
-      <button class="btn-xs btn-export" onclick="exportExcelLearner()">📥 Excel ผู้เรียน</button>
-      <button class="btn-xs btn-export-phq" onclick="exportExcelPHQ()">📥 Excel PHQ</button>
-      <button class="btn-xs btn-export-adhd" onclick="exportExcelADHD()">📥 Excel ADHD</button>
-      <button class="btn-xs btn-clear" onclick="showClearMenu()">🗑️</button>
-      <button class="btn-xs btn-logout" onclick="doLogout()">🚪 ออก</button>
+    <div class="h-act">
+      <button class="bxs bxs-o" onclick="exportExcelLearner()">📥 Excel ผู้เรียน</button>
+      <button class="bxs bxs-p" onclick="exportExcelPHQ()">📥 PHQ</button>
+      <button class="bxs bxs-t" onclick="exportExcelADHD()">📥 ADHD</button>
+      <button class="bxs bxs-g" onclick="reloadAll()">🔄</button>
+      <button class="bxs bxs-gl" onclick="doLogout()">🚪 ออก</button>
     </div>
   </div>
 </header>
 
-<!-- DASH MODE TABS -->
-<div class="dash-tabs">
-  <div class="dash-tabs-inner">
-    <button class="dtab-btn active" id="dtab-learner" onclick="switchDash('learner')">📊 แดชบอร์ดผู้เรียน</button>
-    <button class="dtab-btn" id="dtab-phq" onclick="switchDash('phq')">💜 รายงาน PHQ-A</button>
-    <button class="dtab-btn" id="dtab-adhd" onclick="switchDash('adhd')">🧩 รายงาน ADHD</button>
-  </div>
-</div>
+<!-- DASH TABS -->
+<div class="dtb"><div class="dtb-i">
+  <button class="dtab act" id="dt-l" onclick="switchDash('l')">📊 แดชบอร์ดผู้เรียน</button>
+  <button class="dtab" id="dt-p" onclick="switchDash('p')">💜 รายงาน PHQ-A</button>
+  <button class="dtab" id="dt-a" onclick="switchDash('a')">🧩 รายงาน ADHD</button>
+</div></div>
 
 <main class="main">
 
-<!-- ===== LEARNER DASHBOARD ===== -->
-<div class="dash-panel active" id="dash-learner">
-  <div class="page-head">
-    <div><h1 class="page-title">📊 แดชบอร์ดวิเคราะห์ผู้เรียน</h1><p class="page-sub" id="learnerSubtext">ปีการศึกษา 2569</p></div>
-    <div class="filter-wrap"><select class="filter-select" id="filterClass" onchange="renderLearner()"><option value="all">ทุกห้อง</option></select></div>
+<!-- ═══ LEARNER DASH ═══════════════════════════════════════════ -->
+<div class="dp act" id="d-l">
+  <div class="ph">
+    <div><div class="pt">📊 แดชบอร์ดวิเคราะห์ผู้เรียน</div><div class="ps" id="lSub">กำลังโหลดข้อมูล...</div></div>
+    <div class="fw"><select class="fsel" id="fClass" onchange="renderLearner()"><option value="all">ทุกห้อง</option></select></div>
   </div>
-
-  <!-- Stat cards -->
-  <div class="stat-grid stat-grid-6" id="statGrid">
-    <div class="stat-card"><div class="stat-icon" style="background:var(--o100)">👥</div><div class="stat-body"><div class="stat-num" id="sTotalStudents">0</div><div class="stat-label">นักเรียนทั้งหมด</div><div class="stat-sub" id="sTotalSub">ยังไม่มีข้อมูล</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">🏆</div><div class="stat-body"><div class="stat-num num-green" id="sAdvanced">0</div><div class="stat-label">กลุ่มเก่ง</div><div class="stat-sub">Advanced</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">📚</div><div class="stat-body"><div class="stat-num num-amber" id="sIntermediate">0</div><div class="stat-label">กลุ่มกลาง</div><div class="stat-sub">Intermediate</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--red-bg)">🚨</div><div class="stat-body"><div class="stat-num num-red" id="sStruggling">0</div><div class="stat-label">กลุ่มต้องดูแล</div><div class="stat-sub">Struggling</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">💻</div><div class="stat-body"><div class="stat-num num-amber" id="sNoDevice">0</div><div class="stat-label">ขาดอุปกรณ์</div><div class="stat-sub">ไม่มีคอมส่วนตัว</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">⭐</div><div class="stat-body"><div class="stat-num num-green" id="sSpecial">0</div><div class="stat-label">มีทักษะพิเศษ</div><div class="stat-sub">ทักษะดิจิทัล</div></div></div>
+  <div class="sg" id="statGrid">
+    <div class="sc"><div class="si2" style="background:var(--o3)">👥</div><div><div class="sn" id="sTot">0</div><div class="sl2">นักเรียนทั้งหมด</div><div class="ss" id="sTotS">—</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--gbg)">🏆</div><div><div class="sn c-g" id="sAdv">0</div><div class="sl2">กลุ่มเก่ง</div><div class="ss">Advanced</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--abg)">📚</div><div><div class="sn c-a" id="sInt">0</div><div class="sl2">กลุ่มกลาง</div><div class="ss">Intermediate</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--rbg)">🚨</div><div><div class="sn c-r" id="sStr">0</div><div class="sl2">กลุ่มต้องดูแล</div><div class="ss">Struggling</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--abg)">💻</div><div><div class="sn c-a" id="sNoDev">0</div><div class="sl2">ขาดอุปกรณ์</div><div class="ss">ไม่มีคอม</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--gbg)">⭐</div><div><div class="sn c-g" id="sSp">0</div><div class="sl2">ทักษะพิเศษ</div><div class="ss">ดิจิทัล</div></div></div>
   </div>
-
-  <!-- Tab bar -->
-  <div class="tab-bar">
-    <button class="tab-btn active" onclick="showLTab('groups',this)">🎯 จัดกลุ่มผู้เรียน</button>
-    <button class="tab-btn" onclick="showLTab('risk',this)">🚨 กลุ่มเสี่ยง</button>
-    <button class="tab-btn" onclick="showLTab('skills',this)">⭐ ทักษะ</button>
-    <button class="tab-btn" onclick="showLTab('devices',this)">📱 อุปกรณ์</button>
-    <button class="tab-btn" onclick="showLTab('students',this)">📋 รายชื่อ</button>
+  <div class="tb">
+    <button class="tbt act" onclick="showLTab('grp',this)">🎯 จัดกลุ่มผู้เรียน</button>
+    <button class="tbt" onclick="showLTab('risk',this)">🚨 กลุ่มเสี่ยง</button>
+    <button class="tbt" onclick="showLTab('sk',this)">⭐ ทักษะ</button>
+    <button class="tbt" onclick="showLTab('dev',this)">📱 อุปกรณ์</button>
+    <button class="tbt" onclick="showLTab('stu',this)">📋 รายชื่อ</button>
   </div>
-
-  <!-- Panel: กลุ่มผู้เรียน (Bug 1 + Bug 5 Fix: renderGroups defined and called) -->
-  <div class="panel active" id="lpanel-groups">
-    <div class="group-grid" id="groupGrid">
-      <div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📊</div>ยังไม่มีข้อมูล</div>
-    </div>
-    <div class="panel-card">
-      <div class="panel-head"><div class="panel-title">📋 รายละเอียดการจัดกลุ่ม</div><div class="panel-note">คะแนนทักษะคอม + GPAX + ส่งงาน</div></div>
-      <div class="panel-body"><div class="tbl-wrap"><table id="groupTable"><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ห้อง</th><th>ทักษะคอม</th><th>GPAX</th><th>ส่งงาน</th><th>กลุ่ม</th><th>PHQ-A</th><th>ADHD</th></tr></thead><tbody id="groupTbody"><tr><td colspan="9" class="empty-state">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div>
-    </div>
+  <div class="pan act" id="lp-grp">
+    <div class="gg" id="groupGrid"><div class="es" style="grid-column:1/-1"><div class="ei">📊</div>ยังไม่มีข้อมูล</div></div>
+    <div class="pc"><div class="ph2"><div class="pt2">📋 รายละเอียดการจัดกลุ่ม</div><div class="pn">คะแนนทักษะคอม + GPAX + ส่งงาน</div></div><div class="pb2" style="padding:0"><div class="tw"><table id="grpTable"><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ห้อง</th><th>ทักษะคอม</th><th>GPAX</th><th>ส่งงาน</th><th>กลุ่ม</th><th>PHQ-A</th><th>ADHD</th></tr></thead><tbody id="grpTbody"><tr><td colspan="9" class="es">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div></div>
   </div>
-
-  <!-- Panel: Risk -->
-  <div class="panel" id="lpanel-risk">
-    <div class="panel-card">
-      <div class="panel-head"><div class="panel-title">🚨 นักเรียนกลุ่มเสี่ยง</div><div class="panel-note">เรียงจากความเสี่ยงมากไปน้อย · Q9 ≥1 = แจ้งครูแนะแนว</div></div>
-      <div class="panel-body" id="riskBody"><div class="empty-state"><div class="empty-icon">📋</div>ยังไม่มีข้อมูล</div></div>
-    </div>
+  <div class="pan" id="lp-risk">
+    <div class="pc"><div class="ph2"><div class="pt2">🚨 นักเรียนกลุ่มเสี่ยง</div><div class="pn">เรียงจากความเสี่ยงมากไปน้อย · Q9≥1 = แจ้งครูแนะแนว</div></div><div class="pb2" id="riskBody"><div class="es"><div class="ei">📋</div>ยังไม่มีข้อมูล</div></div></div>
   </div>
-
-  <!-- Panel: Skills -->
-  <div class="panel" id="lpanel-skills">
-    <div class="panel-card">
-      <div class="panel-head"><div class="panel-title">⭐ ภาพรวมทักษะและความสามารถ</div></div>
-      <div class="panel-body">
-        <div class="skills-layout">
-          <div class="sub-card"><div class="sub-card-title">📊 ค่าเฉลี่ยทักษะหลัก (1–5)</div><div id="skillBars"></div></div>
-          <div>
-            <div class="sub-card"><div class="sub-card-title">✨ ทักษะพิเศษในห้องเรียน</div><div class="tag-cloud" id="specialSkillTags"><span class="t-tag">ยังไม่มีข้อมูล</span></div></div>
-            <div class="sub-card"><div class="sub-card-title">📱 Social Media ที่ใช้งาน</div><div class="tag-cloud" id="platformTags"><span class="t-tag">ยังไม่มีข้อมูล</span></div></div>
-            <div class="sub-card"><div class="sub-card-title">🎯 เป้าหมายอาชีพ</div><div id="careerChart"></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="pan" id="lp-sk">
+    <div class="pc"><div class="ph2"><div class="pt2">⭐ ภาพรวมทักษะและความสามารถ</div></div><div class="pb2"><div class="sl3"><div class="sub-c"><div class="sub-t">📊 ค่าเฉลี่ยทักษะหลัก (1–5)</div><div id="skillBars"></div></div><div><div class="sub-c"><div class="sub-t">✨ ทักษะพิเศษในห้องเรียน</div><div class="tc" id="spTags"><span class="tg">ยังไม่มีข้อมูล</span></div></div><div class="sub-c"><div class="sub-t">📱 Social Media ที่ใช้งาน</div><div class="tc" id="platTags"><span class="tg">ยังไม่มีข้อมูล</span></div></div><div class="sub-c"><div class="sub-t">🎯 เป้าหมายอาชีพ</div><div id="careerChart"></div></div></div></div></div></div>
   </div>
-
-  <!-- Panel: Devices -->
-  <div class="panel" id="lpanel-devices">
-    <div class="panel-card"><div class="panel-head"><div class="panel-title">📱 ความพร้อมด้านอุปกรณ์</div></div><div class="panel-body"><div class="device-grid" id="deviceGrid"><div class="empty-state"><div class="empty-icon">💻</div>ยังไม่มีข้อมูล</div></div></div></div>
+  <div class="pan" id="lp-dev">
+    <div class="pc"><div class="ph2"><div class="pt2">📱 ความพร้อมด้านอุปกรณ์</div></div><div class="pb2"><div class="dg" id="devGrid"><div class="es"><div class="ei">💻</div>ยังไม่มีข้อมูล</div></div></div></div>
   </div>
-
-  <!-- Panel: Students -->
-  <div class="panel" id="lpanel-students">
-    <div class="panel-card">
-      <div class="panel-head"><div class="panel-title">📋 รายชื่อนักเรียนทั้งหมด</div><input type="text" class="search-input" placeholder="🔍 ค้นหาชื่อ..." oninput="filterLearnerTable(this.value)"></div>
-      <div class="panel-body" style="padding:0"><div class="tbl-wrap"><table id="studentTable"><thead><tr><th>#</th><th>ชื่อ–นามสกุล</th><th>ระดับ/ห้อง</th><th>ทักษะคอม</th><th>อุปกรณ์</th><th>อินเทอร์เน็ต</th><th>ความเสี่ยง</th><th>กลุ่ม</th><th>PHQ-A</th><th>ADHD</th></tr></thead><tbody id="studentTbody"><tr><td colspan="10" class="empty-state">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div>
-    </div>
+  <div class="pan" id="lp-stu">
+    <div class="pc"><div class="ph2"><div class="pt2">📋 รายชื่อทั้งหมด</div><input type="text" class="si3" placeholder="🔍 ค้นหา..." oninput="filterLT(this.value)"></div><div class="pb2" style="padding:0"><div class="tw"><table id="stuTable"><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ชั้น/ห้อง</th><th>คอม</th><th>อุปกรณ์</th><th>เน็ต</th><th>เสี่ยง</th><th>กลุ่ม</th><th>PHQ-A</th><th>ADHD</th></tr></thead><tbody id="stuTbody"><tr><td colspan="10" class="es">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div></div>
   </div>
 </div>
 
-<!-- ===== PHQ DASHBOARD ===== -->
-<div class="dash-panel" id="dash-phq">
-  <div class="page-head">
-    <div><h1 class="page-title">💜 รายงาน PHQ-A</h1><p class="page-sub" id="phqSubtext">กำลังโหลดข้อมูล...</p></div>
-    <div class="filter-wrap">
-      <select class="filter-select" id="filterLevel" onchange="applyPHQFilters()"><option value="">ทุกชั้นปี</option><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></select>
-      <select class="filter-select" id="filterRoom" onchange="applyPHQFilters()"><option value="">ทุกห้อง</option></select>
+<!-- ═══ PHQ DASH ═══════════════════════════════════════════════ -->
+<div class="dp" id="d-p">
+  <div class="ph">
+    <div><div class="pt">💜 รายงาน PHQ-A</div><div class="ps" id="pSub">กำลังโหลด...</div></div>
+    <div class="fw">
+      <select class="fsel" id="fLv" onchange="applyPF()"><option value="">ทุกชั้นปี</option><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></select>
+      <select class="fsel" id="fRm" onchange="applyPF()"><option value="">ทุกห้อง</option></select>
     </div>
   </div>
-  <div class="stat-grid stat-grid-5">
-    <div class="stat-card"><div class="stat-icon" style="background:var(--purple-bg)">👥</div><div class="stat-body"><div class="stat-num num-purple" id="sTotal">0</div><div class="stat-label">นักเรียนทั้งหมด</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">✅</div><div class="stat-body"><div class="stat-num num-green" id="sNone">0</div><div class="stat-label">ปกติ (0–4)</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">⚠️</div><div class="stat-body"><div class="stat-num num-amber" id="sMild">0</div><div class="stat-label">น้อย (5–9)</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--o100)">🔶</div><div class="stat-body"><div class="stat-num num-orange" id="sModerate">0</div><div class="stat-label">ปานกลาง (10–19)</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--red-bg)">🔴</div><div class="stat-body"><div class="stat-num num-red" id="sSevere">0</div><div class="stat-label">รุนแรง (20+)</div></div></div>
+  <div class="sg" style="grid-template-columns:repeat(5,1fr)">
+    <div class="sc"><div class="si2" style="background:var(--pbg)">👥</div><div><div class="sn c-p" id="pTot">0</div><div class="sl2">กรอกแล้ว</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--gbg)">✅</div><div><div class="sn c-g" id="pNone">0</div><div class="sl2">ปกติ (0–4)</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--abg)">⚠️</div><div><div class="sn c-a" id="pMild">0</div><div class="sl2">น้อย (5–9)</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--o3)">🔶</div><div><div class="sn c-o" id="pMod">0</div><div class="sl2">ปานกลาง (10–19)</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--rbg)">🔴</div><div><div class="sn c-r" id="pSev">0</div><div class="sl2">รุนแรง (20+)</div></div></div>
   </div>
-  <div class="tab-bar">
-    <button class="tab-btn phq-tab-btn active" onclick="showPTab('overview',this)">📊 ภาพรวม</button>
-    <button class="tab-btn phq-tab-btn" onclick="showPTab('q9risk',this)">🔴 ผู้มีความเสี่ยง Q9</button>
-    <button class="tab-btn phq-tab-btn" onclick="showPTab('byroom',this)">🏫 แยกห้อง</button>
-    <button class="tab-btn phq-tab-btn" onclick="showPTab('questions',this)">❓ รายข้อ</button>
-    <button class="tab-btn phq-tab-btn" onclick="showPTab('students',this)">📋 รายชื่อ</button>
-    <button class="tab-btn phq-tab-btn" onclick="showPTab('report',this)">📄 รีพอร์ต</button>
+  <div class="tb">
+    <button class="tbt p-tbt act" onclick="showPTab('ov',this)">📊 ภาพรวม</button>
+    <button class="tbt p-tbt" onclick="showPTab('q9',this)">🔴 ความเสี่ยง Q9</button>
+    <button class="tbt p-tbt" onclick="showPTab('rm',this)">🏫 แยกห้อง</button>
+    <button class="tbt p-tbt" onclick="showPTab('qq',this)">❓ รายข้อ</button>
+    <button class="tbt p-tbt" onclick="showPTab('pl',this)">📋 รายชื่อ</button>
+    <button class="tbt p-tbt" onclick="showPTab('rp',this)">📄 รีพอร์ต</button>
   </div>
-  <div class="panel active" id="ppanel-overview">
-    <div class="panel-card"><div class="panel-head"><div class="panel-title">การกระจายระดับความรุนแรง</div><div class="panel-note" id="overviewNote">—</div></div><div class="panel-body" id="severityBars"><div class="empty-state"><div class="empty-icon">💜</div>ยังไม่มีข้อมูล<br><a href="index.html" style="color:var(--o500);font-weight:600">→ ไปกรอกแบบประเมิน PHQ-A</a></div></div></div>
-    <div class="panel-card"><div class="panel-head"><div class="panel-title">แนวโน้มคะแนนเฉลี่ย</div></div><div class="panel-body"><div id="trendChart" class="trend-grid"></div></div></div>
+  <div class="pan act" id="pp-ov">
+    <div class="pc"><div class="ph2"><div class="pt2">การกระจายระดับความรุนแรง</div><div class="pn" id="ovNote">—</div></div><div class="pb2" id="sevBars"><div class="es"><div class="ei">💜</div>ยังไม่มีข้อมูล PHQ-A</div></div></div>
+    <div class="pc"><div class="ph2"><div class="pt2">แนวโน้มคะแนนเฉลี่ย</div></div><div class="pb2"><div class="tg2" id="trendChart"></div></div></div>
   </div>
-  <!-- Q9 RISK PANEL (Bug fix: warning shown here for teacher, not student form) -->
-  <div class="panel" id="ppanel-q9risk">
-    <div class="panel-card" style="border-color:#8B0000">
-      <div class="panel-head" style="background:#FEE9E7">
-        <div class="panel-title" style="color:var(--red)">🔴 นักเรียนที่ตอบข้อ 9 (ความคิดทำร้ายตัวเอง) ≥ 1</div>
-        <div class="panel-note" style="color:var(--red)">ควรแจ้งครูแนะแนวหรือผู้บริหารทันที</div>
-      </div>
-      <div class="panel-body">
-        <div style="background:#FEE9E7;border:1px solid #C62828;border-radius:var(--r-md);padding:.875rem 1rem;margin-bottom:1rem;font-size:.875rem;color:#B71C1C;line-height:1.6">
-          <strong>⚠️ คำแนะนำสำหรับครู:</strong> นักเรียนด้านล่างนี้ตอบว่ามีความคิดทำร้ายตัวเอง กรุณาพูดคุยและประเมินความปลอดภัยก่อน แจ้งครูแนะแนวและผู้บริหาร หากจำเป็นให้ติดต่อผู้ปกครองและแนะนำสายด่วนสุขภาพจิต 1323
-        </div>
-        <div id="q9RiskList"><div class="empty-state"><div class="empty-icon">✅</div>ไม่พบนักเรียนที่มีคะแนนข้อ 9 ≥ 1</div></div>
+  <div class="pan" id="pp-q9">
+    <div class="pc" style="border-color:#8B0000">
+      <div class="ph2" style="background:var(--rbg)"><div class="pt2" style="color:var(--red)">🔴 นักเรียนที่ตอบข้อ 9 ≥ 1</div><div class="pn" style="color:var(--red)">ควรแจ้งครูแนะแนวหรือผู้บริหารทันที</div></div>
+      <div class="pb2">
+        <div class="q9-box"><strong>⚠️ คำแนะนำสำหรับครู:</strong> นักเรียนต่อไปนี้ตอบว่ามีความคิดทำร้ายตัวเอง กรุณาพูดคุยประเมินความปลอดภัย แจ้งครูแนะแนวและผู้บริหาร หากจำเป็นแนะนำสายด่วนสุขภาพจิต <strong>1323</strong></div>
+        <div id="q9List"><div class="es"><div class="ei">✅</div>ไม่พบนักเรียนที่มีคะแนนข้อ 9 ≥ 1</div></div>
       </div>
     </div>
   </div>
-  <div class="panel" id="ppanel-byroom"><div class="room-grid" id="roomGrid"><div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏫</div>ยังไม่มีข้อมูล</div></div></div>
-  <div class="panel" id="ppanel-questions"><div class="panel-card"><div class="panel-head"><div class="panel-title">คะแนนเฉลี่ยรายข้อ (0–3)</div><div class="panel-note">ข้อที่มีคะแนนสูง = พบบ่อยกว่า</div></div><div class="panel-body"><div id="qHeatmap" class="q-heatmap"></div></div></div></div>
-  <div class="panel" id="ppanel-students">
-    <div class="panel-card">
-      <div class="panel-head"><div class="panel-title">รายชื่อนักเรียน (คลิกเพื่อดูรายละเอียด)</div><div style="display:flex;gap:8px;flex-wrap:wrap"><input class="search-input" style="max-width:200px" type="text" placeholder="🔍 ค้นหาชื่อ..." oninput="filterPHQTable(this.value)"><select class="filter-select" id="filterSeverity" onchange="filterPHQTable('')"><option value="">ทุกระดับ</option><option value="none">ปกติ</option><option value="mild">น้อย</option><option value="moderate">ปานกลาง</option><option value="moderately_severe">ค่อนข้างรุนแรง</option><option value="severe">รุนแรง</option></select></div></div>
-      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ชั้น/ห้อง</th><th>เพศ</th><th>คะแนน</th><th>ระดับ</th><th>Q9⚠️</th><th>ADHD</th><th>วันที่</th></tr></thead><tbody id="phqStudentTbody"><tr><td colspan="9" class="empty-state">ยังไม่มีข้อมูล</td></tr></tbody></table></div>
+  <div class="pan" id="pp-rm"><div class="rg" id="roomGrid"><div class="es" style="grid-column:1/-1"><div class="ei">🏫</div>ยังไม่มีข้อมูล</div></div></div>
+  <div class="pan" id="pp-qq"><div class="pc"><div class="ph2"><div class="pt2">คะแนนเฉลี่ยรายข้อ (0–3)</div><div class="pn">ข้อที่สูง = พบบ่อยกว่า</div></div><div class="pb2"><div class="qh" id="qHeat"></div></div></div></div>
+  <div class="pan" id="pp-pl">
+    <div class="pc">
+      <div class="ph2"><div class="pt2">รายชื่อ (คลิกเพื่อดูรายละเอียด)</div><div style="display:flex;gap:7px;flex-wrap:wrap"><input class="si3" style="max-width:180px" type="text" placeholder="🔍 ค้นหา..." oninput="filterPT(this.value)"><select class="fsel" id="fSev" onchange="filterPT('')"><option value="">ทุกระดับ</option><option value="none">ปกติ</option><option value="mild">น้อย</option><option value="moderate">ปานกลาง</option><option value="moderately_severe">ค่อนข้างรุนแรง</option><option value="severe">รุนแรง</option></select></div></div>
+      <div class="tw"><table><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ชั้น/ห้อง</th><th>คะแนน</th><th>ระดับ</th><th>Q9⚠️</th><th>ADHD</th><th>วันที่</th></tr></thead><tbody id="phqTbody"><tr><td colspan="8" class="es">ยังไม่มีข้อมูล</td></tr></tbody></table></div>
     </div>
   </div>
-  <div class="panel" id="ppanel-report">
-    <div class="report-controls">
-      <select class="report-select" id="reportRoom" onchange="renderReport()"><option value="">ทุกห้อง</option></select>
-      <select class="report-select" id="reportLevel" onchange="renderReport()"><option value="">ทุกชั้นปี</option><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></select>
-      <select class="report-select" id="reportSev" onchange="renderReport()"><option value="">ทุกระดับ</option><option value="need_attention">ต้องติดตาม (≥5)</option><option value="moderate">ปานกลางขึ้นไป (≥10)</option><option value="severe">รุนแรง (≥20)</option></select>
-      <button class="btn-print" onclick="window.print()">🖨️ พิมพ์/PDF</button>
+  <div class="pan" id="pp-rp">
+    <div class="rc4">
+      <select class="rsel" id="rpRm" onchange="renderReport()"><option value="">ทุกห้อง</option></select>
+      <select class="rsel" id="rpLv" onchange="renderReport()"><option value="">ทุกชั้นปี</option><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></select>
+      <select class="rsel" id="rpSev" onchange="renderReport()"><option value="">ทุกระดับ</option><option value="5">ต้องติดตาม (≥5)</option><option value="10">ปานกลาง+ (≥10)</option><option value="20">รุนแรง (≥20)</option></select>
+      <button onclick="window.print()" style="padding:8px 16px;border-radius:var(--rm);background:var(--o);color:#fff;border:none;cursor:pointer;font-family:'Sarabun',sans-serif;font-size:.84rem;font-weight:600">🖨️ พิมพ์/PDF</button>
     </div>
-    <div id="reportContent"><div class="empty-state"><div class="empty-icon">📄</div>เลือกตัวกรองด้านบนเพื่อสร้างรีพอร์ต</div></div>
+    <div id="reportContent"><div class="es"><div class="ei">📄</div>เลือกตัวกรองด้านบนเพื่อสร้างรีพอร์ต</div></div>
   </div>
 </div>
 
-<!-- ===== ADHD DASHBOARD ===== -->
-<div class="dash-panel" id="dash-adhd">
-  <div class="page-head">
-    <div><h1 class="page-title">🧩 รายงาน ADHD</h1><p class="page-sub" id="adhdSubtext">กำลังโหลดข้อมูล...</p></div>
-    <div class="filter-wrap">
-      <select class="filter-select" id="adhdFilterLevel" onchange="applyADHDFilters()"><option value="">ทุกชั้นปี</option><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></select>
-      <select class="filter-select" id="adhdFilterRoom" onchange="applyADHDFilters()"><option value="">ทุกห้อง</option></select>
+<!-- ═══ ADHD DASH ══════════════════════════════════════════════ -->
+<div class="dp" id="d-a">
+  <div class="ph">
+    <div><div class="pt">🧩 รายงาน ADHD</div><div class="ps" id="aSub">กำลังโหลด...</div></div>
+    <div class="fw">
+      <select class="fsel" id="afLv" onchange="applyAF()"><option value="">ทุกชั้นปี</option><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></select>
+      <select class="fsel" id="afRm" onchange="applyAF()"><option value="">ทุกห้อง</option></select>
     </div>
   </div>
-  <div class="stat-grid stat-grid-5">
-    <div class="stat-card"><div class="stat-icon" style="background:var(--teal-bg)">👥</div><div class="stat-body"><div class="stat-num num-teal" id="sAdhdTotal">0</div><div class="stat-label">กรอกแบบประเมิน</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--green-bg)">✅</div><div class="stat-body"><div class="stat-num num-green" id="sAdhdNone">0</div><div class="stat-label">ไม่พบแนวโน้ม</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--amber-bg)">👁️</div><div class="stat-body"><div class="stat-num num-amber" id="sAdhdSub">0</div><div class="stat-label">ต้องติดตาม</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--blue-bg)">🎯</div><div class="stat-body"><div class="stat-num num-blue" id="sAdhdInatt">0</div><div class="stat-label">ขาดสมาธิ</div></div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--red-bg)">⚡</div><div class="stat-body"><div class="stat-num num-red" id="sAdhdHigh">0</div><div class="stat-label">มีแนวโน้ม ADHD</div></div></div>
+  <div class="sg" style="grid-template-columns:repeat(5,1fr)">
+    <div class="sc"><div class="si2" style="background:var(--tbg)">👥</div><div><div class="sn c-t" id="aTot">0</div><div class="sl2">กรอกแล้ว</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--gbg)">✅</div><div><div class="sn c-g" id="aNone">0</div><div class="sl2">ไม่พบแนวโน้ม</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--abg)">👁️</div><div><div class="sn c-a" id="aSub2">0</div><div class="sl2">ต้องติดตาม</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--bbg)">🎯</div><div><div class="sn c-b" id="aInatt">0</div><div class="sl2">ขาดสมาธิ</div></div></div>
+    <div class="sc"><div class="si2" style="background:var(--rbg)">⚡</div><div><div class="sn c-r" id="aHigh">0</div><div class="sl2">มีแนวโน้ม ADHD</div></div></div>
   </div>
-  <div class="tab-bar">
-    <button class="tab-btn adhd-tab-btn active" onclick="showATab('list',this)">📋 รายชื่อ (คลิกดูรายละเอียด)</button>
-    <button class="tab-btn adhd-tab-btn" onclick="showATab('summary',this)">📊 สรุปภาพรวม</button>
+  <div class="tb">
+    <button class="tbt a-tbt act" onclick="showATab('al',this)">📋 รายชื่อ</button>
+    <button class="tbt a-tbt" onclick="showATab('as',this)">📊 สรุปภาพรวม</button>
   </div>
-  <div class="panel active" id="apanel-list">
-    <div class="panel-card">
-      <div class="panel-head"><div class="panel-title">รายชื่อนักเรียนที่กรอกแบบประเมิน ADHD</div><input class="search-input" style="max-width:200px" type="text" placeholder="🔍 ค้นหา..." oninput="filterADHDTable(this.value)"></div>
-      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ชั้น/ห้อง</th><th>รวม/54</th><th>สมาธิ/27</th><th>ซน/27</th><th>ระดับ</th><th>AI วิเคราะห์</th><th>วันที่</th></tr></thead><tbody id="adhdTbody"><tr><td colspan="9" class="empty-state">ยังไม่มีข้อมูล</td></tr></tbody></table></div>
-    </div>
+  <div class="pan act" id="ap-al">
+    <div class="pc"><div class="ph2"><div class="pt2">รายชื่อ (คลิกดูรายละเอียด)</div><input class="si3" style="max-width:180px" type="text" placeholder="🔍 ค้นหา..." oninput="filterAT(this.value)"></div><div class="tw"><table><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ชั้น/ห้อง</th><th>รวม/54</th><th>สมาธิ/27</th><th>ซน/27</th><th>ระดับ</th><th>AI วิเคราะห์</th><th>วันที่</th></tr></thead><tbody id="adhdTbody"><tr><td colspan="9" class="es">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div>
   </div>
-  <div class="panel" id="apanel-summary">
-    <div class="panel-card"><div class="panel-head"><div class="panel-title">📊 สรุปแนวโน้ม ADHD ทั้งหมด</div></div><div class="panel-body" id="adhdSummaryBody"><div class="empty-state"><div class="empty-icon">🧩</div>ยังไม่มีข้อมูล</div></div></div>
+  <div class="pan" id="ap-as">
+    <div class="pc"><div class="ph2"><div class="pt2">📊 สรุปแนวโน้ม ADHD</div></div><div class="pb2" id="adhdSumBody"><div class="es"><div class="ei">🧩</div>ยังไม่มีข้อมูล</div></div></div>
   </div>
 </div>
 
 </main>
 
-<!-- STUDENT DETAIL MODAL -->
-<div id="studentModal" style="display:none"></div>
+<!-- MODAL -->
+<div id="modalWrap" style="display:none"></div>
 
-<footer class="footer"><span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span><span style="opacity:.3">●</span><span>วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span style="opacity:.3">●</span><span style="opacity:.5">ระบบวิเคราะห์ผู้เรียน v6.0</span></footer>
+<footer class="footer"><span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span><span style="opacity:.3">●</span><span>วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span style="opacity:.3">●</span><span style="opacity:.5">v7.0 — Google Sheets</span></footer>
 
 <script>
 // ================================================================
-// LOGIN
+// !! แก้ URL ตรงนี้ !!
+// ================================================================
+const SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
 // ================================================================
 const ADMIN_USER='admin', ADMIN_PASS='admin1234';
+let ALL=[], PHQ=[], ADHD=[], FILT=[], PHQF=[], ADHDF=[];
+const PHQ_Q=['รู้สึกหดหู่ เศร้า หรือสิ้นหวัง','ไม่สนใจหรือไม่มีความสุขกับสิ่งที่เคยสนุก','นอนหลับยาก หรือนอนมากเกินไป','รู้สึกอ่อนเพลีย หรือไม่มีแรง','รับประทานไม่อยาก หรือกินมากเกินไป','รู้สึกแย่กับตัวเอง รู้สึกว่าเป็นภาระ','มีปัญหาในการมีสมาธิ','พูดหรือเคลื่อนไหวช้า หรือกระวนกระวาย','มีความคิดทำร้ายตัวเองหรืออยากตาย'];
+
+// ── LOGIN ────────────────────────────────────────────────────
 function doLogin(){
-  const u=document.getElementById('loginUser').value.trim();
-  const p=document.getElementById('loginPass').value;
-  if(u===ADMIN_USER&&p===ADMIN_PASS){sessionStorage.setItem('dash_auth','1');document.getElementById('loginOverlay').style.display='none';init();}
-  else{document.getElementById('loginErr').style.display='block';document.getElementById('loginPass').value='';}
+  const u=document.getElementById('lUser').value.trim();
+  const p=document.getElementById('lPass').value;
+  if(u===ADMIN_USER&&p===ADMIN_PASS){sessionStorage.setItem('da','1');document.getElementById('loginOverlay').style.display='none';init();}
+  else document.getElementById('lErr').style.display='block';
 }
-function doLogout(){sessionStorage.removeItem('dash_auth');location.reload();}
-if(sessionStorage.getItem('dash_auth')==='1'){document.getElementById('loginOverlay').style.display='none';window.addEventListener('DOMContentLoaded',init);}
+function doLogout(){sessionStorage.removeItem('da');location.reload();}
+if(sessionStorage.getItem('da')==='1'){document.getElementById('loginOverlay').style.display='none';window.addEventListener('DOMContentLoaded',init);}
 
-// ================================================================
-// DASH SWITCHER
-// ================================================================
-function switchDash(tab){
-  ['learner','phq','adhd'].forEach(t=>{
-    document.getElementById('dash-'+t).classList.toggle('active',t===tab);
-    document.getElementById('dtab-'+t).classList.toggle('active',t===tab);
-  });
-}
+// ── FETCH FROM GOOGLE SHEETS ──────────────────────────────────
+function showLoad(msg){const el=document.getElementById('loadCover');el.classList.add('vis');document.getElementById('loadMsg').textContent=msg||'กำลังโหลด...';}
+function hideLoad(){document.getElementById('loadCover').classList.remove('vis');}
 
-// ================================================================
-// DATA STORE
-// ================================================================
-let ALL_DATA=[], FILTERED=[];
-let PHQ_ALL=[], PHQ_FILTERED=[];
-let ADHD_ALL=[], ADHD_FILTERED=[];
-
-const PHQ_QUESTIONS_DB=['รู้สึกหดหู่ เศร้า หรือสิ้นหวัง','ไม่สนใจหรือไม่มีความสุขกับสิ่งที่เคยสนุก','นอนหลับยาก หลับไม่หลับ หรือนอนมากเกินไป','รู้สึกอ่อนเพลีย หรือไม่มีแรงทำอะไร','รับประทานอาหารไม่อยาก หรือกินมากเกินไป','รู้สึกแย่กับตัวเอง รู้สึกว่าตัวเองเป็นภาระ','มีปัญหาในการมีสมาธิ','พูดหรือเคลื่อนไหวช้าหรือกระวนกระวาย','มีความคิดทำร้ายตัวเองหรืออยากตาย'];
-
-// ================================================================
-// LEARNER HELPERS
-// ================================================================
-function classifyStudent(d) {
-  // Advanced: ทักษะคอม ≥4 AND GPAX ≥3.0 AND ส่งงาน ≥4
-  const skill = parseInt(d.computer_skill_level||0);
-  const gpaxMap = {'3.5-4.0':4,'3.0-3.49':3,'2.5-2.99':2,'2.0-2.49':1,'below2':0,'new':2};
-  const gpax = gpaxMap[d.gpax]??2;
-  const submit = parseInt(d.submission_habit||3);
-  const score = skill + gpax + submit; // max=4+4+5=13
-  if(skill>=4 && gpax>=3 && submit>=4) return 'advanced';
-  if(score<=5 || (skill<=1&&gpax<=1)) return 'struggling';
-  return 'intermediate';
+async function fetchSheet(type){
+  if(!SCRIPT_URL||SCRIPT_URL==='YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'){console.warn('SCRIPT_URL ยังไม่ได้ตั้งค่า');return[];}
+  try{
+    const url=SCRIPT_URL+'?type='+type+'&t='+Date.now();
+    const res=await fetch(url,{mode:'cors'});
+    const data=await res.json();
+    return data.ok?data.data:[];
+  }catch(e){console.error('fetchSheet',type,e);return[];}
 }
 
-function loadLearnerData(){
-  // Reload all stores so PHQ/ADHD lookups are always fresh when renderGroups/renderRisk run
-  ALL_DATA  = JSON.parse(localStorage.getItem('learner_data') || '[]');
-  PHQ_ALL   = JSON.parse(localStorage.getItem('phq_data')     || '[]');
-  ADHD_ALL  = JSON.parse(localStorage.getItem('adhd_data')    || '[]');
-  const classes=[...new Set(ALL_DATA.map(d=>d.classroom).filter(Boolean))].sort();
-  const sel=document.getElementById('filterClass');
-  const cur=sel.value;
-  sel.innerHTML='<option value="all">ทุกห้อง</option>'+classes.map(c=>`<option value="${c}"${c===cur?' selected':''}>${c}</option>`).join('');
+async function reloadAll(){
+  showLoad('กำลังดึงข้อมูลจาก Google Sheets...');
+  try{
+    [ALL,PHQ,ADHD]=await Promise.all([fetchSheet('learner'),fetchSheet('phq'),fetchSheet('adhd')]);
+    // populate classroom filters
+    const rooms=[...new Set(ALL.map(d=>d.classroom).filter(Boolean))].sort();
+    ['fClass','fRm','rpRm','afRm'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const cur=el.value;const base=id==='fClass'?'<option value="all">ทุกห้อง</option>':'<option value="">ทุกห้อง</option>';el.innerHTML=base+rooms.map(r=>`<option value="${r}"${r===cur?' selected':''}>${r}</option>`).join('');});
+    renderLearner();applyPF();applyAF();
+  }finally{hideLoad();}
 }
+
+async function init(){
+  await reloadAll();
+  setInterval(reloadAll,60000); // auto-refresh ทุก 1 นาที
+}
+
+// ── DASH SWITCH ───────────────────────────────────────────────
+function switchDash(t){['l','p','a'].forEach(k=>{document.getElementById('d-'+k).classList.toggle('act',k===t);document.getElementById('dt-'+k).classList.toggle('act',k===t);});}
+
+// ══════════════════════════════════════════════════════════════
+// LEARNER RENDER
+// ══════════════════════════════════════════════════════════════
+function classify(d){
+  const sk=parseInt(d.computer_skill_level||0);
+  const gm={'3.5-4.0':4,'3.0-3.49':3,'2.5-2.99':2,'2.0-2.49':1,'below2':0,'new':2};
+  const gp=gm[d.gpax]??2,sb=parseInt(d.submission_habit||3);
+  if(sk>=4&&gp>=3&&sb>=4)return'advanced';
+  if((sk+gp+sb)<=5||(sk<=1&&gp<=1))return'struggling';
+  return'intermediate';
+}
+
+function findPHQ(d){return PHQ.find(p=>p._id===d._id)||PHQ.find(p=>p.fullname===d.fullname&&p.classroom===d.classroom);}
+function findADHD(d){return ADHD.find(a=>a._id===d._id)||ADHD.find(a=>a.fullname===d.fullname&&a.classroom===d.classroom);}
 
 function renderLearner(){
-  loadLearnerData();
-  const cls=document.getElementById('filterClass').value;
-  FILTERED=cls==='all'?ALL_DATA:ALL_DATA.filter(d=>d.classroom===cls);
-  const n=FILTERED.length;
-  document.getElementById('sTotalStudents').textContent=n;
-  document.getElementById('sTotalSub').textContent=n?`กรอกแล้ว ${n} คน`:'ยังไม่มีข้อมูล';
-  const adv=FILTERED.filter(d=>classifyStudent(d)==='advanced').length;
-  const mid=FILTERED.filter(d=>classifyStudent(d)==='intermediate').length;
-  const str=FILTERED.filter(d=>classifyStudent(d)==='struggling').length;
-  document.getElementById('sAdvanced').textContent=adv;
-  document.getElementById('sIntermediate').textContent=mid;
-  document.getElementById('sStruggling').textContent=str;
-  document.getElementById('sNoDevice').textContent=FILTERED.filter(d=>d.has_computer==='none').length;
-  document.getElementById('sSpecial').textContent=FILTERED.filter(d=>d.special_skills&&!d.special_skills.includes('none')).length;
-  document.getElementById('learnerSubtext').textContent=n?`ข้อมูลล่าสุด: ${FILTERED[FILTERED.length-1]?._ts||'—'}`:'ยังไม่มีข้อมูล';
-  // Bug 1 + 5 Fix: renderGroups is defined and called
-  renderGroups();
-  renderRisk();
-  renderSkills();
-  renderDevices();
-  renderLearnerTable(FILTERED);
+  const cls=document.getElementById('fClass').value;
+  FILT=cls==='all'?ALL:ALL.filter(d=>d.classroom===cls);
+  const n=FILT.length;
+  document.getElementById('sTot').textContent=n;
+  document.getElementById('sTotS').textContent=n?`กรอกแล้ว ${n} คน`:'ยังไม่มีข้อมูล';
+  const adv=FILT.filter(d=>classify(d)==='advanced').length;
+  const int=FILT.filter(d=>classify(d)==='intermediate').length;
+  const str=FILT.filter(d=>classify(d)==='struggling').length;
+  document.getElementById('sAdv').textContent=adv;
+  document.getElementById('sInt').textContent=int;
+  document.getElementById('sStr').textContent=str;
+  document.getElementById('sNoDev').textContent=FILT.filter(d=>d.has_computer==='none').length;
+  document.getElementById('sSp').textContent=FILT.filter(d=>d.special_skills&&!String(d.special_skills).includes('none')).length;
+  document.getElementById('lSub').textContent=n?`อัปเดต: ${FILT[FILT.length-1]?._ts||'—'}`:'ยังไม่มีข้อมูล';
+  renderGroups();renderRisk();renderSkills();renderDevices();renderLearnerTable(FILT);
 }
 
-// Bug 1 Fix: renderGroups defined
 function renderGroups(){
   const gg=document.getElementById('groupGrid');
-  if(!FILTERED.length){gg.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📊</div>ยังไม่มีข้อมูล</div>';renderGroupTable([]);return;}
+  if(!FILT.length){gg.innerHTML='<div class="es" style="grid-column:1/-1"><div class="ei">📊</div>ยังไม่มีข้อมูล</div>';renderGrpTable([]);return;}
   const groups={advanced:[],intermediate:[],struggling:[]};
-  FILTERED.forEach(d=>groups[classifyStudent(d)].push(d));
-  const defs=[
-    {key:'advanced',label:'🏆 กลุ่มเก่ง (Advanced)',desc:'ทักษะคอม ≥4, GPAX ≥3.0, ส่งงานดี — เหมาะกับงานโปรเจกต์และเป็นพี่เลี้ยง'},
-    {key:'intermediate',label:'📚 กลุ่มกลาง (Intermediate)',desc:'มีพื้นฐานพอใช้ — เน้นฝึกทักษะจุดอ่อน เพิ่มความมั่นใจ'},
-    {key:'struggling',label:'🚨 กลุ่มต้องดูแล (Struggling)',desc:'ต้องการการช่วยเหลือพิเศษ — ปรับการสอน ลดโจทย์ ติดตามใกล้ชิด'},
-  ];
-  gg.innerHTML=defs.map(d=>`
-    <div class="group-card ${d.key}">
-      <div class="group-card-head">
-        <div class="group-card-icon">${d.key==='advanced'?'🏆':d.key==='intermediate'?'📚':'🚨'}</div>
-        <div style="flex:1"><div class="group-card-title">${d.label}</div></div>
-        <div class="group-card-count">${groups[d.key].length}</div>
-      </div>
-      <div class="group-card-body">
-        ${d.desc}
-        <div class="group-name-list">${groups[d.key].slice(0,6).map(s=>`<span class="g-name-tag">${s.fullname||'—'}</span>`).join('')}${groups[d.key].length>6?`<span class="g-name-tag">+${groups[d.key].length-6}</span>`:''}</div>
-      </div>
-    </div>`).join('');
-  renderGroupTable(FILTERED);
+  FILT.forEach(d=>groups[classify(d)].push(d));
+  const defs=[{k:'advanced',l:'🏆 กลุ่มเก่ง (Advanced)',desc:'ทักษะคอม ≥4 · GPAX ≥3.0 · ส่งงานดี — เหมาะกับงานโปรเจกต์และเป็นพี่เลี้ยง'},{k:'intermediate',l:'📚 กลุ่มกลาง (Intermediate)',desc:'มีพื้นฐานพอใช้ — เน้นฝึกจุดอ่อน เพิ่มความมั่นใจ'},{k:'struggling',l:'🚨 กลุ่มต้องดูแล (Struggling)',desc:'ต้องการความช่วยเหลือพิเศษ — ปรับการสอน ติดตามใกล้ชิด'}];
+  gg.innerHTML=defs.map(d=>`<div class="gc ${d.k}"><div class="gc-h"><div class="gc-ic">${d.k==='advanced'?'🏆':d.k==='intermediate'?'📚':'🚨'}</div><div style="flex:1"><div class="gc-t">${d.l}</div></div><div class="gc-n">${groups[d.k].length}</div></div><div class="gc-b">${d.desc}<div class="ntl">${groups[d.k].slice(0,6).map(s=>`<span class="ntg">${s.fullname||'—'}</span>`).join('')}${groups[d.k].length>6?`<span class="ntg">+${groups[d.k].length-6}</span>`:''}</div></div></div>`).join('');
+  renderGrpTable(FILT);
 }
 
-function renderGroupTable(data){
-  const tbody=document.getElementById('groupTbody');
-  if(!data.length){tbody.innerHTML='<tr><td colspan="9" class="empty-state">ยังไม่มีข้อมูล</td></tr>';return;}
-  const gpaxLabel={'3.5-4.0':'3.5+','3.0-3.49':'3.0+','2.5-2.99':'2.5+','2.0-2.49':'2.0+','below2':'<2.0','new':'ใหม่'};
-  const submitLabel={5:'⭐ เสมอ',4:'👍 ส่วนใหญ่',3:'🙂 บางครั้ง',2:'😅 ช้า',1:'😓 ไม่ส่ง'};
+function renderGrpTable(data){
+  const tbody=document.getElementById('grpTbody');
+  if(!data.length){tbody.innerHTML='<tr><td colspan="9" class="es">ยังไม่มีข้อมูล</td></tr>';return;}
+  const gm={'3.5-4.0':'3.5+','3.0-3.49':'3.0+','2.5-2.99':'2.5+','2.0-2.49':'2.0+','below2':'<2.0','new':'ใหม่'};
+  const sm={5:'⭐ เสมอ',4:'👍 ส่วนใหญ่',3:'🙂 บางครั้ง',2:'😅 ช้า',1:'😓 ไม่ส่ง'};
   tbody.innerHTML=data.map((d,i)=>{
-    const g=classifyStudent(d);
-    const gBadge=g==='advanced'?'badge-green':g==='intermediate'?'badge-amber':'badge-red';
-    const gLabel=g==='advanced'?'🏆 เก่ง':g==='intermediate'?'📚 กลาง':'🚨 อ่อน';
-    // Look up PHQ and ADHD
-    const phq=PHQ_ALL.find(p=>p._id===d._id)||PHQ_ALL.find(p=>p.fullname===d.fullname&&p.classroom===d.classroom);
-    const adhd=ADHD_ALL.find(a=>a._id===d._id)||ADHD_ALL.find(a=>a.fullname===d.fullname&&a.classroom===d.classroom);
-    const phqBadge=phq?`<span class="badge ${phq.total<=4?'badge-green':phq.total<=9?'badge-amber':phq.total<=14?'badge-orange':'badge-red'}" onclick="openStudentModal('${d._id}',event)">${phq.total}/27</span>`:'<span class="badge badge-gray">—</span>';
-    const adhdBadge=adhd?`<span class="badge ${adhd.severity==='none'?'badge-green':adhd.severity==='subclinical'?'badge-amber':'badge-red'}" onclick="openStudentModal('${d._id}',event)">${adhd.total}/54</span>`:'<span class="badge badge-gray">—</span>';
-    return`<tr onclick="openStudentModal('${d._id}',event)"><td style="color:var(--g400);font-size:.78rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge badge-gray">${d.level||''} ${d.classroom||''}</span></td><td>${d.computer_skill_level?`${d.computer_skill_level}/5`:'—'}</td><td>${gpaxLabel[d.gpax]||d.gpax||'—'}</td><td>${submitLabel[parseInt(d.submission_habit)]||d.submission_habit||'—'}</td><td><span class="badge ${gBadge}">${gLabel}</span></td><td>${phqBadge}</td><td>${adhdBadge}</td></tr>`;
+    const g=classify(d),gb=g==='advanced'?'b-g':g==='intermediate'?'b-a':'b-r',gl=g==='advanced'?'🏆 เก่ง':g==='intermediate'?'📚 กลาง':'🚨 อ่อน';
+    const phq=findPHQ(d),adhd=findADHD(d);
+    const pb=phq?`<span class="badge ${phq.phq_total<=4?'b-g':phq.phq_total<=9?'b-a':phq.phq_total<=14?'b-o':'b-r'}">${phq.phq_total}/27</span>`:'<span class="badge b-gy">—</span>';
+    const ab=adhd?`<span class="badge b-t">${adhd.adhd_total}/54</span>`:'<span class="badge b-gy">—</span>';
+    return`<tr onclick="openModal('${d._id}')"><td style="color:var(--g4);font-size:.76rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge b-gy">${d.level||''} ${d.classroom||''}</span></td><td>${d.computer_skill_level?`${d.computer_skill_level}/5`:'—'}</td><td>${gm[d.gpax]||d.gpax||'—'}</td><td>${sm[parseInt(d.submission_habit)]||'—'}</td><td><span class="badge ${gb}">${gl}</span></td><td>${pb}</td><td>${ab}</td></tr>`;
   }).join('');
 }
 
 function renderRisk(){
   const body=document.getElementById('riskBody');
-  // Join PHQ Q9 and ADHD info into risk
-  const risky=[...FILTERED].map(d=>{
-    const phq=PHQ_ALL.find(p=>p._id===d._id)||PHQ_ALL.find(p=>p.fullname===d.fullname&&p.classroom===d.classroom);
-    const adhd=ADHD_ALL.find(a=>a._id===d._id)||ADHD_ALL.find(a=>a.fullname===d.fullname&&a.classroom===d.classroom);
-    return{...d,_phq:phq,_adhd:adhd,_q9:phq?.answers?.[8]||0};
-  }).sort((a,b)=>(b._risk||0)-(a._risk||0)).filter(d=>(d._risk||0)>=3||d._q9>0||['combined','inattentive','hyperactive'].includes(d._adhd?.severity));
-  if(!risky.length){body.innerHTML=`<div class="empty-state"><div class="empty-icon">${FILTERED.length?'🟢':'📋'}</div>${FILTERED.length?'ยอดเยี่ยม! ยังไม่มีนักเรียนกลุ่มเสี่ยง':'ยังไม่มีข้อมูล'}</div>`;return;}
+  const risky=FILT.map(d=>{
+    const phq=findPHQ(d),adhd=findADHD(d),q9=parseInt(phq?.phq_q9||0);
+    return{...d,_phq:phq,_adhd:adhd,_q9:q9};
+  }).sort((a,b)=>(b._risk||0)-(a._risk||0)).filter(d=>(d._risk||0)>=3||d._q9>0||['combined','inattentive','hyperactive'].includes(d._adhd?.adhd_severity));
+  if(!risky.length){body.innerHTML=`<div class="es"><div class="ei">${FILT.length?'🟢':'📋'}</div>${FILT.length?'ยอดเยี่ยม! ยังไม่มีกลุ่มเสี่ยง':'ยังไม่มีข้อมูล'}</div>`;return;}
   body.innerHTML=risky.map(d=>{
-    const level=d._risk>=8||d._q9>=2?'#D93025':d._risk>=5||d._q9>=1?'#C8760A':'#6B6560';
+    const lc=d._risk>=8||d._q9>=2?'#D93025':d._risk>=5||d._q9>=1?'#C8760A':'#6B6560';
     const tags=[];
-    if(d._q9>=2)tags.push({t:'⚠️ Q9 คะแนนสูง แจ้งครูแนะแนว',cls:'q9'});
-    else if(d._q9===1)tags.push({t:'Q9 มีคะแนน ควรติดตาม',cls:'phq-alert'});
-    if(d._phq&&d._phq.total>=10)tags.push({t:`PHQ-A ${d._phq.total}/27`,cls:'phq-alert'});
-    if(d._adhd&&['combined','inattentive','hyperactive'].includes(d._adhd.severity))tags.push({t:`ADHD ${d._adhd.severity}`,cls:'adhd-alert'});
-    if(d.has_computer==='none')tags.push({t:'ไม่มีคอมพิวเตอร์',cls:''});
-    if(d.home_internet==='none')tags.push({t:'ไม่มีอินเทอร์เน็ต',cls:''});
-    if(d.absence==='7+')tags.push({t:'ขาดเรียนบ่อย',cls:''});
-    if(d.submission_habit==='1'||d.submission_habit==='2')tags.push({t:'ส่งงานไม่ตรงเวลา',cls:'warn'});
-    if(d.part_time==='weekly')tags.push({t:'ทำงานพิเศษทุกสัปดาห์',cls:'warn'});
-    if(d.computer_skill_level==='1')tags.push({t:'ทักษะคอมต่ำมาก',cls:'warn'});
-    if(d.sleep_hours==='under5')tags.push({t:'นอนน้อย',cls:'warn'});
-    return`<div class="risk-item" onclick="openStudentModal('${d._id}',event)" style="cursor:pointer">
-      <div class="risk-level-dot" style="background:${level}"></div>
-      <div class="risk-info">
-        <span class="risk-name">${d.fullname||'—'}</span><span class="risk-class">${d.level||''} ${d.classroom||''}</span>
-        <div class="risk-tags">${tags.map(t=>`<span class="risk-tag ${t.cls||''}">${t.t}</span>`).join('')}</div>
-      </div>
-      <div class="risk-score">เสี่ยง<br><strong style="font-size:1.1rem">${d._risk||0}</strong>${d._q9>0?`<br><span style="color:var(--red);font-size:.75rem">Q9:${d._q9}</span>`:''}</div>
-    </div>`;
+    if(d._q9>=2)tags.push({t:'⚠️ Q9 สูง แจ้งครูแนะแนว',c:'q9'});
+    else if(d._q9===1)tags.push({t:'Q9 มีคะแนน ติดตาม',c:'pp'});
+    if(d._phq&&parseInt(d._phq.phq_total)>=10)tags.push({t:`PHQ-A ${d._phq.phq_total}/27`,c:'pp'});
+    if(d._adhd&&['combined','inattentive','hyperactive'].includes(d._adhd.adhd_severity))tags.push({t:`ADHD ${d._adhd.adhd_severity}`,c:'tt'});
+    if(d.has_computer==='none')tags.push({t:'ไม่มีคอม',c:''});
+    if(d.home_internet==='none')tags.push({t:'ไม่มีเน็ต',c:''});
+    if(d.absence==='7+')tags.push({t:'ขาดเรียนบ่อย',c:''});
+    if(d.submission_habit==='1'||d.submission_habit==='2')tags.push({t:'ส่งงานไม่ตรง',c:'w'});
+    if(d.part_time==='weekly')tags.push({t:'ทำงานทุกสัปดาห์',c:'w'});
+    if(d.sleep_hours==='under5')tags.push({t:'นอนน้อย',c:'w'});
+    return`<div class="ri" onclick="openModal('${d._id}')"><div class="rd" style="background:${lc}"></div><div class="ri-i"><span class="rn">${d.fullname||'—'}</span><span class="rc2">${d.level||''} ${d.classroom||''}</span><div class="rts">${tags.map(t=>`<span class="rt ${t.c}">${t.t}</span>`).join('')}</div></div><div class="rs2">เสี่ยง<br><strong style="font-size:1rem">${d._risk||0}</strong>${d._q9>0?`<br><span style="color:var(--red);font-size:.71rem">Q9:${d._q9}</span>`:''}</div></div>`;
   }).join('');
 }
 
 function renderSkills(){
-  const metrics=[{key:'computer_skill_level',label:'💻 ทักษะคอมพิวเตอร์',color:'#E86A2E'},{key:'submission_habit',label:'📬 การส่งงาน',color:'#1E7E4E'},{key:'family_support',label:'🏠 การสนับสนุนครอบครัว',color:'#1565C0'},{key:'multitasking',label:'⚡ Multitasking',color:'#6A1B9A'}];
-  const sbEl=document.getElementById('skillBars');
-  if(!FILTERED.length){sbEl.innerHTML='<div style="color:var(--g400);font-size:.85rem">ยังไม่มีข้อมูล</div>';return;}
-  sbEl.innerHTML=metrics.map(m=>{const vals=FILTERED.map(d=>parseInt(d[m.key]||0)).filter(Boolean);const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):'—';const pct=vals.length?(parseFloat(avg)/5*100):0;return`<div class="skill-row"><div class="skill-meta"><span>${m.label}</span><span>${avg}/5</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${m.color}"></div></div></div>`;}).join('');
-  const skillLabels={video_edit:'🎬 ตัดต่อวิดีโอ',graphic:'🎨 ออกแบบกราฟิก',photo:'📷 ถ่ายภาพ/วิดีโอ',code:'👨‍💻 เขียนโค้ด',ads:'📢 ยิงโฆษณา',seo:'🔍 SEO',accounting:'📊 บัญชีดิจิทัล'};
-  const skillCount={};FILTERED.forEach(d=>{if(Array.isArray(d.special_skills))d.special_skills.filter(s=>s!=='none').forEach(s=>{skillCount[s]=(skillCount[s]||0)+1})});
-  document.getElementById('specialSkillTags').innerHTML=Object.entries(skillCount).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="t-tag">${skillLabels[k]||k}<span class="cnt">${v}</span></span>`).join('')||'<span class="t-tag">ยังไม่มีข้อมูล</span>';
-  const platLabels={tiktok:'🎵 TikTok',facebook:'📘 Facebook',instagram:'📸 Instagram',youtube:'▶️ YouTube',x:'🐦 X',lineoa:'💚 Line OA',shopee:'🛒 Shopee/Lazada'};
-  const platCount={};FILTERED.forEach(d=>{if(Array.isArray(d.social_platforms))d.social_platforms.forEach(s=>{platCount[s]=(platCount[s]||0)+1})});
-  document.getElementById('platformTags').innerHTML=Object.entries(platCount).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="t-tag">${platLabels[k]||k}<span class="cnt">${v}</span></span>`).join('')||'<span class="t-tag">ยังไม่มีข้อมูล</span>';
-  const careerLabels={study_more:'🎓 เรียนต่อ',company:'🏢 สมัครงาน',own_biz:'🚀 เปิดธุรกิจ',freelance:'💻 Freelance',unsure:'🤷 ยังไม่แน่ใจ'};
-  const careerCount={};FILTERED.forEach(d=>{if(d.career_goal)careerCount[d.career_goal]=(careerCount[d.career_goal]||0)+1});
-  const max=Math.max(1,...Object.values(careerCount));
-  document.getElementById('careerChart').innerHTML=Object.entries(careerCount).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="career-row"><div class="career-label">${careerLabels[k]||k}</div><div class="career-bar"><div class="career-fill" style="width:${v/max*100}%"></div></div><div class="career-cnt">${v}</div></div>`).join('')||'<div style="color:var(--g400);font-size:.85rem">ยังไม่มีข้อมูล</div>';
+  const metrics=[{k:'computer_skill_level',l:'💻 ทักษะคอมพิวเตอร์',c:'#E86A2E'},{k:'submission_habit',l:'📬 การส่งงาน',c:'#1E7E4E'},{k:'family_support',l:'🏠 สนับสนุนครอบครัว',c:'#1565C0'},{k:'multitasking',l:'⚡ Multitasking',c:'#6A0DAD'}];
+  const el=document.getElementById('skillBars');
+  if(!FILT.length){el.innerHTML='<div style="color:var(--g4);font-size:.83rem">ยังไม่มีข้อมูล</div>';return;}
+  el.innerHTML=metrics.map(m=>{const v=FILT.map(d=>parseInt(d[m.k]||0)).filter(Boolean);const a=v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):'—';const p=v.length?(parseFloat(a)/5*100):0;return`<div class="skr"><div class="sk-m"><span>${m.l}</span><span>${a}/5</span></div><div class="bt"><div class="bf" style="width:${p}%;background:${m.c}"></div></div></div>`;}).join('');
+  const slm={video_edit:'🎬 ตัดต่อ',graphic:'🎨 กราฟิก',photo:'📷 ถ่ายภาพ',code:'👨‍💻 โค้ด',ads:'📢 Ads',seo:'🔍 SEO',accounting:'📊 บัญชี'};
+  const sc={};FILT.forEach(d=>{(d.special_skills||'').split(',').map(s=>s.trim()).filter(s=>s&&s!=='none').forEach(s=>{sc[s]=(sc[s]||0)+1;});});
+  document.getElementById('spTags').innerHTML=Object.entries(sc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="tg">${slm[k]||k}<span class="ct">${v}</span></span>`).join('')||'<span class="tg">ยังไม่มีข้อมูล</span>';
+  const pm={tiktok:'🎵 TikTok',facebook:'📘 Facebook',instagram:'📸 Instagram',youtube:'▶️ YouTube',x:'🐦 X',lineoa:'💚 Line OA',shopee:'🛒 Shopee'};
+  const pc={};FILT.forEach(d=>{(d.social_platforms||'').split(',').map(s=>s.trim()).filter(Boolean).forEach(s=>{pc[s]=(pc[s]||0)+1;});});
+  document.getElementById('platTags').innerHTML=Object.entries(pc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="tg">${pm[k]||k}<span class="ct">${v}</span></span>`).join('')||'<span class="tg">ยังไม่มีข้อมูล</span>';
+  const cl={study_more:'🎓 เรียนต่อ',company:'🏢 สมัครงาน',own_biz:'🚀 เปิดธุรกิจ',freelance:'💻 Freelance',unsure:'🤷 ไม่แน่ใจ'};
+  const cc={};FILT.forEach(d=>{if(d.career_goal)cc[d.career_goal]=(cc[d.career_goal]||0)+1;});
+  const mx=Math.max(1,...Object.values(cc));
+  document.getElementById('careerChart').innerHTML=Object.entries(cc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="cr"><div class="cl">${cl[k]||k}</div><div class="cb"><div class="cbf" style="width:${v/mx*100}%"></div></div><div class="cc">${v}</div></div>`).join('')||'<div style="color:var(--g4);font-size:.83rem">ยังไม่มีข้อมูล</div>';
 }
 
 function renderDevices(){
-  const el=document.getElementById('deviceGrid');
-  if(!FILTERED.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">💻</div>ยังไม่มีข้อมูล</div>';return;}
-  const n=FILTERED.length,pct=(k,v)=>Math.round(FILTERED.filter(d=>d[k]===v).length/n*100);
-  const sections=[{label:'💻 คอมพิวเตอร์',rows:[{l:'มีส่วนตัว',pct:pct('has_computer','own')},{l:'ใช้ร่วม',pct:pct('has_computer','shared')},{l:'ใช้ของโรงเรียน',pct:pct('has_computer','school_only')},{l:'ไม่มีเลย',pct:pct('has_computer','none')}]},{label:'🌐 อินเทอร์เน็ตที่บ้าน',rows:[{l:'WiFi เร็ว',pct:pct('home_internet','fast_wifi')},{l:'WiFi ช้า',pct:pct('home_internet','slow_wifi')},{l:'Data มือถือ',pct:pct('home_internet','mobile_data')},{l:'ไม่มีอินเทอร์เน็ต',pct:pct('home_internet','none')}]},{label:'📱 สมาร์ทโฟน',rows:[{l:'Android',pct:pct('smartphone_os','android')},{l:'iOS (iPhone)',pct:pct('smartphone_os','ios')},{l:'ไม่มีสมาร์ทโฟน',pct:pct('smartphone_os','none')}]},{label:'😴 ชั่วโมงนอน',rows:[{l:'< 5 ชม.',pct:pct('sleep_hours','under5')},{l:'5–6 ชม.',pct:pct('sleep_hours','5-6')},{l:'7–8 ชม.',pct:pct('sleep_hours','7-8')},{l:'> 8 ชม.',pct:pct('sleep_hours','over8')}]}];
-  el.innerHTML=sections.map(s=>`<div class="d-card"><div class="d-label">${s.label}</div>${s.rows.map(r=>`<div class="d-bar-row"><div class="d-bar-label">${r.l}</div><div class="d-bar-track"><div class="d-bar-fill" style="width:${r.pct}%"></div></div><div class="d-pct">${r.pct}%</div></div>`).join('')}</div>`).join('');
+  const el=document.getElementById('devGrid');
+  if(!FILT.length){el.innerHTML='<div class="es"><div class="ei">💻</div>ยังไม่มีข้อมูล</div>';return;}
+  const n=FILT.length,pct=(k,v)=>Math.round(FILT.filter(d=>d[k]===v).length/n*100);
+  const sects=[{l:'💻 คอมพิวเตอร์',rows:[{l:'มีส่วนตัว',p:pct('has_computer','own')},{l:'ใช้ร่วม',p:pct('has_computer','shared')},{l:'ใช้ของโรงเรียน',p:pct('has_computer','school_only')},{l:'ไม่มีเลย',p:pct('has_computer','none')}]},{l:'🌐 อินเทอร์เน็ต',rows:[{l:'WiFi เร็ว',p:pct('home_internet','fast_wifi')},{l:'WiFi ช้า',p:pct('home_internet','slow_wifi')},{l:'Data มือถือ',p:pct('home_internet','mobile_data')},{l:'ไม่มี',p:pct('home_internet','none')}]},{l:'📱 สมาร์ทโฟน',rows:[{l:'Android',p:pct('smartphone_os','android')},{l:'iOS',p:pct('smartphone_os','ios')},{l:'ไม่มี',p:pct('smartphone_os','none')}]},{l:'😴 ชั่วโมงนอน',rows:[{l:'<5 ชม.',p:pct('sleep_hours','under5')},{l:'5-6 ชม.',p:pct('sleep_hours','5-6')},{l:'7-8 ชม.',p:pct('sleep_hours','7-8')},{l:'>8 ชม.',p:pct('sleep_hours','over8')}]}];
+  el.innerHTML=sects.map(s=>`<div class="dc"><div class="dl">${s.l}</div>${s.rows.map(r=>`<div class="dbr"><div class="dbl">${r.l}</div><div class="dbt"><div class="dbf" style="width:${r.p}%"></div></div><div class="dp2">${r.p}%</div></div>`).join('')}</div>`).join('');
 }
 
 function renderLearnerTable(data){
-  const tbody=document.getElementById('studentTbody');
-  if(!data.length){tbody.innerHTML='<tr><td colspan="10" class="empty-state">ยังไม่มีข้อมูล</td></tr>';return;}
-  const devLabels={own:'✅ มีส่วนตัว',shared:'🤝 ใช้ร่วม',school_only:'🏫 โรงเรียน',none:'❌ ไม่มี'};
-  const netLabels={fast_wifi:'⚡ เร็ว',slow_wifi:'📶 ช้า',mobile_data:'📱 Data',none:'❌ ไม่มี'};
+  const tbody=document.getElementById('stuTbody');
+  if(!data.length){tbody.innerHTML='<tr><td colspan="10" class="es">ยังไม่มีข้อมูล</td></tr>';return;}
+  const dl={own:'✅ ส่วนตัว',shared:'🤝 ร่วม',school_only:'🏫 โรงเรียน',none:'❌ ไม่มี'};
+  const nl={fast_wifi:'⚡ เร็ว',slow_wifi:'📶 ช้า',mobile_data:'📱 Data',none:'❌ ไม่มี'};
   tbody.innerHTML=data.map((d,i)=>{
-    const risk=d._risk||0,rBadge=risk>=8?'badge-red':risk>=5?'badge-amber':risk>=3?'badge-gray':'badge-green';
-    const rLabel=risk>=8?'🔴 สูง':risk>=5?'🟡 กลาง':risk>=3?'⚪ ต่ำ':'🟢 ปลอดภัย';
-    const g=classifyStudent(d);
-    const gBadge=g==='advanced'?'badge-green':g==='intermediate'?'badge-amber':'badge-red';
-    const gLabel=g==='advanced'?'🏆 เก่ง':g==='intermediate'?'📚 กลาง':'🚨 อ่อน';
-    const phq=PHQ_ALL.find(p=>p._id===d._id)||PHQ_ALL.find(p=>p.fullname===d.fullname&&p.classroom===d.classroom);
-    const adhd=ADHD_ALL.find(a=>a._id===d._id)||ADHD_ALL.find(a=>a.fullname===d.fullname&&a.classroom===d.classroom);
-    const phqBadge=phq?`<span class="badge ${phq.total<=4?'badge-green':phq.total<=9?'badge-amber':phq.total<=14?'badge-orange':'badge-red'}">${phq.total}/27${phq.answers?.[8]>0?' ⚠️':''}</span>`:'<span class="badge badge-gray">—</span>';
-    const adhdBadge=adhd?`<span class="badge badge-teal">${adhd.total}/54</span>`:'<span class="badge badge-gray">—</span>';
-    return`<tr onclick="openStudentModal('${d._id}',event)" style="cursor:pointer"><td style="color:var(--g400);font-size:.78rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge badge-gray">${d.level||''} ${d.classroom||''}</span></td><td>${d.computer_skill_level?`${d.computer_skill_level}/5`:'—'}</td><td style="font-size:.82rem">${devLabels[d.has_computer]||'—'}</td><td style="font-size:.82rem">${netLabels[d.home_internet]||'—'}</td><td><span class="badge ${rBadge}">${rLabel}</span></td><td><span class="badge ${gBadge}">${gLabel}</span></td><td>${phqBadge}</td><td>${adhdBadge}</td></tr>`;
+    const r=d._risk||0,rb=r>=8?'b-r':r>=5?'b-a':r>=3?'b-gy':'b-g',rl=r>=8?'🔴 สูง':r>=5?'🟡 กลาง':r>=3?'⚪ ต่ำ':'🟢 ปลอดภัย';
+    const g=classify(d),gb=g==='advanced'?'b-g':g==='intermediate'?'b-a':'b-r',gl=g==='advanced'?'🏆':g==='intermediate'?'📚':'🚨';
+    const phq=findPHQ(d),adhd=findADHD(d);
+    const pb=phq?`<span class="badge ${phq.phq_total<=4?'b-g':phq.phq_total<=9?'b-a':phq.phq_total<=14?'b-o':'b-r'}">${phq.phq_total}/27${parseInt(phq.phq_q9||0)>0?' ⚠️':''}</span>`:'<span class="badge b-gy">—</span>';
+    const ab=adhd?`<span class="badge b-t">${adhd.adhd_total}/54</span>`:'<span class="badge b-gy">—</span>';
+    return`<tr onclick="openModal('${d._id}')"><td style="color:var(--g4);font-size:.74rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge b-gy">${d.level||''} ${d.classroom||''}</span></td><td>${d.computer_skill_level?`${d.computer_skill_level}/5`:'—'}</td><td style="font-size:.78rem">${dl[d.has_computer]||'—'}</td><td style="font-size:.78rem">${nl[d.home_internet]||'—'}</td><td><span class="badge ${rb}">${rl}</span></td><td><span class="badge ${gb}">${gl} ${g==='advanced'?'เก่ง':g==='intermediate'?'กลาง':'อ่อน'}</span></td><td>${pb}</td><td>${ab}</td></tr>`;
   }).join('');
 }
 
-function filterLearnerTable(q){const lq=q.toLowerCase();renderLearnerTable(FILTERED.filter(d=>(d.fullname||'').toLowerCase().includes(lq)));}
-function showLTab(id,btn){document.querySelectorAll('#dash-learner .panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('#dash-learner .tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('lpanel-'+id).classList.add('active');btn.classList.add('active');}
+function filterLT(q){const lq=q.toLowerCase();renderLearnerTable(FILT.filter(d=>(d.fullname||'').toLowerCase().includes(lq)));}
+function showLTab(id,btn){document.querySelectorAll('#d-l .pan').forEach(p=>p.classList.remove('act'));document.querySelectorAll('#d-l .tbt').forEach(b=>b.classList.remove('act'));document.getElementById('lp-'+id).classList.add('act');btn.classList.add('act');}
 
-// ================================================================
-// STUDENT MODAL — Bug 6 Fix: student_note AI analysis included
-// ================================================================
-function openStudentModal(id, event) {
-  if(event) event.stopPropagation();
-  // Match by _id first; fallback to clicked row's strong text
-  let d = id ? ALL_DATA.find(s=>s._id===id) : null;
-  if(!d && event) {
-    const _tr = event.target?.closest('tr');
-    const _nc = _tr?.querySelector('strong');
-    if(_nc) d = ALL_DATA.find(s=>s.fullname===_nc.textContent.trim());
-  }
-  if(!d) { console.warn('No learner record found for id:', id); return; }
-  const phq = PHQ_ALL.find(p=>p._id===d._id)||PHQ_ALL.find(p=>p.fullname===d.fullname&&p.classroom===d.classroom);
-  const adhd = ADHD_ALL.find(a=>a._id===d._id)||ADHD_ALL.find(a=>a.fullname===d.fullname&&a.classroom===d.classroom);
-  const g = classifyStudent(d);
-  const gLabel = g==='advanced'?'🏆 กลุ่มเก่ง':g==='intermediate'?'📚 กลุ่มกลาง':'🚨 กลุ่มต้องดูแล';
-  const gColor = g==='advanced'?'var(--green)':g==='intermediate'?'var(--amber)':'var(--red)';
-  const sevBadge = s=>{if(s<=4)return['b-none','ปกติ'];if(s<=9)return['b-mild','น้อย'];if(s<=14)return['b-moderate','ปานกลาง'];if(s<=19)return['b-moderate','ค่อนข้างรุนแรง'];return['b-severe','รุนแรง'];};
-  const skillLabels={video_edit:'🎬 ตัดต่อ',graphic:'🎨 กราฟิก',photo:'📷 ถ่ายภาพ',code:'👨‍💻 โค้ด',ads:'📢 Ads',seo:'🔍 SEO',accounting:'📊 บัญชี'};
-
-  let phqSection = '';
+// ══════════════════════════════════════════════════════════════
+// MODAL — Student Detail
+// ══════════════════════════════════════════════════════════════
+function openModal(id){
+  const d=ALL.find(s=>s._id===id);
+  if(!d)return;
+  const phq=findPHQ(d),adhd=findADHD(d);
+  const g=classify(d),gc=g==='advanced'?'var(--grn)':g==='intermediate'?'var(--amb)':'var(--red)',gl=g==='advanced'?'🏆 กลุ่มเก่ง':g==='intermediate'?'📚 กลุ่มกลาง':'🚨 กลุ่มต้องดูแล';
+  const sb=s=>{if(s<=4)return['b-g','ปกติ'];if(s<=9)return['b-a','น้อย'];if(s<=14)return['b-o','ปานกลาง'];if(s<=19)return['b-o','ค่อนข้างรุนแรง'];return['b-r','รุนแรง'];};
+  let phqSec='';
   if(phq){
-    const [cls,lbl]=sevBadge(phq.total);
-    const q9 = phq.answers?.[8]||0;
-    phqSection = `<div class="modal-section">
-      <div class="modal-section-title phq-color">💜 ผลประเมิน PHQ-A</div>
-      <div class="score-chip" style="background:var(--purple-bg);color:var(--purple)">คะแนน ${phq.total}/27 — <span class="badge ${cls}" style="margin-left:4px">${lbl}</span>${q9>0?`<span class="risk-tag q9" style="margin-left:6px">⚠️ Q9: ${q9}</span>`:''}</div>
-      ${q9>0?`<div style="background:#FEE9E7;border:1px solid var(--red);border-radius:var(--r-sm);padding:.75rem;font-size:.83rem;color:#B71C1C;margin-bottom:.75rem">⚠️ นักเรียนรายนี้ตอบข้อ 9 (ความคิดทำร้ายตัวเอง) = ${q9} — กรุณาพูดคุยและแจ้งครูแนะแนว</div>`:''}
-      <div class="breakdown-mini">${(phq.answers||[]).map((s,i)=>`<span class="breakdown-mini-item score-${s}" title="ข้อ ${i+1}">ข${i+1}:${s}</span>`).join('')}</div>
-      <div style="margin-top:.75rem;font-size:.8rem;font-weight:600;color:var(--g500);margin-bottom:.375rem">AI วิเคราะห์ PHQ-A:</div>
-      <div class="ai-bubble purple" id="modal-phq-ai">${phq.ai_analysis?phq.ai_analysis.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'):'<div class="ai-loading"><div class="dot-pulse"><span></span><span></span><span></span></div><span>กำลังโหลด...</span></div>'}</div>
+    const[bc,bl]=sb(parseInt(phq.phq_total));const q9=parseInt(phq.phq_q9||0);
+    const answers=[phq.phq_q1,phq.phq_q2,phq.phq_q3,phq.phq_q4,phq.phq_q5,phq.phq_q6,phq.phq_q7,phq.phq_q8,phq.phq_q9];
+    phqSec=`<div class="ms"><div class="mst pu">💜 ผลประเมิน PHQ-A</div>
+      <div class="chip" style="background:var(--pbg);color:var(--pur)">คะแนน ${phq.phq_total}/27 <span class="badge ${bc}" style="margin-left:5px">${bl}</span>${q9>0?`<span class="rt q9" style="margin-left:6px">⚠️ Q9:${q9}</span>`:''}</div>
+      ${q9>0?`<div class="q9-box">⚠️ นักเรียนตอบข้อ 9 = ${q9} — กรุณาพูดคุยและแจ้งครูแนะแนวทันที</div>`:''}
+      <div class="bmi">${answers.map((v,i)=>`<span class="bmi-i score-${v}" style="background:${v==0?'var(--gbg)':v==1?'var(--abg)':v==2?'var(--o3)':'var(--rbg)'};color:${v==0?'var(--grn)':v==1?'var(--amb)':v==2?'var(--o)':'var(--red)'}">ข${i+1}:${v}</span>`).join('')}</div>
+      <div style="font-size:.77rem;font-weight:600;color:var(--g5);margin:.625rem 0 .3rem">AI วิเคราะห์ PHQ-A:</div>
+      <div class="ai-box ai-p">${phq.ai_analysis?phq.ai_analysis.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'):'<span style="color:var(--g4)">ยังไม่มีการวิเคราะห์ AI (AI จะวิเคราะห์ในเบื้องหลังหลังจากบันทึก)</span>'}</div>
     </div>`;
   }
-
-  let adhdSection = '';
+  let adhdSec='';
   if(adhd){
-    const adhdSevLabel={none:'ไม่พบแนวโน้ม',subclinical:'ต้องติดตาม',inattentive:'ขาดสมาธิ',hyperactive:'ซน/หุนหัน',combined:'แบบรวม'};
-    adhdSection = `<div class="modal-section">
-      <div class="modal-section-title adhd-color">🧩 ผลประเมิน ADHD</div>
-      <div class="score-chip" style="background:var(--teal-bg);color:var(--teal)">รวม ${adhd.total}/54 · สมาธิ ${adhd.inatt}/27 · ซน ${adhd.hyper}/27</div>
-      <div class="badge badge-teal" style="margin-bottom:.75rem">${adhdSevLabel[adhd.severity]||adhd.severity}</div>
-      <div style="font-size:.8rem;font-weight:600;color:var(--g500);margin-bottom:.375rem">AI วิเคราะห์ ADHD:</div>
-      <div class="ai-bubble teal" id="modal-adhd-ai">${adhd.ai_analysis?adhd.ai_analysis.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'):'<div class="ai-loading"><div class="dot-pulse"><span></span><span></span><span></span></div><span>กำลังโหลด...</span></div>'}</div>
+    const asl={none:'ไม่พบแนวโน้ม',subclinical:'ต้องติดตาม',inattentive:'ขาดสมาธิ',hyperactive:'ซน/หุนหัน',combined:'แบบรวม'};
+    adhdSec=`<div class="ms"><div class="mst tu">🧩 ผลประเมิน ADHD</div>
+      <div class="chip" style="background:var(--tbg);color:var(--tel)">รวม ${adhd.adhd_total}/54 · สมาธิ ${adhd.adhd_inatt}/27 · ซน ${adhd.adhd_hyper}/27</div>
+      <div style="margin-bottom:.625rem"><span class="badge b-t">${asl[adhd.adhd_severity]||adhd.adhd_severity}</span></div>
+      <div style="font-size:.77rem;font-weight:600;color:var(--g5);margin-bottom:.3rem">AI วิเคราะห์ ADHD:</div>
+      <div class="ai-box ai-t">${adhd.ai_analysis?adhd.ai_analysis.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'):'<span style="color:var(--g4)">ยังไม่มีการวิเคราะห์ AI</span>'}</div>
     </div>`;
   }
-
-  // Bug 6 Fix: student_note AI analysis shown in modal
-  let noteSection = '';
+  let noteSec='';
   if(d.student_note&&d.student_note.trim()){
-    noteSection = `<div class="modal-section">
-      <div class="modal-section-title note-color">📝 สิ่งที่นักเรียนอยากให้ครูรู้</div>
-      <div style="background:var(--o50);border:1px solid rgba(232,106,46,.2);border-radius:var(--r-md);padding:.875rem 1rem;font-size:.9rem;color:var(--g700);line-height:1.75;white-space:pre-wrap">${escapeHTML(d.student_note)}</div>
-      <div style="margin-top:.75rem;font-size:.8rem;font-weight:600;color:var(--g500);margin-bottom:.375rem">AI แนะนำแนวทางสำหรับครู:</div>
-      <div class="ai-bubble" id="modal-note-ai"><div class="ai-loading"><div class="dot-pulse"><span></span><span></span><span></span></div><span>กำลังวิเคราะห์...</span></div></div>
+    noteSec=`<div class="ms"><div class="mst ou">📝 สิ่งที่นักเรียนอยากให้ครูรู้</div>
+      <div class="ai-box ai-o" style="white-space:pre-wrap">${String(d.student_note).replace(/</g,'&lt;')}</div>
     </div>`;
   }
-
-  const html=`<div class="modal-overlay" onclick="closeModal(event)">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <div class="modal-head">
-        <div>
-          <div class="modal-title">${d.fullname||'—'}</div>
-          <div style="font-size:.82rem;color:var(--g400);margin-top:2px">${d.level||''} ${d.classroom||''} ${d.gender?'· '+d.gender:''}</div>
-        </div>
-        <button class="modal-close" onclick="closeModal()">✕</button>
+  const html=`<div class="mo" onclick="closeModal(event)">
+    <div class="mb" onclick="event.stopPropagation()">
+      <div class="mh">
+        <div><div class="mt3">${d.fullname||'—'}</div><div style="font-size:.79rem;color:var(--g4);margin-top:2px">${d.level||''} ${d.classroom||''} ${d.gender?'· '+d.gender:''}</div></div>
+        <button class="mx" onclick="closeModal()">✕</button>
       </div>
-      <div class="modal-body">
-        <div class="modal-section">
-          <div class="modal-section-title" style="color:var(--o500)">📊 ข้อมูลทั่วไป</div>
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem">
-            <span class="badge badge-gray">GPAX: ${d.gpax||'—'}</span>
-            <span class="badge" style="background:${gColor+'22'};color:${gColor}">${gLabel}</span>
-            <span class="badge ${d._risk>=8?'badge-red':d._risk>=5?'badge-amber':'badge-green'}">ความเสี่ยง: ${d._risk||0}</span>
-            ${d.computer_skill_level?`<span class="badge badge-blue">คอม: ${d.computer_skill_level}/5</span>`:''}
+      <div class="mbody">
+        <div class="ms"><div class="mst ou">📊 ข้อมูลทั่วไป</div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.625rem">
+            <span class="badge b-gy">GPAX: ${d.gpax||'—'}</span>
+            <span class="badge" style="background:${gc}22;color:${gc}">${gl}</span>
+            <span class="badge ${parseInt(d._risk||0)>=8?'b-r':parseInt(d._risk||0)>=5?'b-a':'b-g'}">เสี่ยง: ${d._risk||0}</span>
+            ${d.computer_skill_level?`<span class="badge b-b">คอม: ${d.computer_skill_level}/5</span>`:''}
           </div>
-          <div style="font-size:.85rem;color:var(--g600);line-height:1.8">
+          <div style="font-size:.82rem;color:var(--g5);line-height:1.9">
             ${d.has_computer?`💻 ${d.has_computer==='own'?'มีคอมส่วนตัว':d.has_computer==='shared'?'ใช้ร่วม':d.has_computer==='school_only'?'ใช้ของโรงเรียน':'ไม่มีคอม'} &nbsp;`:''}
             ${d.home_internet?`🌐 ${d.home_internet==='fast_wifi'?'WiFi เร็ว':d.home_internet==='slow_wifi'?'WiFi ช้า':d.home_internet==='mobile_data'?'Data มือถือ':'ไม่มีเน็ต'} &nbsp;`:''}
-            ${d.sleep_hours?`😴 นอน${d.sleep_hours==='under5'?'<5':d.sleep_hours==='5-6'?'5-6':d.sleep_hours==='7-8'?'7-8':'>8'} ชม. &nbsp;`:''}
-            ${d.part_time?`💼 ${d.part_time==='none'?'ไม่ทำงานพิเศษ':d.part_time==='weekend'?'ทำงานวันหยุด':'ทำงานทุกสัปดาห์'} &nbsp;`:''}
+            ${d.sleep_hours?`😴 ${d.sleep_hours==='under5'?'นอน<5':d.sleep_hours==='5-6'?'นอน5-6':d.sleep_hours==='7-8'?'นอน7-8':'นอน>8'} ชม. &nbsp;`:''}
+            ${d.part_time?`💼 ${d.part_time==='none'?'ไม่ทำงานพิเศษ':d.part_time==='weekend'?'ทำวันหยุด':'ทำทุกสัปดาห์'} &nbsp;`:''}
           </div>
-          ${Array.isArray(d.special_skills)&&d.special_skills.filter(s=>s!=='none').length?`<div style="margin-top:.5rem;display:flex;gap:5px;flex-wrap:wrap">${d.special_skills.filter(s=>s!=='none').map(s=>`<span class="badge badge-blue">${{video_edit:'🎬 ตัดต่อ',graphic:'🎨 กราฟิก',photo:'📷 ถ่าย',code:'👨‍💻 โค้ด',ads:'📢 Ads',seo:'🔍 SEO',accounting:'📊 บัญชี'}[s]||s}</span>`).join('')}</div>`:''}
+          ${d.special_skills&&!String(d.special_skills).includes('none')?`<div style="margin-top:.375rem;display:flex;gap:4px;flex-wrap:wrap">${String(d.special_skills).split(',').filter(s=>s.trim()&&s.trim()!=='none').map(s=>`<span class="badge b-b">${{'video_edit':'🎬','graphic':'🎨','photo':'📷','code':'👨‍💻','ads':'📢','seo':'🔍','accounting':'📊'}[s.trim()]||s.trim()}</span>`).join('')}</div>`:''}
         </div>
-        ${phqSection}
-        ${adhdSection}
-        ${noteSection}
+        ${phqSec}${adhdSec}${noteSec}
       </div>
     </div>
   </div>`;
-
-  const container=document.getElementById('studentModal');
-  container.innerHTML=html;container.style.display='block';
-
-  // Bug 6 Fix: fetch AI for student_note if present
-  if(d.student_note&&d.student_note.trim()) {
-    fetchNoteAI(d, document.getElementById('modal-note-ai'));
-  }
+  const w=document.getElementById('modalWrap');w.innerHTML=html;w.style.display='block';
 }
-
-async function fetchNoteAI(d, el) {
-  const prompt=`คุณเป็นครูอาชีวศึกษา นักเรียนได้เขียนข้อความถึงครูว่า:\n"${d.student_note}"\n\nนักเรียน: ${d.fullname} ชั้น: ${d.level} ${d.classroom}\n\nกรุณาให้คำแนะนำสำหรับครูในการดูแลนักเรียนรายนี้ เป็นภาษาไทย ไม่เกิน 120 คำ กระชับและเป็นประโยชน์`;
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    const text=data.content?.map(c=>c.text||'').join('')||'ไม่สามารถวิเคราะห์ได้';
-    if(el) el.innerHTML=text.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
-  }catch(e){if(el) el.innerHTML='⚠️ ไม่สามารถเชื่อมต่อ AI ได้';}
-}
-
-function closeModal(event) {
-  if(!event||event.target===event.currentTarget){
-    document.getElementById('studentModal').style.display='none';
-    document.getElementById('studentModal').innerHTML='';
-  }
-}
+function closeModal(e){if(!e||e.target===e.currentTarget){document.getElementById('modalWrap').style.display='none';document.getElementById('modalWrap').innerHTML='';}}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
-function escapeHTML(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-// ================================================================
-// PHQ DASHBOARD
-// ================================================================
-function loadPHQData(){
-  PHQ_ALL=JSON.parse(localStorage.getItem('phq_data')||'[]');
-  const rooms=[...new Set(PHQ_ALL.map(d=>d.classroom).filter(Boolean))].sort();
-  ['filterRoom','reportRoom'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">ทุกห้อง</option>'+rooms.map(r=>`<option value="${r}"${r===cur?' selected':''}>${r}</option>`).join('');});
-  applyPHQFilters();
+// ══════════════════════════════════════════════════════════════
+// PHQ RENDER
+// ══════════════════════════════════════════════════════════════
+function loadPHQRooms(){
+  const rooms=[...new Set(PHQ.map(d=>d.classroom).filter(Boolean))].sort();
+  ['fRm','rpRm'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">ทุกห้อง</option>'+rooms.map(r=>`<option value="${r}"${r===cur?' selected':''}>${r}</option>`).join('');});
 }
-function applyPHQFilters(){const level=document.getElementById('filterLevel').value,room=document.getElementById('filterRoom').value;PHQ_FILTERED=PHQ_ALL.filter(d=>(!level||d.level===level)&&(!room||d.classroom===room));renderPHQ();}
+function applyPF(){loadPHQRooms();const lv=document.getElementById('fLv').value,rm=document.getElementById('fRm').value;PHQF=PHQ.filter(d=>(!lv||d.level===lv)&&(!rm||d.classroom===rm));renderPHQ();}
 function renderPHQ(){
-  const n=PHQ_FILTERED.length;
-  document.getElementById('phqSubtext').textContent=`ข้อมูลทั้งหมด ${PHQ_ALL.length} คน | กำลังแสดง ${n} คน`;
-  const counts={none:0,mild:0,moderate:0,severe:0};
-  PHQ_FILTERED.forEach(d=>{const s=d.total;if(s<=4)counts.none++;else if(s<=9)counts.mild++;else if(s<=19)counts.moderate++;else counts.severe++;});
-  document.getElementById('sTotal').textContent=n;
-  document.getElementById('sNone').textContent=counts.none;
-  document.getElementById('sMild').textContent=counts.mild;
-  document.getElementById('sModerate').textContent=counts.moderate;
-  document.getElementById('sSevere').textContent=counts.severe;
-  renderPHQOverview(counts,n);renderTrend();renderByRoom();renderQuestions();renderPHQTable(PHQ_FILTERED);renderQ9Risk();renderReport();
+  const n=PHQF.length;
+  document.getElementById('pSub').textContent=`ข้อมูลทั้งหมด ${PHQ.length} คน | แสดง ${n} คน`;
+  const counts={none:0,mild:0,mod:0,sev:0};
+  PHQF.forEach(d=>{const s=parseInt(d.phq_total||0);if(s<=4)counts.none++;else if(s<=9)counts.mild++;else if(s<=19)counts.mod++;else counts.sev++;});
+  document.getElementById('pTot').textContent=n;
+  document.getElementById('pNone').textContent=counts.none;
+  document.getElementById('pMild').textContent=counts.mild;
+  document.getElementById('pMod').textContent=counts.mod;
+  document.getElementById('pSev').textContent=counts.sev;
+  renderPHQOverview(counts,n);renderTrend();renderByRoom();renderQHeat();renderPHQTable(PHQF);renderQ9Risk();renderReport();
 }
-function renderPHQOverview(counts,n){
-  const el=document.getElementById('severityBars');
-  if(!n){el.innerHTML=`<div class="empty-state"><div class="empty-icon">💜</div>ยังไม่มีข้อมูล PHQ-A<br><a href="index.html" style="color:var(--o500);font-weight:600">→ ไปกรอกแบบประเมิน PHQ-A</a></div>`;return;}
-  document.getElementById('overviewNote').textContent=`ค่าเฉลี่ย ${(PHQ_FILTERED.reduce((a,d)=>a+d.total,0)/n).toFixed(1)} / 27`;
-  const rows=[{label:'ปกติ (0–4)',cnt:counts.none,cls:'fill-none'},{label:'น้อย (5–9)',cnt:counts.mild,cls:'fill-mild'},{label:'ปานกลาง (10–19)',cnt:counts.moderate,cls:'fill-moderate'},{label:'รุนแรง (20+)',cnt:counts.severe,cls:'fill-severe'}];
-  el.innerHTML=rows.map(r=>`<div class="sev-row"><div class="sev-label">${r.label}</div><div class="sev-track"><div class="sev-fill ${r.cls}" style="width:${n?r.cnt/n*100:0}%"></div></div><div class="sev-cnt">${r.cnt}</div></div>`).join('');
+function renderPHQOverview(c,n){
+  const el=document.getElementById('sevBars');
+  if(!n){el.innerHTML=`<div class="es"><div class="ei">💜</div>ยังไม่มีข้อมูล PHQ-A</div>`;return;}
+  document.getElementById('ovNote').textContent=`ค่าเฉลี่ย ${(PHQF.reduce((a,d)=>a+parseInt(d.phq_total||0),0)/n).toFixed(1)} / 27`;
+  const rows=[{l:'ปกติ (0–4)',n:c.none,f:'fn'},{l:'น้อย (5–9)',n:c.mild,f:'fm'},{l:'ปานกลาง (10–19)',n:c.mod,f:'fmo'},{l:'รุนแรง (20+)',n:c.sev,f:'fse'}];
+  el.innerHTML=rows.map(r=>`<div class="sev-r"><div>${r.l}</div><div class="sev-t"><div class="sev-f ${r.f}" style="width:${n?r.n/n*100:0}%"></div></div><div style="font-weight:600">${r.n}</div></div>`).join('');
 }
-// Bug fix: Q9 warning now shown in dashboard panel, NOT in student form
+function renderTrend(){
+  const el=document.getElementById('trendChart');
+  if(!PHQF.length){el.innerHTML='<div style="color:var(--g4);font-size:.83rem">ยังไม่มีข้อมูล</div>';return;}
+  const bd={};PHQF.forEach(d=>{const day=(d._ts||'?').split(' ')[0];if(!bd[day])bd[day]=[];bd[day].push(parseInt(d.phq_total||0));});
+  el.innerHTML=Object.entries(bd).sort((a,b)=>a[0].localeCompare(b[0])).slice(-12).map(([day,scores])=>{const avg=(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);const c=avg>=10?'var(--red)':avg>=5?'var(--amb)':'var(--grn)';return`<div class="tp"><div class="td">${day}</div><div class="ta2" style="color:${c}">${avg}</div><div class="tn">${scores.length} คน</div></div>`;}).join('')||'<div style="color:var(--g4)">ยังไม่มีข้อมูล</div>';
+}
+function renderByRoom(){
+  const el=document.getElementById('roomGrid');
+  if(!PHQF.length){el.innerHTML='<div class="es" style="grid-column:1/-1"><div class="ei">🏫</div>ยังไม่มีข้อมูล</div>';return;}
+  const rooms={};PHQF.forEach(d=>{const k=`${d.level||''} ${d.classroom||''}`.trim()||'ไม่ระบุ';if(!rooms[k])rooms[k]=[];rooms[k].push(d);});
+  el.innerHTML=Object.entries(rooms).sort((a,b)=>a[0].localeCompare(b[0])).map(([room,sts])=>{
+    const n=sts.length,avg=(sts.reduce((a,d)=>a+parseInt(d.phq_total||0),0)/n).toFixed(1);
+    const none=sts.filter(d=>d.phq_total<=4).length,mild=sts.filter(d=>d.phq_total>=5&&d.phq_total<=9).length,mod=sts.filter(d=>d.phq_total>=10&&d.phq_total<=19).length,sev=sts.filter(d=>d.phq_total>=20).length;
+    const ac=avg>=10?'var(--red)':avg>=5?'var(--amb)':'var(--grn)',ab=avg>=10?'var(--rbg)':avg>=5?'var(--abg)':'var(--gbg)';
+    return`<div class="rc3"><div class="rc3-h"><div class="rn2">${room}</div><span class="ra" style="background:${ab};color:${ac}">เฉลี่ย ${avg}</span></div><div style="font-size:.77rem;color:var(--g4);margin-bottom:.55rem">${n} คน</div><div class="rb-st"><div class="rb-sg" style="width:${none/n*100}%;background:var(--grn)"></div><div class="rb-sg" style="width:${mild/n*100}%;background:var(--amb)"></div><div class="rb-sg" style="width:${mod/n*100}%;background:var(--o)"></div><div class="rb-sg" style="width:${sev/n*100}%;background:var(--red)"></div></div><div class="rleg"><span class="rli"><span class="rld" style="background:var(--grn)"></span>ปกติ ${none}</span><span class="rli"><span class="rld" style="background:var(--amb)"></span>น้อย ${mild}</span><span class="rli"><span class="rld" style="background:var(--o)"></span>ปานกลาง ${mod}</span><span class="rli"><span class="rld" style="background:var(--red)"></span>รุนแรง ${sev}</span></div></div>`;
+  }).join('');
+}
+function renderQHeat(){
+  const el=document.getElementById('qHeat');
+  if(!PHQF.length){el.innerHTML='<div style="color:var(--g4)">ยังไม่มีข้อมูล</div>';return;}
+  const avgs=PHQ_Q.map((_,i)=>{const f=`phq_q${i+1}`;const v=PHQF.map(d=>parseInt(d[f]||0));return v.reduce((a,b)=>a+b,0)/v.length;});
+  el.innerHTML=PHQ_Q.map((q,i)=>{const a=avgs[i].toFixed(2),p=(avgs[i]/3*100).toFixed(0),c=avgs[i]>=2?'var(--red)':avgs[i]>=1?'var(--amb)':'var(--o)';return`<div class="qr" ${i===8?'style="background:var(--rbg);padding:4px 6px;border-radius:6px"':''}><div class="qrn">ข้อ ${i+1}${i===8?' ⚠️':''}</div><div class="qrt" title="${q}">${q}</div><div class="qbw"><div class="qbt"><div class="qbf" style="width:${p}%;background:${c}"></div></div></div><div class="qa" style="color:${c}">${a}</div></div>`;}).join('');
+}
+function renderPHQTable(data){
+  const sf=document.getElementById('fSev')?.value;
+  let d2=data;
+  if(sf)d2=data.filter(d=>{const t=parseInt(d.phq_total||0);if(sf==='none')return t<=4;if(sf==='mild')return t>=5&&t<=9;if(sf==='moderate')return t>=10&&t<=14;if(sf==='moderately_severe')return t>=15&&t<=19;if(sf==='severe')return t>=20;return true;});
+  const tbody=document.getElementById('phqTbody');
+  if(!d2.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--g4)">ไม่พบข้อมูล</td></tr>';return;}
+  const sb=s=>{const n=parseInt(s);if(n<=4)return['b-g','ปกติ'];if(n<=9)return['b-a','น้อย'];if(n<=14)return['b-o','ปานกลาง'];if(n<=19)return['b-o','ค่อนข้างรุนแรง'];return['b-r','รุนแรง'];};
+  tbody.innerHTML=d2.map((d,i)=>{
+    const[bc,bl]=sb(d.phq_total);const q9=parseInt(d.phq_q9||0);
+    const adhd=findADHD({_id:d._id,fullname:d.fullname,classroom:d.classroom});
+    const ab=adhd?`<span class="badge b-t">${adhd.adhd_total}/54</span>`:'<span class="badge b-gy">—</span>';
+    return`<tr style="cursor:pointer" onclick="openModal('${d._id||''}')"><td style="color:var(--g4);font-size:.74rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge b-gy">${d.level||''} ${d.classroom||''}</span></td><td><strong>${d.phq_total}</strong></td><td><span class="badge ${bc}">${bl}</span></td><td>${q9>0?`<span class="badge b-r">${q9} ⚠️</span>`:`<span class="badge b-gy">0</span>`}</td><td>${ab}</td><td style="font-size:.74rem;color:var(--g4)">${d._ts||'—'}</td></tr>`;
+  }).join('');
+}
+function filterPT(q){const lq=q.toLowerCase();renderPHQTable(PHQF.filter(d=>(d.fullname||'').toLowerCase().includes(lq)));}
 function renderQ9Risk(){
-  const el=document.getElementById('q9RiskList');
-  const q9students=PHQ_FILTERED.filter(d=>(d.answers?.[8]||0)>=1).sort((a,b)=>(b.answers?.[8]||0)-(a.answers?.[8]||0));
-  if(!q9students.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">✅</div>ไม่พบนักเรียนที่มีคะแนนข้อ 9 ≥ 1</div>';return;}
-  el.innerHTML=q9students.map(d=>`<div class="risk-item" style="border-color:#C62828">
-    <div class="risk-level-dot" style="background:${d.answers[8]>=2?'#8B0000':'var(--red)'}"></div>
-    <div class="risk-info">
-      <span class="risk-name">${d.fullname||'—'}</span><span class="risk-class">${d.level||''} ${d.classroom||''} ${d.gender?'· '+d.gender:''}</span>
-      <div class="risk-tags"><span class="risk-tag q9">ข้อ 9: ${d.answers[8]} ${d.answers[8]>=2?'(สูงมาก — แจ้งด่วน)':'(ควรติดตาม)'}</span><span class="risk-tag">คะแนนรวม ${d.total}/27</span></div>
-      ${d.ai_analysis?`<div style="margin-top:.5rem;font-size:.8rem;color:var(--g600);line-height:1.5;max-height:60px;overflow:hidden">${d.ai_analysis.replace(/<[^>]*>/g,'').slice(0,150)}...</div>`:''}
-    </div>
-    <div style="font-size:.78rem;color:var(--g400)">${d._ts||'—'}</div>
+  const el=document.getElementById('q9List');
+  const q9s=PHQF.filter(d=>parseInt(d.phq_q9||0)>=1).sort((a,b)=>parseInt(b.phq_q9||0)-parseInt(a.phq_q9||0));
+  if(!q9s.length){el.innerHTML='<div class="es"><div class="ei">✅</div>ไม่พบนักเรียนที่มีคะแนนข้อ 9 ≥ 1</div>';return;}
+  el.innerHTML=q9s.map(d=>`<div class="ri" onclick="openModal('${d._id||''}')">
+    <div class="rd" style="background:${parseInt(d.phq_q9)>=2?'#8B0000':'var(--red)'}"></div>
+    <div class="ri-i"><span class="rn">${d.fullname||'—'}</span><span class="rc2">${d.level||''} ${d.classroom||''} ${d.gender?'· '+d.gender:''}</span>
+      <div class="rts"><span class="rt q9">ข้อ 9: ${d.phq_q9} ${parseInt(d.phq_q9)>=2?'(สูงมาก — แจ้งด่วน)':'(ควรติดตาม)'}</span><span class="rt">คะแนนรวม ${d.phq_total}/27</span></div>
+    </div><div style="font-size:.74rem;color:var(--g4)">${d._ts||'—'}</div>
   </div>`).join('');
 }
-function renderTrend(){const el=document.getElementById('trendChart');if(!PHQ_FILTERED.length){el.innerHTML='<div style="color:var(--g400);font-size:.85rem">ยังไม่มีข้อมูล</div>';return;}const byDay={};PHQ_FILTERED.forEach(d=>{const day=d._ts?d._ts.split(' ')[0]:'ไม่ระบุ';if(!byDay[day])byDay[day]=[];byDay[day].push(d.total);});el.innerHTML=Object.entries(byDay).sort((a,b)=>a[0].localeCompare(b[0])).slice(-12).map(([day,scores])=>{const avg=(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1);const color=avg>=10?'var(--red)':avg>=5?'var(--amber)':'var(--green)';return`<div class="trend-point"><div class="trend-date">${day}</div><div class="trend-avg" style="color:${color}">${avg}</div><div class="trend-n">${scores.length} คน</div></div>`;}).join('')||'<div style="color:var(--g400)">ยังไม่มีข้อมูล</div>';}
-function renderByRoom(){const el=document.getElementById('roomGrid');if(!PHQ_FILTERED.length){el.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏫</div>ยังไม่มีข้อมูล</div>';return;}const rooms={};PHQ_FILTERED.forEach(d=>{const k=`${d.level||''} ${d.classroom||''}`.trim()||'ไม่ระบุ';if(!rooms[k])rooms[k]=[];rooms[k].push(d);});el.innerHTML=Object.entries(rooms).sort((a,b)=>a[0].localeCompare(b[0])).map(([room,students])=>{const n=students.length,avg=(students.reduce((a,d)=>a+d.total,0)/n).toFixed(1);const none=students.filter(d=>d.total<=4).length,mild=students.filter(d=>d.total>=5&&d.total<=9).length,mod=students.filter(d=>d.total>=10&&d.total<=19).length,sev=students.filter(d=>d.total>=20).length;const avgColor=avg>=10?'var(--red)':avg>=5?'var(--amber)':'var(--green)',avgBg=avg>=10?'var(--red-bg)':avg>=5?'var(--amber-bg)':'var(--green-bg)';return`<div class="room-card"><div class="room-card-head"><div class="room-name">${room}</div><span class="room-avg" style="background:${avgBg};color:${avgColor}">เฉลี่ย ${avg}</span></div><div style="font-size:.8rem;color:var(--g400);margin-bottom:.625rem">${n} คน</div><div class="room-bar-stack"><div class="stack-seg" style="width:${none/n*100}%;background:var(--green)"></div><div class="stack-seg" style="width:${mild/n*100}%;background:var(--amber)"></div><div class="stack-seg" style="width:${mod/n*100}%;background:var(--o500)"></div><div class="stack-seg" style="width:${sev/n*100}%;background:var(--red)"></div></div><div class="room-legend"><span class="legend-item"><span class="legend-dot-el" style="background:var(--green)"></span>ปกติ ${none}</span><span class="legend-item"><span class="legend-dot-el" style="background:var(--amber)"></span>น้อย ${mild}</span><span class="legend-item"><span class="legend-dot-el" style="background:var(--o500)"></span>ปานกลาง ${mod}</span><span class="legend-item"><span class="legend-dot-el" style="background:var(--red)"></span>รุนแรง ${sev}</span></div></div>`;}).join('');}
-function renderQuestions(){const el=document.getElementById('qHeatmap');if(!PHQ_FILTERED.length){el.innerHTML='<div style="color:var(--g400)">ยังไม่มีข้อมูล</div>';return;}const avgs=PHQ_QUESTIONS_DB.map((_,i)=>{const vals=PHQ_FILTERED.map(d=>d.answers?.[i]??0);return vals.reduce((a,b)=>a+b,0)/vals.length;});el.innerHTML=PHQ_QUESTIONS_DB.map((q,i)=>{const a=avgs[i].toFixed(2),pct=(avgs[i]/3*100).toFixed(0),color=avgs[i]>=2?'var(--red)':avgs[i]>=1?'var(--amber)':'var(--o500)',isQ9=i===8;return`<div class="q-row" ${isQ9?'style="background:var(--red-bg);padding:6px 4px;border-radius:8px"':''}><div class="q-num">ข้อ ${i+1}${isQ9?' ⚠️':''}</div><div class="q-text" title="${q}">${q}</div><div class="q-bar-wrap"><div class="q-bar-track"><div class="q-bar-fill" style="width:${pct}%;background:${color}"></div></div></div><div class="q-avg" style="color:${color}">${a}</div></div>`;}).join('');}
-function renderPHQTable(data){
-  const sevFilter=document.getElementById('filterSeverity')?.value;
-  let d2=data;
-  if(sevFilter)d2=data.filter(d=>{if(sevFilter==='none')return d.total<=4;if(sevFilter==='mild')return d.total>=5&&d.total<=9;if(sevFilter==='moderate')return d.total>=10&&d.total<=14;if(sevFilter==='moderately_severe')return d.total>=15&&d.total<=19;if(sevFilter==='severe')return d.total>=20;return true;});
-  const tbody=document.getElementById('phqStudentTbody');
-  if(!d2.length){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--g400)">ไม่พบข้อมูล</td></tr>';return;}
-  const sevBadge=s=>{if(s<=4)return['b-none','ปกติ'];if(s<=9)return['b-mild','น้อย'];if(s<=14)return['b-moderate','ปานกลาง'];if(s<=19)return['b-moderate','ค่อนข้างรุนแรง'];return['b-severe','รุนแรง'];};
-  tbody.innerHTML=d2.map((d,i)=>{
-    const[cls,label]=sevBadge(d.total);const q9=d.answers?.[8]??0;
-    const adhd=ADHD_ALL.find(a=>a._id===d._id)||ADHD_ALL.find(a=>a.fullname===d.fullname&&a.classroom===d.classroom);
-    const adhdBadge=adhd?`<span class="badge badge-teal">${adhd.total}/54</span>`:'<span class="badge badge-gray">—</span>';
-    return`<tr style="cursor:pointer" onclick="openStudentModal('${d._id||''}',event)"><td style="color:var(--g400);font-size:.78rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge b-gray">${d.level||''} ${d.classroom||''}</span></td><td style="font-size:.82rem">${d.gender||'—'}</td><td><strong>${d.total}</strong></td><td><span class="badge ${cls}">${label}</span></td><td>${q9>0?`<span class="badge b-severe">${q9} ⚠️</span>`:`<span class="badge b-gray">0</span>`}</td><td>${adhdBadge}</td><td style="font-size:.78rem;color:var(--g400)">${d._ts||'—'}</td></tr>`;
-  }).join('');
-}
-function filterPHQTable(q){const lq=q.toLowerCase();renderPHQTable(PHQ_FILTERED.filter(d=>(d.fullname||'').toLowerCase().includes(lq)));}
 function renderReport(){
-  const room=document.getElementById('reportRoom')?.value,level=document.getElementById('reportLevel')?.value,sevF=document.getElementById('reportSev')?.value;
-  let data=PHQ_ALL.filter(d=>(!room||d.classroom===room)&&(!level||d.level===level));
-  if(sevF==='need_attention')data=data.filter(d=>d.total>=5);if(sevF==='moderate')data=data.filter(d=>d.total>=10);if(sevF==='severe')data=data.filter(d=>d.total>=20);
+  const rm=document.getElementById('rpRm')?.value,lv=document.getElementById('rpLv')?.value,sv=parseInt(document.getElementById('rpSev')?.value||0);
+  let data=PHQ.filter(d=>(!rm||d.classroom===rm)&&(!lv||d.level===lv)&&(!sv||parseInt(d.phq_total||0)>=sv));
   const el=document.getElementById('reportContent');
-  if(!data.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">📄</div>ไม่พบข้อมูลตามเงื่อนไขที่เลือก</div>';return;}
+  if(!data.length){el.innerHTML='<div class="es"><div class="ei">📄</div>ไม่พบข้อมูลตามเงื่อนไข</div>';return;}
   const byRoom={};data.forEach(d=>{const k=`${d.level||''} ${d.classroom||''}`.trim()||'ไม่ระบุ';if(!byRoom[k])byRoom[k]=[];byRoom[k].push(d);});
-  const sevBadge=s=>{if(s<=4)return['b-none','ปกติ'];if(s<=9)return['b-mild','น้อย'];if(s<=14)return['b-moderate','ปานกลาง'];if(s<=19)return['b-moderate','ค่อนข้างรุนแรง'];return['b-severe','รุนแรง'];};
-  el.innerHTML=Object.entries(byRoom).sort((a,b)=>a[0].localeCompare(b[0])).map(([roomName,students])=>{
-    const avg=(students.reduce((a,d)=>a+d.total,0)/students.length).toFixed(1);const atRisk=students.filter(d=>d.total>=10).length;const q9Alert=students.filter(d=>(d.answers?.[8]||0)>0).length;
-    const rows=students.sort((a,b)=>b.total-a.total).map((d,i)=>{const[cls,label]=sevBadge(d.total);const q9=d.answers?.[8]??0;return`<tr><td style="color:var(--g400);font-size:.78rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td style="font-size:.82rem">${d.gender||'—'}</td><td><strong>${d.total}/27</strong></td><td><span class="badge ${cls}">${label}</span></td><td>${q9>0?`<span class="badge b-severe">⚠️ ${q9}</span>`:`<span class="badge b-gray">0</span>`}</td><td style="font-size:.78rem;color:var(--g400)">${d._ts||'—'}</td></tr>`;}).join('');
-    return`<div class="report-block"><div class="report-block-head"><div class="report-block-title">🏫 ${roomName}</div><div class="report-block-meta">${students.length} คน | เฉลี่ย ${avg} | ต้องดูแล ${atRisk} คน${q9Alert>0?` | ⚠️ Q9 ${q9Alert} คน`:''}</div></div><div class="tbl-wrap"><table><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>เพศ</th><th>คะแนน</th><th>ระดับ</th><th>ข้อ 9</th><th>วันที่</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  const sb=s=>{const n=parseInt(s);if(n<=4)return['b-g','ปกติ'];if(n<=9)return['b-a','น้อย'];if(n<=14)return['b-o','ปานกลาง'];if(n<=19)return['b-o','ค่อนข้างรุนแรง'];return['b-r','รุนแรง'];};
+  el.innerHTML=Object.entries(byRoom).sort((a,b)=>a[0].localeCompare(b[0])).map(([room,sts])=>{
+    const avg=(sts.reduce((a,d)=>a+parseInt(d.phq_total||0),0)/sts.length).toFixed(1);const atr=sts.filter(d=>parseInt(d.phq_total||0)>=10).length;const q9a=sts.filter(d=>parseInt(d.phq_q9||0)>0).length;
+    const rows=sts.sort((a,b)=>parseInt(b.phq_total||0)-parseInt(a.phq_total||0)).map((d,i)=>{const[bc,bl]=sb(d.phq_total);const q9=parseInt(d.phq_q9||0);return`<tr><td style="font-size:.74rem;color:var(--g4)">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td style="font-size:.79rem">${d.gender||'—'}</td><td><strong>${d.phq_total}/27</strong></td><td><span class="badge ${bc}">${bl}</span></td><td>${q9>0?`<span class="badge b-r">⚠️ ${q9}</span>`:`<span class="badge b-gy">0</span>`}</td><td style="font-size:.74rem;color:var(--g4)">${d._ts||'—'}</td></tr>`;}).join('');
+    return`<div class="r-blk"><div class="r-bh"><div class="r-bt">🏫 ${room}</div><div class="r-bm">${sts.length} คน | เฉลี่ย ${avg} | ต้องดูแล ${atr} คน${q9a>0?` | ⚠️ Q9 ${q9a} คน`:''}</div></div><div class="tw"><table><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>เพศ</th><th>คะแนน</th><th>ระดับ</th><th>ข้อ 9</th><th>วันที่</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
   }).join('');
 }
-function showPTab(id,btn){document.querySelectorAll('#dash-phq .panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('#dash-phq .tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('ppanel-'+id).classList.add('active');btn.classList.add('active');}
+function showPTab(id,btn){document.querySelectorAll('#d-p .pan').forEach(p=>p.classList.remove('act'));document.querySelectorAll('#d-p .tbt').forEach(b=>b.classList.remove('act'));document.getElementById('pp-'+id).classList.add('act');btn.classList.add('act');}
 
-// ================================================================
-// ADHD DASHBOARD
-// ================================================================
-function loadADHDData(){
-  ADHD_ALL=JSON.parse(localStorage.getItem('adhd_data')||'[]');
-  const rooms=[...new Set(ADHD_ALL.map(d=>d.classroom).filter(Boolean))].sort();
-  const sel=document.getElementById('adhdFilterRoom');if(!sel)return;
-  const cur=sel.value;
-  sel.innerHTML='<option value="">ทุกห้อง</option>'+rooms.map(r=>`<option value="${r}"${r===cur?' selected':''}>${r}</option>`).join('');
-  applyADHDFilters();
+// ══════════════════════════════════════════════════════════════
+// ADHD RENDER
+// ══════════════════════════════════════════════════════════════
+function loadADHDRooms(){
+  const rooms=[...new Set(ADHD.map(d=>d.classroom).filter(Boolean))].sort();
+  const el=document.getElementById('afRm');if(!el)return;
+  const cur=el.value;el.innerHTML='<option value="">ทุกห้อง</option>'+rooms.map(r=>`<option value="${r}"${r===cur?' selected':''}>${r}</option>`).join('');
 }
-function applyADHDFilters(){
-  const level=document.getElementById('adhdFilterLevel').value,room=document.getElementById('adhdFilterRoom').value;
-  ADHD_FILTERED=ADHD_ALL.filter(d=>(!level||d.level===level)&&(!room||d.classroom===room));
-  renderADHD();
-}
+function applyAF(){loadADHDRooms();const lv=document.getElementById('afLv').value,rm=document.getElementById('afRm').value;ADHDF=ADHD.filter(d=>(!lv||d.level===lv)&&(!rm||d.classroom===rm));renderADHD();}
 function renderADHD(){
-  const n=ADHD_FILTERED.length;
-  document.getElementById('adhdSubtext').textContent=`ข้อมูลทั้งหมด ${ADHD_ALL.length} คน | กำลังแสดง ${n} คน`;
-  const none=ADHD_FILTERED.filter(d=>d.severity==='none').length;
-  const sub=ADHD_FILTERED.filter(d=>d.severity==='subclinical').length;
-  const inatt=ADHD_FILTERED.filter(d=>d.severity==='inattentive').length;
-  const high=ADHD_FILTERED.filter(d=>['combined','inattentive','hyperactive'].includes(d.severity)).length;
-  document.getElementById('sAdhdTotal').textContent=n;
-  document.getElementById('sAdhdNone').textContent=none;
-  document.getElementById('sAdhdSub').textContent=sub;
-  document.getElementById('sAdhdInatt').textContent=inatt;
-  document.getElementById('sAdhdHigh').textContent=high;
-  renderADHDTable(ADHD_FILTERED);
-  renderADHDSummary();
+  const n=ADHDF.length;
+  document.getElementById('aSub').textContent=`ข้อมูลทั้งหมด ${ADHD.length} คน | แสดง ${n} คน`;
+  const none=ADHDF.filter(d=>d.adhd_severity==='none').length;
+  const sub=ADHDF.filter(d=>d.adhd_severity==='subclinical').length;
+  const inatt=ADHDF.filter(d=>d.adhd_severity==='inattentive').length;
+  const high=ADHDF.filter(d=>['combined','inattentive','hyperactive'].includes(d.adhd_severity)).length;
+  document.getElementById('aTot').textContent=n;document.getElementById('aNone').textContent=none;document.getElementById('aSub2').textContent=sub;document.getElementById('aInatt').textContent=inatt;document.getElementById('aHigh').textContent=high;
+  renderADHDTable(ADHDF);renderADHDSum();
 }
 function renderADHDTable(data){
   const tbody=document.getElementById('adhdTbody');
-  if(!data.length){tbody.innerHTML='<tr><td colspan="9" class="empty-state">ยังไม่มีข้อมูล</td></tr>';return;}
-  const sevLabels={none:'🟢 ไม่พบแนวโน้ม',subclinical:'🟡 ต้องติดตาม',inattentive:'🔵 ขาดสมาธิ',hyperactive:'🟠 ซน/หุนหัน',combined:'🔴 แบบรวม'};
-  const sevBadges={none:'badge-green',subclinical:'badge-amber',inattentive:'badge-blue',hyperactive:'badge-orange',combined:'badge-red'};
-  tbody.innerHTML=data.map((d,i)=>`<tr style="cursor:pointer" onclick="openStudentModalADHD('${d._id||''}',event)">
-    <td style="color:var(--g400);font-size:.78rem">${i+1}</td>
-    <td><strong>${d.fullname||'—'}</strong></td>
-    <td><span class="badge badge-gray">${d.level||''} ${d.classroom||''}</span></td>
-    <td><strong>${d.total}/54</strong></td>
-    <td><span style="color:var(--blue);font-weight:600">${d.inatt}/27</span></td>
-    <td><span style="color:var(--o500);font-weight:600">${d.hyper}/27</span></td>
-    <td><span class="badge ${sevBadges[d.severity]||'badge-gray'}">${sevLabels[d.severity]||d.severity}</span></td>
-    <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem;color:var(--g500)">${d.ai_analysis?d.ai_analysis.replace(/<[^>]*>/g,'').slice(0,80)+'...':'—'}</td>
-    <td style="font-size:.78rem;color:var(--g400)">${d._ts||'—'}</td>
+  if(!data.length){tbody.innerHTML='<tr><td colspan="9" class="es">ยังไม่มีข้อมูล</td></tr>';return;}
+  const sl={none:'🟢 ไม่พบ',subclinical:'🟡 ติดตาม',inattentive:'🔵 ขาดสมาธิ',hyperactive:'🟠 ซน/หุนหัน',combined:'🔴 แบบรวม'};
+  const sb2={none:'b-g',subclinical:'b-a',inattentive:'b-b',hyperactive:'b-o',combined:'b-r'};
+  tbody.innerHTML=data.map((d,i)=>`<tr style="cursor:pointer" onclick="openModal('${d._id||''}')">
+    <td style="color:var(--g4);font-size:.74rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td>
+    <td><span class="badge b-gy">${d.level||''} ${d.classroom||''}</span></td>
+    <td><strong>${d.adhd_total}/54</strong></td>
+    <td><span style="color:var(--blu);font-weight:600">${d.adhd_inatt}/27</span></td>
+    <td><span style="color:var(--o);font-weight:600">${d.adhd_hyper}/27</span></td>
+    <td><span class="badge ${sb2[d.adhd_severity]||'b-gy'}">${sl[d.adhd_severity]||d.adhd_severity}</span></td>
+    <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.76rem;color:var(--g5)">${d.ai_analysis?String(d.ai_analysis).replace(/<[^>]*>/g,'').slice(0,80)+'...':'—'}</td>
+    <td style="font-size:.74rem;color:var(--g4)">${d._ts||'—'}</td>
   </tr>`).join('');
 }
-function filterADHDTable(q){const lq=q.toLowerCase();renderADHDTable(ADHD_FILTERED.filter(d=>(d.fullname||'').toLowerCase().includes(lq)));}
-function renderADHDSummary(){
-  const el=document.getElementById('adhdSummaryBody');
-  if(!ADHD_FILTERED.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">🧩</div>ยังไม่มีข้อมูล</div>';return;}
-  const n=ADHD_FILTERED.length;
-  const avgInatt=(ADHD_FILTERED.reduce((a,d)=>a+d.inatt,0)/n).toFixed(1);
-  const avgHyper=(ADHD_FILTERED.reduce((a,d)=>a+d.hyper,0)/n).toFixed(1);
-  const avgTotal=(ADHD_FILTERED.reduce((a,d)=>a+d.total,0)/n).toFixed(1);
-  el.innerHTML=`
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1rem">
-      <div class="d-card"><div class="d-label">ค่าเฉลี่ยคะแนน</div>
-        <div class="d-bar-row"><div class="d-bar-label">สมาธิ (Inatt)</div><div class="d-bar-track"><div class="d-bar-fill" style="width:${parseFloat(avgInatt)/27*100}%;background:var(--blue)"></div></div><div class="d-pct">${avgInatt}</div></div>
-        <div class="d-bar-row"><div class="d-bar-label">ซน/หุนหัน (Hyp)</div><div class="d-bar-track"><div class="d-bar-fill" style="width:${parseFloat(avgHyper)/27*100}%;background:var(--o500)"></div></div><div class="d-pct">${avgHyper}</div></div>
-        <div class="d-bar-row"><div class="d-bar-label">รวม</div><div class="d-bar-track"><div class="d-bar-fill" style="width:${parseFloat(avgTotal)/54*100}%;background:var(--teal)"></div></div><div class="d-pct">${avgTotal}</div></div>
-      </div>
-      <div class="d-card"><div class="d-label">การกระจายระดับ</div>
-        ${['none','subclinical','inattentive','hyperactive','combined'].map(k=>{const cnt=ADHD_FILTERED.filter(d=>d.severity===k).length;const labels={none:'ไม่พบแนวโน้ม',subclinical:'ต้องติดตาม',inattentive:'ขาดสมาธิ',hyperactive:'ซน/หุนหัน',combined:'แบบรวม'};return`<div class="d-bar-row"><div class="d-bar-label">${labels[k]}</div><div class="d-bar-track"><div class="d-bar-fill" style="width:${cnt/n*100}%;background:var(--teal)"></div></div><div class="d-pct">${cnt}</div></div>`}).join('')}
-      </div>
-    </div>`;
+function filterAT(q){const lq=q.toLowerCase();renderADHDTable(ADHDF.filter(d=>(d.fullname||'').toLowerCase().includes(lq)));}
+function renderADHDSum(){
+  const el=document.getElementById('adhdSumBody');
+  if(!ADHDF.length){el.innerHTML='<div class="es"><div class="ei">🧩</div>ยังไม่มีข้อมูล</div>';return;}
+  const n=ADHDF.length;
+  const aI=(ADHDF.reduce((a,d)=>a+parseInt(d.adhd_inatt||0),0)/n).toFixed(1);
+  const aH=(ADHDF.reduce((a,d)=>a+parseInt(d.adhd_hyper||0),0)/n).toFixed(1);
+  const aT=(ADHDF.reduce((a,d)=>a+parseInt(d.adhd_total||0),0)/n).toFixed(1);
+  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.875rem">
+    <div class="dc"><div class="dl">ค่าเฉลี่ยคะแนน</div>
+      <div class="dbr"><div class="dbl">สมาธิ (Inatt)</div><div class="dbt"><div style="height:100%;border-radius:4px;background:var(--blu);width:${parseFloat(aI)/27*100}%"></div></div><div class="dp2">${aI}</div></div>
+      <div class="dbr"><div class="dbl">ซน/หุนหัน (Hyp)</div><div class="dbt"><div style="height:100%;border-radius:4px;background:var(--o);width:${parseFloat(aH)/27*100}%"></div></div><div class="dp2">${aH}</div></div>
+      <div class="dbr"><div class="dbl">รวม</div><div class="dbt"><div style="height:100%;border-radius:4px;background:var(--tel);width:${parseFloat(aT)/54*100}%"></div></div><div class="dp2">${aT}</div></div>
+    </div>
+    <div class="dc"><div class="dl">การกระจายระดับ</div>
+      ${['none','subclinical','inattentive','hyperactive','combined'].map(k=>{const cnt=ADHDF.filter(d=>d.adhd_severity===k).length;const lbs={none:'ไม่พบแนวโน้ม',subclinical:'ต้องติดตาม',inattentive:'ขาดสมาธิ',hyperactive:'ซน/หุนหัน',combined:'แบบรวม'};return`<div class="dbr"><div class="dbl">${lbs[k]}</div><div class="dbt"><div style="height:100%;border-radius:4px;background:var(--tel);width:${cnt/n*100}%"></div></div><div class="dp2">${cnt}</div></div>`;}).join('')}
+    </div>
+  </div>`;
 }
-function showATab(id,btn){document.querySelectorAll('#dash-adhd .panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('#dash-adhd .tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('apanel-'+id).classList.add('active');btn.classList.add('active');}
+function showATab(id,btn){document.querySelectorAll('#d-a .pan').forEach(p=>p.classList.remove('act'));document.querySelectorAll('#d-a .tbt').forEach(b=>b.classList.remove('act'));document.getElementById('ap-'+id).classList.add('act');btn.classList.add('act');}
 
-// openStudentModalADHD — looks up learner record by _id, then opens modal
-// (needed because ADHD table rows don't have access to ALL_DATA directly)
-function openStudentModalADHD(adhdId, event) {
-  if(event) event.stopPropagation();
-  // Find the ADHD record first
-  const adhdRec = ADHD_ALL.find(a=>a._id===adhdId);
-  if(!adhdRec) { console.warn('ADHD record not found for _id:', adhdId); return; }
-  // Try to find the matching learner record
-  const learnerRec = ALL_DATA.find(d=>d._id===adhdRec._id) ||
-                     ALL_DATA.find(d=>d.fullname===adhdRec.fullname && d.classroom===adhdRec.classroom);
-  if(learnerRec) {
-    openStudentModal(learnerRec._id, event);
-  } else {
-    // No learner record: build a synthetic one from ADHD data
-    openStudentModal(adhdRec._id, event);
-  }
-}
-
-// ================================================================
-// EXCEL EXPORTS
-// ================================================================
+// ══════════════════════════════════════════════════════════════
+// EXCEL EXPORT
+// ══════════════════════════════════════════════════════════════
 function exportExcelLearner(){
-  const data=ALL_DATA;if(!data.length){alert('ยังไม่มีข้อมูลแบบสำรวจ');return;}
-  const headers=['รหัส','วันที่','ชื่อ-นามสกุล','ระดับ','ห้อง','รหัสนักเรียน','เพศ','GPAX','เบอร์นักเรียน','เบอร์ผู้ปกครอง','ทักษะคอม','ความเร็วพิมพ์','ภาษาอังกฤษ','วิธีแก้ปัญหา','ทัศนคติต่องานยาก','ส่งงาน','ขาดเรียน','คอมพิวเตอร์','อินเทอร์เน็ต','สมาร์ทโฟน','Part-time','นอนหลับ','สนับสนุนครอบครัว','เป้าหมาย','ทักษะพิเศษ','Social Media','ความเครียด','คะแนนเสี่ยง','กลุ่ม','บันทึกนักเรียน'];
-  const rows=data.map(d=>[d._id||'',d._ts||'',d.fullname||'',d.level||'',d.classroom||'',d.student_no||'',d.gender||'',d.gpax||'',d.phone||'',d.parent_phone||'',d.computer_skill_level||'',d.typing_speed||'',d.english_tech||'',d.problem_solving||'',d.challenge_attitude||'',d.submission_habit||'',d.absence||'',d.has_computer||'',d.home_internet||'',d.smartphone_os||'',d.part_time||'',d.sleep_hours||'',d.family_support||'',d.career_goal||'',Array.isArray(d.special_skills)?d.special_skills.join(', '):'',Array.isArray(d.social_platforms)?d.social_platforms.join(', '):'',d.stress_level||'',d._risk||0,classifyStudent(d),d.student_note||'']);
-  const ws=XLSX.utils.aoa_to_sheet([headers,...rows]);ws['!cols']=headers.map(()=>({wch:18}));
-  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'แบบสำรวจผู้เรียน');
-  XLSX.writeFile(wb,`learner_data_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
+  if(!ALL.length){alert('ยังไม่มีข้อมูลผู้เรียน');return;}
+  const hdr=['_id','_ts','fullname','level','classroom','student_no','gender','gpax','phone','parent_phone','computer_skill_level','typing_speed','english_tech','problem_solving','challenge_attitude','submission_habit','absence','has_computer','home_internet','smartphone_os','part_time','sleep_hours','family_support','career_goal','special_skills','social_platforms','student_note','_risk','learning_group'];
+  const rows=ALL.map(d=>hdr.map(k=>d[k]??''));
+  const ws=XLSX.utils.aoa_to_sheet([hdr,...rows]);ws['!cols']=hdr.map(()=>({wch:18}));
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'ผู้เรียน');
+  XLSX.writeFile(wb,`learner_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
 }
 function exportExcelPHQ(){
-  if(!PHQ_ALL.length){alert('ยังไม่มีข้อมูล PHQ-A');return;}
-  const headers=['รหัส','วันที่','ชื่อ','ชั้นปี','ห้อง','เพศ','คะแนนรวม','ระดับ','Q9-ทำร้ายตัวเอง',...PHQ_QUESTIONS_DB.map((_,i)=>`ข้อ ${i+1}`),'AI วิเคราะห์'];
-  const rows=PHQ_ALL.map(d=>[d._id||'',d._ts||'',d.fullname||'',d.level||'',d.classroom||'',d.gender||'',d.total||0,d.severity||'',d.answers?.[8]||0,...(d.answers||Array(9).fill(0)),d.ai_analysis||'']);
-  const ws=XLSX.utils.aoa_to_sheet([headers,...rows]);ws['!cols']=[{wch:12},{wch:18},{wch:20},{wch:8},{wch:10},{wch:8},{wch:10},{wch:16},{wch:12},...PHQ_QUESTIONS_DB.map(()=>({wch:8})),{wch:60}];
-  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'รายงาน PHQ-A');
-  XLSX.writeFile(wb,`phq_report_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
+  if(!PHQ.length){alert('ยังไม่มีข้อมูล PHQ-A');return;}
+  const hdr=['_id','_ts','fullname','level','classroom','gender','phq_total','phq_severity','phq_q1','phq_q2','phq_q3','phq_q4','phq_q5','phq_q6','phq_q7','phq_q8','phq_q9','ai_analysis'];
+  const rows=PHQ.map(d=>hdr.map(k=>d[k]??''));
+  const ws=XLSX.utils.aoa_to_sheet([hdr,...rows]);ws['!cols']=[{wch:12},{wch:18},{wch:20},{wch:8},{wch:10},{wch:8},{wch:8},{wch:16},...Array(9).fill({wch:7}),{wch:60}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'PHQ-A');
+  XLSX.writeFile(wb,`phq_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
 }
 function exportExcelADHD(){
-  if(!ADHD_ALL.length){alert('ยังไม่มีข้อมูล ADHD');return;}
-  const headers=['รหัส','วันที่','ชื่อ','ชั้นปี','ห้อง','เพศ','รวม/54','สมาธิ/27','ซน/27','ระดับ',...ADHD_ALL[0]?.answers?.map((_,i)=>`ข้อ ${i+1}`)||Array.from({length:18},(_,i)=>`ข้อ ${i+1}`),'AI วิเคราะห์'];
-  const rows=ADHD_ALL.map(d=>[d._id||'',d._ts||'',d.fullname||'',d.level||'',d.classroom||'',d.gender||'',d.total||0,d.inatt||0,d.hyper||0,d.severity||'',...(d.answers||Array(18).fill(0)),d.ai_analysis||'']);
-  const ws=XLSX.utils.aoa_to_sheet([headers,...rows]);ws['!cols']=[{wch:12},{wch:18},{wch:20},{wch:8},{wch:10},{wch:8},{wch:8},{wch:8},{wch:8},{wch:16},...Array(18).fill({wch:7}),{wch:60}];
-  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'รายงาน ADHD');
-  XLSX.writeFile(wb,`adhd_report_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
-}
-
-// ================================================================
-// CLEAR
-// ================================================================
-function showClearMenu(){
-  const keys=['learner_data','phq_data','adhd_data'];
-  const labels=['แบบสำรวจผู้เรียน','PHQ-A','ADHD'];
-  const choice=prompt(`ลบข้อมูลชุดใด?\n1 = ${labels[0]}\n2 = ${labels[1]}\n3 = ${labels[2]}\n4 = ทั้งหมด\n\nพิมพ์หมายเลข:`,'');
-  const idx=parseInt(choice)-1;
-  if(choice==='4'){if(confirm('ลบข้อมูลทั้งหมดหรือไม่? (ไม่สามารถยกเลิกได้)')){keys.forEach(k=>localStorage.removeItem(k));init();}}
-  else if(idx>=0&&idx<3){if(confirm(`ลบข้อมูล ${labels[idx]} หรือไม่?`)){localStorage.removeItem(keys[idx]);init();}}
-}
-
-// ================================================================
-// INIT — Fix: load PHQ + ADHD first, THEN renderLearner so lookups work
-// ================================================================
-function init(){
-  // Load all three datasets into memory first
-  ALL_DATA   = JSON.parse(localStorage.getItem('learner_data') || '[]');
-  PHQ_ALL    = JSON.parse(localStorage.getItem('phq_data')     || '[]');
-  ADHD_ALL   = JSON.parse(localStorage.getItem('adhd_data')    || '[]');
-  // Now render everything (PHQ_ALL / ADHD_ALL already populated)
-  renderLearner();
-  loadPHQData();
-  loadADHDData();
-  setInterval(()=>{
-    ALL_DATA  = JSON.parse(localStorage.getItem('learner_data') || '[]');
-    PHQ_ALL   = JSON.parse(localStorage.getItem('phq_data')     || '[]');
-    ADHD_ALL  = JSON.parse(localStorage.getItem('adhd_data')    || '[]');
-    renderLearner();
-    loadPHQData();
-    loadADHDData();
-  }, 30000);
+  if(!ADHD.length){alert('ยังไม่มีข้อมูล ADHD');return;}
+  const hdr=['_id','_ts','fullname','level','classroom','gender','adhd_total','adhd_inatt','adhd_hyper','adhd_severity','adhd_q1','adhd_q2','adhd_q3','adhd_q4','adhd_q5','adhd_q6','adhd_q7','adhd_q8','adhd_q9','adhd_q10','adhd_q11','adhd_q12','adhd_q13','adhd_q14','adhd_q15','adhd_q16','adhd_q17','adhd_q18','ai_analysis'];
+  const rows=ADHD.map(d=>hdr.map(k=>d[k]??''));
+  const ws=XLSX.utils.aoa_to_sheet([hdr,...rows]);
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'ADHD');
+  XLSX.writeFile(wb,`adhd_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
 }
 </script>
 </body>
