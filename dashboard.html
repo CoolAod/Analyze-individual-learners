@@ -438,7 +438,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
 // ================================================================
 // !! แก้ URL ตรงนี้ !!
 // ================================================================
-const SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const SCRIPT_URL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQ8YAWe7uIKLhlryWs80QUXOroPY9lhbQC4zgyAR6U-39HgvxRf_FDs8K0n9RaMnH92pNM90gAdv2ZCJUuV29HByDMWhHNjpv3P0TF14R6bjKxPprIObGD7dsR_fH4GvzWHRS-DdhYf7ixUI2p0zFifsEiKYmEBTLi0lWydpy5rahhxFAMbEoUrA5agL7K02bGaz3oZtMOoaiqJrKG8R6xFppYBpAYYyrUa5Rrqe4csxkLZU8AgQG2eWj4wEsyzAfRWIvP8QWiP0zdUTuhlENloT0ycGQ&lib=Moy6lGOVpCy0OWWo-jB9tfrDFnk49QqJF';
 
 // ================================================================
 const ADMIN_USER='admin', ADMIN_PASS='admin1234';
@@ -460,7 +460,7 @@ function showLoad(msg){const el=document.getElementById('loadCover');el.classLis
 function hideLoad(){document.getElementById('loadCover').classList.remove('vis');}
 
 async function fetchSheet(type){
-  if(!SCRIPT_URL||SCRIPT_URL==='YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'){console.warn('SCRIPT_URL ยังไม่ได้ตั้งค่า');return[];}
+  if(!SCRIPT_URL||SCRIPT_URL==='https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQ8YAWe7uIKLhlryWs80QUXOroPY9lhbQC4zgyAR6U-39HgvxRf_FDs8K0n9RaMnH92pNM90gAdv2ZCJUuV29HByDMWhHNjpv3P0TF14R6bjKxPprIObGD7dsR_fH4GvzWHRS-DdhYf7ixUI2p0zFifsEiKYmEBTLi0lWydpy5rahhxFAMbEoUrA5agL7K02bGaz3oZtMOoaiqJrKG8R6xFppYBpAYYyrUa5Rrqe4csxkLZU8AgQG2eWj4wEsyzAfRWIvP8QWiP0zdUTuhlENloT0ycGQ&lib=Moy6lGOVpCy0OWWo-jB9tfrDFnk49QqJF'){console.warn('SCRIPT_URL ยังไม่ได้ตั้งค่า');return[];}
   try{
     const url=SCRIPT_URL+'?type='+type+'&t='+Date.now();
     const res=await fetch(url,{mode:'cors'});
