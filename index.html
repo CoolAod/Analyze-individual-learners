@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>แบบสำรวจผู้เรียน | ทดธ. วท.ประจวบคีรีขันธ์</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-height:1.65;min-height:100vh;overflow-x:hidden}
+:root{
+  --o:#E86A2E;--o2:#F07C42;--o3:#FEF0E8;--o4:#FFF8F4;
+  --g9:#1A1714;--g7:#3D3830;--g5:#6B6560;--g4:#9C978F;
+  --g2:#E5E2DC;--g1:#F0EDE8;--g0:#F7F5F3;--w:#FFF;
+  --red:#D93025;--rbg:#FEE9E7;--amb:#C8760A;--abg:#FEF5E4;
+  --grn:#1E7E4E;--gbg:#E6F5EC;--pur:#6A0DAD;--pbg:#F3E8FF;
+  --tel:#00796B;--tbg:#E0F2F1;
+  --r:8px;--rm:14px;--rl:20px;--rxl:28px;
+  --tr:.18s cubic-bezier(.4,0,.2,1);
+}
+.hd{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--g2);box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.hd-i{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;height:60px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.b-logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--o),#F5A070);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(232,106,46,.3)}
+.b-tx{display:flex;flex-direction:column;line-height:1.2}
+.b-s{font-family:'Kanit',sans-serif;font-size:13px;font-weight:600;color:var(--g9)}
+.b-d{font-size:11px;color:var(--g4)}
+.hn{display:flex;gap:4px;overflow-x:auto}
+.np{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;color:var(--g5);text-decoration:none;border:1.5px solid transparent;transition:var(--tr);white-space:nowrap}
+.np:hover{color:var(--o);background:var(--o3)}
+.np.act{color:var(--o);background:var(--o3);border-color:rgba(232,106,46,.25)}
+@media(max-width:480px){.b-s{font-size:11px}.b-d{display:none}.np{padding:5px 8px;font-size:11px}}
+.hero{background:linear-gradient(160deg,var(--w) 0%,var(--o4) 100%);border-bottom:1px solid var(--g2);padding:1.75rem 1.25rem 1.5rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(232,106,46,.08) 0%,transparent 70%);top:-100px;right:-100px;pointer-events:none}
+.hi{max-width:680px;margin:0 auto;position:relative;z-index:1}
+.hbg{display:inline-flex;align-items:center;gap:6px;background:var(--o3);color:var(--o);font-size:11px;font-weight:600;letter-spacing:.08em;padding:4px 14px;border-radius:20px;margin-bottom:.75rem;border:1px solid rgba(232,106,46,.2);text-transform:uppercase}
+.ht{font-family:'Kanit',sans-serif;font-size:clamp(1.35rem,5vw,2rem);font-weight:700;color:var(--g9);line-height:1.2;margin-bottom:.5rem}
+.ht em{font-style:normal;color:var(--o)}
+.hd2{font-size:.875rem;color:var(--g5);max-width:520px;margin:0 auto 1.125rem;line-height:1.75}
+.sw{max-width:720px;margin:0 auto}
+.st{display:flex;align-items:center;margin-bottom:.625rem}
+.si{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;cursor:pointer}
+.si:not(:last-child)::after{content:'';position:absolute;top:14px;left:calc(50% + 14px);right:calc(-50% + 14px);height:2px;background:var(--g2);z-index:0;transition:background var(--tr)}
+.si.done:not(:last-child)::after,.si.act:not(:last-child)::after{background:#F5A070}
+.si.phq.act .sd{background:var(--pur);border-color:var(--pur);box-shadow:0 0 0 3px rgba(106,13,173,.2)}
+.si.phq.done .sd{background:var(--pur);border-color:var(--pur)}
+.si.adhd.act .sd{background:var(--tel);border-color:var(--tel);box-shadow:0 0 0 3px rgba(0,121,107,.2)}
+.si.adhd.done .sd{background:var(--tel);border-color:var(--tel)}
+.sd{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;z-index:1;transition:all var(--tr);background:var(--w);border:2px solid var(--g2);color:var(--g4)}
+.si.done .sd{background:var(--o);border-color:var(--o);color:var(--w)}
+.si.act .sd{background:var(--o);border-color:var(--o);color:var(--w);box-shadow:0 0 0 3px rgba(232,106,46,.2)}
+.sl{font-size:9px;color:var(--g4);margin-top:4px;white-space:nowrap;font-weight:500}
+.si.act .sl{color:var(--o);font-weight:600}
+.si.phq.act .sl{color:var(--pur)}
+.si.adhd.act .sl{color:var(--tel)}
+.si.done .sl{color:var(--g5)}
+.pb-o{height:4px;background:var(--g2);border-radius:2px;overflow:hidden;margin-top:.375rem}
+.pb-f{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--o),#F5A070);transition:width .4s cubic-bezier(.4,0,.2,1);width:0%}
+@media(max-width:540px){.sl{display:none}.sd{width:22px;height:22px;font-size:9px}.si:not(:last-child)::after{top:11px}}
+.main{max-width:920px;margin:0 auto;padding:1.25rem 1.25rem 5rem}
+.fc{background:var(--w);border-radius:var(--rxl);border:1px solid var(--g2);box-shadow:0 6px 24px rgba(0,0,0,.09);overflow:hidden;margin-bottom:1.25rem}
+.fc.phq-c{border-color:rgba(106,13,173,.2)}
+.fc.adhd-c{border-color:rgba(0,121,107,.2)}
+.fch{display:flex;align-items:center;gap:14px;padding:1.125rem 1.5rem .875rem;border-bottom:1px solid var(--g1);background:var(--g0)}
+.phq-c .fch{background:linear-gradient(135deg,#FAF5FF,var(--pbg))}
+.adhd-c .fch{background:linear-gradient(135deg,#E0F7FA,var(--tbg))}
+.fci{width:42px;height:42px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.fcn{font-size:10px;font-weight:600;color:var(--g4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.fct{font-family:'Kanit',sans-serif;font-size:1.05rem;font-weight:600;color:var(--g9);line-height:1.2}
+.fcd{font-size:.8rem;color:var(--g4);margin-top:2px}
+.fss{display:none}.fss.act{display:block;animation:up .3s cubic-bezier(.4,0,.2,1)}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fcb{padding:1.25rem 1.5rem}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:1.125rem}
+.ff{grid-column:span 2}
+@media(max-width:580px){.fg{grid-template-columns:1fr}.ff{grid-column:span 1}}
+.fl{display:flex;flex-direction:column;gap:7px}
+.flb{font-size:.855rem;font-weight:600;color:var(--g7);display:flex;align-items:center;gap:6px}
+.qn{font-size:9.5px;font-weight:700;background:var(--o3);color:var(--o);padding:2px 7px;border-radius:10px}
+.req{color:var(--o);margin-left:2px}
+.fi,.fs,.ft{width:100%;padding:10px 14px;border:1.5px solid var(--g2);border-radius:var(--rm);font-family:'Sarabun',sans-serif;font-size:.875rem;color:var(--g7);background:var(--w);outline:none;transition:border-color var(--tr);-webkit-appearance:none;appearance:none}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--o);box-shadow:0 0 0 3px rgba(232,106,46,.12)}
+.fi::placeholder,.ft::placeholder{color:var(--g2)}
+.fs{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%239C978F' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer}
+.ft{resize:vertical;min-height:100px;line-height:1.7}
+.rs{display:flex;flex-direction:column;gap:7px}
+.rr{display:flex;gap:7px;flex-wrap:wrap}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px}
+@media(max-width:460px){.cg{grid-template-columns:1fr 1fr}}
+.rc,.cc{display:flex;align-items:center;gap:9px;padding:10px 13px;border:1.5px solid var(--g2);border-radius:var(--rm);background:var(--w);cursor:pointer;font-size:.855rem;color:#524D47;transition:all var(--tr);user-select:none}
+.rc:hover,.cc:hover{border-color:var(--o2)}
+.rc input,.cc input{width:16px;height:16px;flex-shrink:0;accent-color:var(--o);cursor:pointer}
+.rc span,.cc span{line-height:1.4}
+.rc:has(input:checked),.cc:has(input:checked){border-color:var(--o);background:var(--o4)}
+.rc:has(input:checked) span,.cc:has(input:checked) span{color:var(--o);font-weight:600}
+.em{font-size:15px;flex-shrink:0}
+.sc-lb{display:flex;justify-content:space-between;font-size:11px;color:var(--g4);margin-bottom:7px}
+.sc-bt{display:flex;gap:5px}
+.sb{flex:1;display:flex;justify-content:center;cursor:pointer}
+.sb input{display:none}
+.sb span{width:100%;text-align:center;padding:9px 4px;border:1.5px solid var(--g2);border-radius:var(--rm);font-size:.95rem;font-weight:700;color:var(--g4);background:var(--w);transition:all var(--tr);display:block}
+.sb:hover span{border-color:var(--o2);color:var(--o2)}
+.sb:has(input:checked) span{background:var(--o);border-color:var(--o);color:var(--w);box-shadow:0 2px 8px rgba(232,106,46,.3);transform:scale(1.04)}
+@media(max-width:380px){.sc-bt{gap:3px}.sb span{padding:8px 2px;font-size:.85rem}}
+.nt{display:flex;align-items:flex-start;gap:9px;padding:11px 13px;border-radius:var(--rm);background:var(--abg);border:1px solid rgba(200,118,10,.2);font-size:.8rem;color:var(--amb);line-height:1.5}
+.nt.info{background:var(--o4);border-color:rgba(232,106,46,.2);color:var(--o)}
+.nt.phq-i{background:var(--pbg);border-color:rgba(106,13,173,.2);color:var(--pur)}
+.nt.adhd-i{background:var(--tbg);border-color:rgba(0,121,107,.2);color:var(--tel)}
+.phq-q,.adhd-q{margin-bottom:1.375rem;padding-bottom:1.375rem;border-bottom:1px solid var(--g1)}
+.phq-q:last-child,.adhd-q:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.phq-qn{font-size:10px;font-weight:700;color:var(--pur);letter-spacing:.07em;text-transform:uppercase;margin-bottom:.3rem}
+.adhd-qn{font-size:10px;font-weight:700;color:var(--tel);letter-spacing:.07em;text-transform:uppercase;margin-bottom:.3rem}
+.phq-qt,.adhd-qt{font-size:.95rem;font-weight:600;color:var(--g9);margin-bottom:.75rem;line-height:1.5}
+.phq-op,.adhd-op{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+@media(max-width:520px){.phq-op,.adhd-op{grid-template-columns:repeat(2,1fr)}}
+.po,.ao{position:relative}
+.po input,.ao input{position:absolute;opacity:0;width:0;height:0}
+.po label{display:flex;flex-direction:column;align-items:center;gap:3px;padding:.5rem .375rem;border-radius:var(--rm);border:1.5px solid var(--g2);cursor:pointer;font-size:.775rem;text-align:center;color:var(--g5);transition:all var(--tr);background:var(--w);user-select:none}
+.po label:hover{border-color:var(--pur);color:var(--pur)}
+.po input:checked+label{background:var(--pbg);border-color:var(--pur);color:var(--pur);font-weight:600}
+.ao label{display:flex;flex-direction:column;align-items:center;gap:3px;padding:.5rem .375rem;border-radius:var(--rm);border:1.5px solid var(--g2);cursor:pointer;font-size:.775rem;text-align:center;color:var(--g5);transition:all var(--tr);background:var(--w);user-select:none}
+.ao label:hover{border-color:var(--tel);color:var(--tel)}
+.ao input:checked+label{background:var(--tbg);border-color:var(--tel);color:var(--tel);font-weight:600}
+.pos,.aos{font-size:1.1rem;font-weight:700}
+/* Sending overlay */
+.so{position:fixed;inset:0;z-index:9999;background:rgba(26,23,20,.72);display:none;flex-direction:column;align-items:center;justify-content:center;gap:1rem;backdrop-filter:blur(8px)}
+.so.vis{display:flex}
+.sp{width:52px;height:52px;border:4px solid rgba(255,255,255,.2);border-top-color:#E86A2E;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sm{font-family:'Kanit',sans-serif;font-size:1rem;font-weight:600;color:#fff;text-align:center}
+.sm2{font-size:.8rem;color:rgba(255,255,255,.6);margin-top:4px;text-align:center}
+/* Nav bar */
+.nb{position:sticky;bottom:0;z-index:150;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-top:1px solid var(--g2);box-shadow:0 -3px 16px rgba(0,0,0,.07);padding:.75rem 1.25rem}
+.nbi{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nn{font-size:.775rem;color:var(--g4);text-align:center;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nn strong{display:block;font-size:.85rem;color:var(--g7);font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:10px 18px;border-radius:var(--rm);font-family:'Sarabun',sans-serif;font-size:.875rem;font-weight:600;border:none;cursor:pointer;transition:all var(--tr);white-space:nowrap;min-width:88px;justify-content:center}
+.bp{background:var(--o);color:var(--w);box-shadow:0 2px 8px rgba(232,106,46,.28)}
+.bp:hover{background:#C05520}
+.bp:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.bg{background:var(--w);color:var(--g5);border:1.5px solid var(--g2)}
+.bg:hover{border-color:var(--g4);color:var(--g7)}
+/* Success */
+.sp-pg{display:none;text-align:center;padding:2.5rem 1.5rem;animation:up .4s ease}
+.sr{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--o3),var(--o4));display:flex;align-items:center;justify-content:center;margin:0 auto 1.375rem;box-shadow:0 0 0 10px rgba(232,106,46,.08),0 0 0 20px rgba(232,106,46,.04)}
+.st2{font-family:'Kanit',sans-serif;font-size:1.625rem;font-weight:700;color:var(--g9);margin-bottom:.375rem}
+.sd2{font-size:.9rem;color:var(--g5);max-width:400px;margin:0 auto 1.375rem;line-height:1.75}
+.sm-meta{display:inline-flex;gap:.625rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.25rem}
+.mc{background:var(--g1);border:1px solid var(--g2);border-radius:var(--r);padding:5px 13px;font-size:.82rem;color:#524D47}
+.mc strong{color:var(--o)}
+.footer{text-align:center;padding:1.125rem;font-size:.775rem;color:var(--g4);border-top:1px solid var(--g2);background:var(--w);display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<!-- Sending overlay -->
+<div class="so" id="so">
+  <div class="sp"></div>
+  <div>
+    <div class="sm" id="sm">กำลังบันทึกข้อมูล...</div>
+    <div class="sm2" id="sm2">กรุณารอสักครู่</div>
+  </div>
+</div>
+
+<header class="hd">
+  <div class="hd-i">
+    <a class="brand" href="index.html">
+      <div class="b-logo"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3L3 8v11h6v-5h4v5h6V8L11 3z" fill="white" opacity=".9"/></svg></div>
+      <div class="b-tx"><span class="b-s">วท.ประจวบคีรีขันธ์</span><span class="b-d">แผนก ทดธ.</span></div>
+    </a>
+    <nav class="hn">
+      <a href="index.html" class="np act">📋 แบบสำรวจ</a>
+      <a href="dashboard.html" class="np">📊 แดชบอร์ด</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="heroSection">
+  <div class="hi">
+    <div class="hbg">📋 การวิเคราะห์ผู้เรียนรายบุคคล</div>
+    <h1 class="ht">แบบสำรวจข้อมูล<em>นักเรียน</em><br>ประจำภาคเรียน</h1>
+    <p class="hd2">กรอกข้อมูลตามความเป็นจริง เพื่อให้ครูออกแบบการเรียนรู้ที่เหมาะกับคุณ 🎯</p>
+    <div class="sw">
+      <div class="st" id="stepsTrack"></div>
+      <div class="pb-o"><div class="pb-f" id="pbFill"></div></div>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+<form id="surveyForm">
+
+<!-- ── S0: ข้อมูลทั่วไป ──────────────────────────────── -->
+<div class="fss act" data-s="0">
+  <div class="fc">
+    <div class="fch"><div class="fci" style="background:#FEF0E8">🏫</div><div><div class="fcn">01 / 09</div><div class="fct">ข้อมูลส่วนตัว</div><div class="fcd">ข้อมูลพื้นฐานสำหรับระบุตัวตน</div></div></div>
+    <div class="fcb"><div class="fg">
+      <div class="fl ff"><label class="flb">ชื่อ – นามสกุล <span class="req">*</span></label><input class="fi" type="text" name="fullname" placeholder="ชื่อ-นามสกุลจริง (ภาษาไทย)" required></div>
+      <div class="fl"><label class="flb">ระดับชั้น <span class="req">*</span></label><select class="fs" name="level" required><option value="">-- เลือก --</option><optgroup label="ปวช."><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option></optgroup><optgroup label="ปวส."><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></optgroup></select></div>
+      <div class="fl"><label class="flb">ห้องเรียน <span class="req">*</span></label><input class="fi" type="text" name="classroom" placeholder="เช่น ทดธ.1/1"></div>
+      <div class="fl"><label class="flb">รหัสนักเรียน</label><input class="fi" type="number" name="student_no" placeholder="6921910XXXX"></div>
+      <div class="fl"><label class="flb">เพศ</label><div class="rr"><label class="rc"><input type="radio" name="gender" value="ชาย"><span class="em">👦</span><span>ชาย</span></label><label class="rc"><input type="radio" name="gender" value="หญิง"><span class="em">👧</span><span>หญิง</span></label><label class="rc"><input type="radio" name="gender" value="อื่นๆ"><span class="em">🌈</span><span>อื่นๆ</span></label></div></div>
+      <div class="fl"><label class="flb">GPAX</label><select class="fs" name="gpax"><option value="">-- เลือก --</option><option value="3.5-4.0">🌟 3.50-4.00</option><option value="3.0-3.49">⭐ 3.00-3.49</option><option value="2.5-2.99">👍 2.50-2.99</option><option value="2.0-2.49">📚 2.00-2.49</option><option value="below2">💪 ต่ำกว่า 2.00</option><option value="new">🆕 นักเรียนใหม่</option></select></div>
+      <div class="fl"><label class="flb">เบอร์โทรนักเรียน</label><input class="fi" type="tel" name="phone" placeholder="08X-XXX-XXXX"></div>
+      <div class="fl"><label class="flb">เบอร์โทรผู้ปกครอง</label><input class="fi" type="tel" name="parent_phone" placeholder="08X-XXX-XXXX"></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ── S1: ทักษะ ──────────────────────────────────────── -->
+<div class="fss" data-s="1">
+  <div class="fc">
+    <div class="fch"><div class="fci" style="background:#E8F0FE">💻</div><div><div class="fcn">02 / 09</div><div class="fct">ความรู้และทักษะพื้นฐาน</div><div class="fcd">ประเมินความพร้อมด้านดิจิทัล</div></div></div>
+    <div class="fcb"><div class="fg">
+      <div class="fl ff"><label class="flb"><span class="qn">Q1.1</span> ระดับทักษะคอมพิวเตอร์</label><div class="sc-lb"><span>😟 ไม่มีพื้นฐาน</span><span>😎 ชำนาญมาก</span></div><div class="sc-bt"><label class="sb"><input type="radio" name="computer_skill_level" value="1"><span>1</span></label><label class="sb"><input type="radio" name="computer_skill_level" value="2"><span>2</span></label><label class="sb"><input type="radio" name="computer_skill_level" value="3"><span>3</span></label><label class="sb"><input type="radio" name="computer_skill_level" value="4"><span>4</span></label><label class="sb"><input type="radio" name="computer_skill_level" value="5"><span>5</span></label></div></div>
+      <div class="fl ff"><label class="flb"><span class="qn">Q1.2</span> โปรแกรมที่เคยใช้</label><div class="cg"><label class="cc"><input type="checkbox" name="programs_used" value="word"><span class="em">📝</span><span>MS Word</span></label><label class="cc"><input type="checkbox" name="programs_used" value="excel"><span class="em">📊</span><span>MS Excel</span></label><label class="cc"><input type="checkbox" name="programs_used" value="powerpoint"><span class="em">📑</span><span>PowerPoint</span></label><label class="cc"><input type="checkbox" name="programs_used" value="gdocs"><span class="em">🔵</span><span>Google Docs</span></label><label class="cc"><input type="checkbox" name="programs_used" value="canva"><span class="em">🎨</span><span>Canva</span></label><label class="cc"><input type="checkbox" name="programs_used" value="photoshop"><span class="em">🖼️</span><span>Photoshop/AI</span></label><label class="cc"><input type="checkbox" name="programs_used" value="video"><span class="em">🎬</span><span>ตัดต่อวิดีโอ</span></label><label class="cc"><input type="checkbox" name="programs_used" value="code"><span class="em">👨‍💻</span><span>เขียนโค้ด</span></label><label class="cc"><input type="checkbox" name="programs_used" value="none"><span class="em">🆕</span><span>ยังไม่เคย</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q1.3</span> ความเร็วพิมพ์ดีด</label><div class="rs"><label class="rc"><input type="radio" name="typing_speed" value="under20"><span class="em">🐢</span><span>น้อยกว่า 20 คำ/นาที</span></label><label class="rc"><input type="radio" name="typing_speed" value="20-40"><span class="em">🚶</span><span>20-40 คำ/นาที</span></label><label class="rc"><input type="radio" name="typing_speed" value="40-60"><span class="em">🏃</span><span>40-60 คำ/นาที</span></label><label class="rc"><input type="radio" name="typing_speed" value="over60"><span class="em">🚀</span><span>มากกว่า 60 คำ/นาที</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q1.4</span> ภาษาอังกฤษเทคโนโลยี</label><div class="rs"><label class="rc"><input type="radio" name="english_tech" value="1"><span class="em">😓</span><span>ไม่เข้าใจเลย</span></label><label class="rc"><input type="radio" name="english_tech" value="2"><span class="em">🤔</span><span>เดาได้บ้าง</span></label><label class="rc"><input type="radio" name="english_tech" value="3"><span class="em">🙂</span><span>อ่านเข้าใจได้</span></label><label class="rc"><input type="radio" name="english_tech" value="4"><span class="em">😎</span><span>คล่องมาก</span></label></div></div>
+      <div class="fl ff"><label class="flb"><span class="qn">Q1.5</span> ประสบการณ์ธุรกิจดิจิทัล</label><div class="cg"><label class="cc"><input type="checkbox" name="digital_biz_exp" value="sell_online"><span class="em">🛒</span><span>ขายออนไลน์</span></label><label class="cc"><input type="checkbox" name="digital_biz_exp" value="content"><span class="em">🎥</span><span>ทำคอนเทนต์</span></label><label class="cc"><input type="checkbox" name="digital_biz_exp" value="design"><span class="em">✏️</span><span>ออกแบบสื่อ</span></label><label class="cc"><input type="checkbox" name="digital_biz_exp" value="social"><span class="em">📱</span><span>ดูแลเพจ</span></label><label class="cc"><input type="checkbox" name="digital_biz_exp" value="web"><span class="em">🌐</span><span>เขียนเว็บ</span></label><label class="cc"><input type="checkbox" name="digital_biz_exp" value="none"><span class="em">🆕</span><span>ยังไม่เคย</span></label></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ── S2: การคิด/เรียนรู้ ─────────────────────────── -->
+<div class="fss" data-s="2">
+  <div class="fc">
+    <div class="fch"><div class="fci" style="background:#EDE7F6">🧠</div><div><div class="fcn">03 / 09</div><div class="fct">รูปแบบการคิดและการเรียนรู้</div><div class="fcd">ไม่มีคำตอบผิด ตอบตามความเป็นจริง</div></div></div>
+    <div class="fcb"><div class="fg">
+      <div class="fl ff"><label class="flb"><span class="qn">Q2.1</span> เมื่อพบปัญหาที่ไม่รู้แก้ ทำอะไรก่อน?</label><div class="rs"><label class="rc"><input type="radio" name="problem_solving" value="try"><span class="em">🔧</span><span>ลองผิดลองถูกเอง</span></label><label class="rc"><input type="radio" name="problem_solving" value="search"><span class="em">🔍</span><span>ค้น Google/YouTube</span></label><label class="rc"><input type="radio" name="problem_solving" value="ask"><span class="em">🙋</span><span>ถามเพื่อน/ครูทันที</span></label><label class="rc"><input type="radio" name="problem_solving" value="wait"><span class="em">⏳</span><span>หยุดรอจนมีคนช่วย</span></label></div></div>
+      <div class="fl ff"><label class="flb"><span class="qn">Q2.2</span> รูปแบบการเรียนที่ชอบ</label><div class="cg"><label class="cc"><input type="checkbox" name="learning_style" value="video"><span class="em">📺</span><span>ดูวิดีโอ</span></label><label class="cc"><input type="checkbox" name="learning_style" value="practice"><span class="em">💪</span><span>ลงมือปฏิบัติ</span></label><label class="cc"><input type="checkbox" name="learning_style" value="read"><span class="em">📖</span><span>อ่านเอกสาร</span></label><label class="cc"><input type="checkbox" name="learning_style" value="listen"><span class="em">👂</span><span>ฟังครูบรรยาย</span></label><label class="cc"><input type="checkbox" name="learning_style" value="group"><span class="em">👥</span><span>เรียนกลุ่ม</span></label></div></div>
+      <div class="fl ff"><label class="flb"><span class="qn">Q2.3</span> งานยากมาก รู้สึกอย่างไร?</label><div class="rs"><label class="rc"><input type="radio" name="challenge_attitude" value="excited"><span class="em">🔥</span><span>ตื่นเต้น อยากลอง</span></label><label class="rc"><input type="radio" name="challenge_attitude" value="try_first"><span class="em">💡</span><span>พยายามก่อน ค่อยขอช่วย</span></label><label class="rc"><input type="radio" name="challenge_attitude" value="worry"><span class="em">😰</span><span>กังวล แต่ยังทำ</span></label><label class="rc"><input type="radio" name="challenge_attitude" value="avoid"><span class="em">😞</span><span>ไม่อยากทำเลย</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q2.4</span> นิสัยการวางแผน</label><div class="rs"><label class="rc"><input type="radio" name="planning_habit" value="always"><span class="em">📋</span><span>วางแผนทุกครั้ง</span></label><label class="rc"><input type="radio" name="planning_habit" value="sometimes"><span class="em">📝</span><span>บางครั้ง</span></label><label class="rc"><input type="radio" name="planning_habit" value="rarely"><span class="em">😅</span><span>ไม่ค่อยวางแผน</span></label><label class="rc"><input type="radio" name="planning_habit" value="never"><span class="em">⚡</span><span>ลงมือทันที</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q2.5</span> Multitasking</label><div class="sc-lb"><span>ทำทีละอย่าง</span><span>เก่งมาก</span></div><div class="sc-bt"><label class="sb"><input type="radio" name="multitasking" value="1"><span>1</span></label><label class="sb"><input type="radio" name="multitasking" value="2"><span>2</span></label><label class="sb"><input type="radio" name="multitasking" value="3"><span>3</span></label><label class="sb"><input type="radio" name="multitasking" value="4"><span>4</span></label><label class="sb"><input type="radio" name="multitasking" value="5"><span>5</span></label></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ── S3: พฤติกรรม ──────────────────────────────────── -->
+<div class="fss" data-s="3">
+  <div class="fc">
+    <div class="fch"><div class="fci" style="background:#E8F5E9">✅</div><div><div class="fcn">04 / 09</div><div class="fct">พฤติกรรมและความรับผิดชอบ</div></div></div>
+    <div class="fcb"><div class="fg">
+      <div class="fl"><label class="flb"><span class="qn">Q3.1</span> การส่งงาน</label><div class="rs"><label class="rc"><input type="radio" name="submission_habit" value="5"><span class="em">⭐</span><span>ส่งตรงเวลาเสมอ</span></label><label class="rc"><input type="radio" name="submission_habit" value="4"><span class="em">👍</span><span>ส่วนใหญ่ตรงเวลา</span></label><label class="rc"><input type="radio" name="submission_habit" value="3"><span class="em">🙂</span><span>บางครั้งส่งช้า</span></label><label class="rc"><input type="radio" name="submission_habit" value="2"><span class="em">😅</span><span>ส่งช้าบ่อยๆ</span></label><label class="rc"><input type="radio" name="submission_habit" value="1"><span class="em">😓</span><span>มักไม่ส่ง</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q3.2</span> ขาดเรียน/ภาคเรียน</label><div class="rs"><label class="rc"><input type="radio" name="absence" value="0"><span class="em">🏆</span><span>ไม่เคยขาด</span></label><label class="rc"><input type="radio" name="absence" value="1-3"><span class="em">✅</span><span>1-3 ครั้ง</span></label><label class="rc"><input type="radio" name="absence" value="4-6"><span class="em">⚠️</span><span>4-6 ครั้ง</span></label><label class="rc"><input type="radio" name="absence" value="7+"><span class="em">🚨</span><span>7+ ครั้ง</span></label></div></div>
+      <div class="fl ff"><label class="flb"><span class="qn">Q3.3</span> เมื่อไม่เข้าใจเนื้อหา ทำอะไร?</label><div class="rs"><label class="rc"><input type="radio" name="help_seeking" value="ask_teacher"><span class="em">🙋</span><span>ถามครู</span></label><label class="rc"><input type="radio" name="help_seeking" value="ask_friend"><span class="em">👫</span><span>ถามเพื่อน</span></label><label class="rc"><input type="radio" name="help_seeking" value="self_study"><span class="em">📚</span><span>หาข้อมูลเอง</span></label><label class="rc"><input type="radio" name="help_seeking" value="skip"><span class="em">😶</span><span>ข้ามไปก่อน</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q3.4</span> Part-time</label><div class="rs"><label class="rc"><input type="radio" name="part_time" value="none"><span class="em">📚</span><span>ไม่ทำงานพิเศษ</span></label><label class="rc"><input type="radio" name="part_time" value="weekend"><span class="em">📅</span><span>เฉพาะวันหยุด</span></label><label class="rc"><input type="radio" name="part_time" value="weekly"><span class="em">⏰</span><span>ทุกสัปดาห์</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q3.5</span> ชั่วโมงนอน/วัน</label><div class="rs"><label class="rc"><input type="radio" name="sleep_hours" value="under5"><span class="em">😵</span><span>น้อยกว่า 5 ชม.</span></label><label class="rc"><input type="radio" name="sleep_hours" value="5-6"><span class="em">😴</span><span>5-6 ชม.</span></label><label class="rc"><input type="radio" name="sleep_hours" value="7-8"><span class="em">😊</span><span>7-8 ชม.</span></label><label class="rc"><input type="radio" name="sleep_hours" value="over8"><span class="em">😪</span><span>มากกว่า 8 ชม.</span></label></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ── S4: อุปกรณ์ ────────────────────────────────────── -->
+<div class="fss" data-s="4">
+  <div class="fc">
+    <div class="fch"><div class="fci" style="background:#E3F2FD">📱</div><div><div class="fcn">05 / 09</div><div class="fct">ความพร้อมด้านอุปกรณ์</div></div></div>
+    <div class="fcb"><div class="fg">
+      <div class="fl"><label class="flb"><span class="qn">Q4.1</span> คอมพิวเตอร์/แล็ปท็อป</label><div class="rs"><label class="rc"><input type="radio" name="has_computer" value="own"><span class="em">💻</span><span>มีส่วนตัว</span></label><label class="rc"><input type="radio" name="has_computer" value="shared"><span class="em">🤝</span><span>ใช้ร่วมกับคนในบ้าน</span></label><label class="rc"><input type="radio" name="has_computer" value="school_only"><span class="em">🏫</span><span>ใช้ที่โรงเรียน</span></label><label class="rc"><input type="radio" name="has_computer" value="none"><span class="em">❌</span><span>ไม่มีเลย</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q4.2</span> อินเทอร์เน็ตที่บ้าน</label><div class="rs"><label class="rc"><input type="radio" name="home_internet" value="fast_wifi"><span class="em">⚡</span><span>WiFi เร็ว</span></label><label class="rc"><input type="radio" name="home_internet" value="slow_wifi"><span class="em">📶</span><span>WiFi ช้า</span></label><label class="rc"><input type="radio" name="home_internet" value="mobile_data"><span class="em">📱</span><span>Data มือถือ</span></label><label class="rc"><input type="radio" name="home_internet" value="none"><span class="em">❌</span><span>ไม่มีเน็ต</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q4.3</span> สมาร์ทโฟน</label><div class="rs"><label class="rc"><input type="radio" name="smartphone_os" value="android"><span class="em">🤖</span><span>Android</span></label><label class="rc"><input type="radio" name="smartphone_os" value="ios"><span class="em">🍎</span><span>iOS (iPhone)</span></label><label class="rc"><input type="radio" name="smartphone_os" value="none"><span class="em">❌</span><span>ไม่มี</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q4.4</span> ใช้ AI ช่วยเรียน?</label><div class="rs"><label class="rc"><input type="radio" name="uses_ai" value="often"><span class="em">🤖</span><span>ใช้บ่อย (ChatGPT ฯลฯ)</span></label><label class="rc"><input type="radio" name="uses_ai" value="sometimes"><span class="em">💡</span><span>ใช้บ้าง</span></label><label class="rc"><input type="radio" name="uses_ai" value="never"><span class="em">🤷</span><span>ยังไม่เคย</span></label></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ── S5: สังคม/ครอบครัว ─────────────────────────── -->
+<div class="fss" data-s="5">
+  <div class="fc">
+    <div class="fch"><div class="fci" style="background:#FFF3E0">🏠</div><div><div class="fcn">06 / 09</div><div class="fct">สังคมและครอบครัว 🔒</div><div class="fcd">ข้อมูลลับ เฉพาะครูเท่านั้น</div></div></div>
+    <div class="fcb"><div class="fg">
+      <div class="fl"><label class="flb"><span class="qn">Q5.1</span> การสนับสนุนจากครอบครัว</label><div class="sc-lb"><span>ไม่สนับสนุน</span><span>สนับสนุนเต็มที่</span></div><div class="sc-bt"><label class="sb"><input type="radio" name="family_support" value="1"><span>1</span></label><label class="sb"><input type="radio" name="family_support" value="2"><span>2</span></label><label class="sb"><input type="radio" name="family_support" value="3"><span>3</span></label><label class="sb"><input type="radio" name="family_support" value="4"><span>4</span></label><label class="sb"><input type="radio" name="family_support" value="5"><span>5</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q5.2</span> อาศัยอยู่กับ</label><div class="rs"><label class="rc"><input type="radio" name="living_status" value="parents"><span class="em">🏠</span><span>พ่อแม่/ผู้ปกครอง</span></label><label class="rc"><input type="radio" name="living_status" value="relative"><span class="em">👨‍👩‍👦</span><span>ญาติ</span></label><label class="rc"><input type="radio" name="living_status" value="dorm"><span class="em">🏢</span><span>หอพัก</span></label><label class="rc"><input type="radio" name="living_status" value="alone"><span class="em">🧍</span><span>อยู่คนเดียว</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q5.3</span> เป้าหมายหลังเรียนจบ</label><div class="rs"><label class="rc"><input type="radio" name="career_goal" value="study_more"><span class="em">🎓</span><span>เรียนต่อ</span></label><label class="rc"><input type="radio" name="career_goal" value="company"><span class="em">🏢</span><span>สมัครงาน</span></label><label class="rc"><input type="radio" name="career_goal" value="own_biz"><span class="em">🚀</span><span>เปิดธุรกิจ</span></label><label class="rc"><input type="radio" name="career_goal" value="freelance"><span class="em">💻</span><span>Freelance</span></label><label class="rc"><input type="radio" name="career_goal" value="unsure"><span class="em">🤷</span><span>ยังไม่แน่ใจ</span></label></div></div>
+      <div class="fl"><label class="flb"><span class="qn">Q5.4</span> ความเครียดโดยรวม</label><div class="sc-lb"><span>แทบไม่เครียด</span><span>เครียดมาก</span></div><div class="sc-bt"><label class="sb"><input type="radio" name="stress_level" value="1"><span>1</span></label><label class="sb"><input type="radio" name="stress_level" value="2"><span>2</span></label><label class="sb"><input type="radio" name="stress_level" value="3"><span>3</span></label><label class="sb"><input type="radio" name="stress_level" value="4"><span>4</span></label><label class="sb"><input type="radio" name="stress_level" value="5"><span>5</span></label></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ── S6: ทักษะพิเศษ ─────────────────────────────── -->
+<div class="fss" data-s="6">
+  <div class="fc">
+    <div class="fch"><div class="fci" style="background:#FCE4EC">⭐</div><div><div class="fcn">07 / 09</div><div class="fct">ทักษะพิเศษและสิ่งที่ชอบ</div></div></div>
+    <div class="fcb">
+      <div class="nt info" style="margin-bottom:1rem"><span>💡</span><span>ครูจะออกแบบกิจกรรมที่เหมาะกับความสามารถของคุณ</span></div>
+      <div class="fg">
+        <div class="fl ff"><label class="flb"><span class="qn">Q6.1</span> ทักษะพิเศษด้านดิจิทัล</label><div class="cg"><label class="cc"><input type="checkbox" name="special_skills" value="video_edit"><span class="em">🎬</span><span>ตัดต่อวิดีโอ</span></label><label class="cc"><input type="checkbox" name="special_skills" value="graphic"><span class="em">🎨</span><span>ออกแบบกราฟิก</span></label><label class="cc"><input type="checkbox" name="special_skills" value="photo"><span class="em">📷</span><span>ถ่ายภาพ/วิดีโอ</span></label><label class="cc"><input type="checkbox" name="special_skills" value="code"><span class="em">👨‍💻</span><span>เขียนโค้ด/เว็บ</span></label><label class="cc"><input type="checkbox" name="special_skills" value="ads"><span class="em">📢</span><span>ยิงโฆษณา Ads</span></label><label class="cc"><input type="checkbox" name="special_skills" value="seo"><span class="em">🔍</span><span>SEO/คอนเทนต์</span></label><label class="cc"><input type="checkbox" name="special_skills" value="accounting"><span class="em">📊</span><span>บัญชีดิจิทัล</span></label><label class="cc"><input type="checkbox" name="special_skills" value="none"><span class="em">🌱</span><span>ยังไม่มี</span></label></div></div>
+        <div class="fl ff"><label class="flb"><span class="qn">Q6.2</span> Social Media ที่ใช้จริง</label><div class="cg"><label class="cc"><input type="checkbox" name="social_platforms" value="tiktok"><span class="em">🎵</span><span>TikTok</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="facebook"><span class="em">📘</span><span>Facebook</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="instagram"><span class="em">📸</span><span>Instagram</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="youtube"><span class="em">▶️</span><span>YouTube</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="x"><span class="em">🐦</span><span>X (Twitter)</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="lineoa"><span class="em">💚</span><span>Line OA</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="shopee"><span class="em">🛒</span><span>Shopee/Lazada</span></label></div></div>
+        <div class="fl ff"><label class="flb"><span class="qn">Q6.3</span> อยากให้ครูรู้อะไรเกี่ยวกับตัวคุณ?</label><textarea class="ft" name="student_note" placeholder="ความฝัน สิ่งที่กังวล หรือสิ่งที่ต้องการความช่วยเหลือ..."></textarea></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S7: PHQ-A ────────────────────────────────────── -->
+<div class="fss" data-s="7">
+  <div class="fc phq-c">
+    <div class="fch"><div class="fci" style="background:var(--pbg)">🧠</div><div><div class="fcn" style="color:var(--pur)">08 / 09 — PHQ-A</div><div class="fct">ใน 2 สัปดาห์ที่ผ่านมา รู้สึกแบบนี้บ่อยแค่ไหน?</div><div class="fcd">9 ข้อ · วิเคราะห์โดย AI</div></div></div>
+    <div class="fcb">
+      <div class="nt phq-i" style="margin-bottom:1rem"><span>💜</span><span>คำตอบเป็นความลับ ครูจะใช้เพื่อดูแลคุณเท่านั้น</span></div>
+      <div id="phqBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S8: ADHD ─────────────────────────────────────── -->
+<div class="fss" data-s="8">
+  <div class="fc adhd-c">
+    <div class="fch"><div class="fci" style="background:var(--tbg)">🧩</div><div><div class="fcn" style="color:var(--tel)">09 / 09 — ADHD</div><div class="fct">แบบประเมินสมาธิและพฤติกรรม</div><div class="fcd">อายุ 14-20 ปี · 18 ข้อ · วิเคราะห์โดย AI</div></div></div>
+    <div class="fcb">
+      <div class="nt adhd-i" style="margin-bottom:1rem"><span>🧩</span><span>ตอบตามพฤติกรรมจริงใน 6 เดือนที่ผ่านมา</span></div>
+      <div id="adhdBody"></div>
+    </div>
+  </div>
+</div>
+
+</form>
+
+<!-- Success page -->
+<div class="sp-pg" id="spPg">
+  <div class="sr"><svg width="38" height="38" viewBox="0 0 38 38" fill="none"><path d="M9 19l7 7 13-14" stroke="#E86A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <h2 class="st2">บันทึกข้อมูลสำเร็จแล้ว! 🎉</h2>
+  <p class="sd2">ขอบคุณที่กรอกข้อมูล ครูจะนำไปใช้ดูแลและออกแบบการเรียนรู้ที่เหมาะกับคุณ</p>
+  <div class="sm-meta" id="smMeta"></div>
+  <div style="display:flex;gap:.625rem;justify-content:center;flex-wrap:wrap">
+    <button class="btn bp" onclick="resetForm()">➕ กรอกข้อมูลคนต่อไป</button>
+  </div>
+</div>
+</main>
+
+<div class="nb" id="navBar">
+  <div class="nbi">
+    <button class="btn bg" id="btnBack" onclick="prevS()" style="visibility:hidden">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M10 12L6 7.5l4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>ย้อนกลับ
+    </button>
+    <div class="nn"><span id="nlLabel">ข้อมูลส่วนตัว</span><strong id="nlNum">1/9</strong></div>
+    <button class="btn bp" id="btnNext" onclick="nextS()">ถัดไป <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M5 3l4 4.5L5 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
+  </div>
+</div>
+<footer class="footer"><span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span><span style="opacity:.3">●</span><span>วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span style="opacity:.3">●</span><span style="opacity:.5">v7.0 — Google Sheets</span></footer>
+
+<script>
+// ================================================================
+// !! แก้ URL ตรงนี้ !!
+// วาง Web App URL จาก Apps Script Deploy
+// ================================================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEeliG_Rb65dQP4Tz-_s6iJPnfZImpPeIhUyU5yY81lK6N5sPvuMQ0O4ZJp-sUxNSO/exec';
+
+// ================================================================
+const SECTIONS=[
+  {l:'ข้อมูลส่วนตัว',i:'🏫'},{l:'ทักษะ/ความรู้',i:'💻'},
+  {l:'การคิด/เรียนรู้',i:'🧠'},{l:'พฤติกรรม',i:'✅'},
+  {l:'อุปกรณ์',i:'📱'},{l:'สังคม/ครอบครัว',i:'🏠'},
+  {l:'ทักษะพิเศษ',i:'⭐'},
+  {l:'PHQ-A',i:'💜',phq:1},{l:'ADHD',i:'🧩',adhd:1}
+];
+const TOTAL=SECTIONS.length;
+let cur=0;
+
+const PHQ_Q=['รู้สึกหดหู่ เศร้า หรือสิ้นหวัง','ไม่สนใจหรือไม่มีความสุขกับสิ่งที่เคยสนุก','นอนหลับยาก หลับไม่หลับ หรือนอนมากเกินไป','รู้สึกอ่อนเพลีย หรือไม่มีแรง','รับประทานอาหารไม่อยาก หรือกินมากเกินไป','รู้สึกแย่กับตัวเอง รู้สึกว่าตัวเองเป็นภาระ','มีปัญหาในการมีสมาธิ','พูดหรือเคลื่อนไหวช้า หรือกระวนกระวาย อยู่ไม่นิ่ง','มีความคิดทำร้ายตัวเองหรืออยากตาย'];
+const PHQ_O=[{s:0,l:'ไม่มีเลย'},{s:1,l:'บางวัน'},{s:2,l:'บ่อยกว่าครึ่ง'},{s:3,l:'แทบทุกวัน'}];
+const ADHD_Q=[
+  {q:'ไม่จดจ่อรายละเอียด หรือผิดพลาดบ่อย',t:'I'},{q:'รักษาสมาธิในงานได้ยาก',t:'I'},
+  {q:'ดูเหมือนไม่ฟังเมื่อพูดด้วยโดยตรง',t:'I'},{q:'ทำงานไม่เสร็จหรือไม่ทำตามคำสั่ง',t:'I'},
+  {q:'จัดระเบียบงาน/กิจกรรมได้ยาก',t:'I'},{q:'หลีกเลี่ยงงานที่ต้องคิดต่อเนื่อง',t:'I'},
+  {q:'ทำของหายบ่อย เช่น กุญแจ โทรศัพท์',t:'I'},{q:'วอกแวกง่ายจากสิ่งรอบข้าง',t:'I'},
+  {q:'ลืมสิ่งที่ต้องทำประจำวันบ่อยๆ',t:'I'},{q:'อยู่ไม่นิ่ง ขยับมือเท้าพลุกพล่าน',t:'H'},
+  {q:'ลุกจากที่นั่งในสถานการณ์ที่ควรนั่ง',t:'H'},{q:'วิ่งหรือปีนป่ายไม่เหมาะสม',t:'H'},
+  {q:'ทำกิจกรรมผ่อนคลายเงียบๆ ไม่ได้',t:'H'},{q:'วุ่นวายตลอดเวลา เหมือนถ่านไฟฉาย',t:'H'},
+  {q:'พูดมากเกินไป',t:'H'},{q:'พูดขัดหรือตอบก่อนคำถามจบ',t:'H'},
+  {q:'รอคิวยากหรือรอไม่ได้',t:'H'},{q:'ขัดจังหวะหรือยุ่งกับผู้อื่น',t:'H'}
+];
+const ADHD_O=[{s:0,l:'ไม่เคย'},{s:1,l:'บางครั้ง'},{s:2,l:'บ่อยครั้ง'},{s:3,l:'บ่อยมาก'}];
+
+window.addEventListener('DOMContentLoaded',()=>{
+  buildSteps();buildPHQ();buildADHD();updateUI();
+});
+
+function buildSteps(){
+  document.getElementById('stepsTrack').innerHTML=
+    SECTIONS.map((s,i)=>`<div class="si${s.phq?' phq':''}${s.adhd?' adhd':''}" onclick="jumpTo(${i})"><div class="sd">${i+1}</div><div class="sl">${s.l}</div></div>`).join('');
+}
+function buildPHQ(){
+  document.getElementById('phqBody').innerHTML=PHQ_Q.map((q,i)=>`
+    <div class="phq-q"><div class="phq-qn">ข้อ ${i+1}</div><div class="phq-qt">${q}</div>
+    <div class="phq-op">${PHQ_O.map(o=>`<div class="po"><input type="radio" name="phq_${i}" id="phq_${i}_${o.s}" value="${o.s}"><label for="phq_${i}_${o.s}"><span class="pos">${o.s}</span><span>${o.l}</span></label></div>`).join('')}</div></div>`).join('');
+}
+function buildADHD(){
+  const g=(qs,start,title)=>`<div style="margin-bottom:1.25rem"><div style="font-size:.8rem;font-weight:700;color:var(--tel);text-transform:uppercase;margin-bottom:.875rem;padding:.45rem .75rem;background:rgba(0,121,107,.08);border-radius:var(--r)">${title}</div>${qs.map((q,j)=>{const gi=start+j;return`<div class="adhd-q"><div class="adhd-qn">ข้อ ${gi+1}</div><div class="adhd-qt">${q.q}</div><div class="adhd-op">${ADHD_O.map(o=>`<div class="ao"><input type="radio" name="adhd_${gi}" id="adhd_${gi}_${o.s}" value="${o.s}"><label for="adhd_${gi}_${o.s}"><span class="aos">${o.s}</span><span>${o.l}</span></label></div>`).join('')}</div></div>`;}).join('')}</div>`;
+  const I=ADHD_Q.filter(q=>q.t==='I'),H=ADHD_Q.filter(q=>q.t==='H');
+  document.getElementById('adhdBody').innerHTML=g(I,0,'🎯 ด้านสมาธิ (Inattention) 9 ข้อ')+g(H,9,'⚡ ด้านซน/หุนหัน (Hyperactivity) 9 ข้อ');
+}
+
+function nextS(){if(cur<TOTAL-1){cur++;updateUI();window.scrollTo({top:0,behavior:'smooth'});}else submitForm();}
+function prevS(){if(cur>0){cur--;updateUI();window.scrollTo({top:0,behavior:'smooth'});}}
+function jumpTo(i){if(i<=cur){cur=i;updateUI();window.scrollTo({top:0,behavior:'smooth'});}}
+function updateUI(){
+  document.querySelectorAll('.fss').forEach((el,i)=>el.classList.toggle('act',i===cur));
+  document.querySelectorAll('.si').forEach((el,i)=>{
+    el.classList.remove('act','done');
+    if(i<cur){el.classList.add('done');el.querySelector('.sd').innerHTML='✓';}
+    else{el.classList.toggle('act',i===cur);el.querySelector('.sd').textContent=i+1;}
+  });
+  document.getElementById('pbFill').style.width=(cur/(TOTAL-1)*100)+'%';
+  document.getElementById('btnBack').style.visibility=cur===0?'hidden':'visible';
+  const s=SECTIONS[cur];
+  document.getElementById('nlLabel').textContent=s.i+' '+s.l;
+  document.getElementById('nlNum').textContent=`${cur+1}/${TOTAL}`;
+  const bn=document.getElementById('btnNext');
+  if(cur===TOTAL-1){bn.innerHTML='✅ บันทึกข้อมูลทั้งหมด';bn.style.background='var(--grn)';}
+  else{bn.innerHTML='ถัดไป <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M5 3l4 4.5L5 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';bn.style.background='';}
+}
+
+async function submitForm(){
+  const form=document.getElementById('surveyForm');
+  const fn=form.querySelector('[name="fullname"]').value.trim();
+  const lv=form.querySelector('[name="level"]').value;
+  const cl=form.querySelector('[name="classroom"]').value.trim();
+  if(!fn||!lv||!cl){alert('กรุณากรอกชื่อ ระดับชั้น และห้องเรียน');cur=0;updateUI();return;}
+  if(!SCRIPT_URL||SCRIPT_URL==='YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'){alert('ยังไม่ได้ตั้งค่า SCRIPT_URL\nกรุณาแก้ไขในโค้ดก่อน');return;}
+
+  showOverlay('กำลังบันทึกข้อมูล...','กรุณารอสักครู่');
+
+  try{
+    const id=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    const ts=new Date().toLocaleString('th-TH');
+    const sd={_id:id,_ts:ts};
+    form.querySelectorAll('input[type=text],input[type=number],input[type=tel],select,textarea').forEach(el=>{if(el.name&&el.value&&!el.name.startsWith('phq_')&&!el.name.startsWith('adhd_'))sd[el.name]=el.value;});
+    form.querySelectorAll('input[type=radio]:checked').forEach(el=>{if(!el.name.startsWith('phq_')&&!el.name.startsWith('adhd_'))sd[el.name]=el.value;});
+    [...new Set([...form.querySelectorAll('input[type=checkbox]')].map(e=>e.name))].forEach(n=>{const c=[...form.querySelectorAll(`input[type=checkbox][name="${n}"]:checked`)].map(e=>e.value);if(c.length)sd[n]=c;});
+    sd._risk=calcRisk(sd);sd.learning_group=classify(sd);
+
+    const phqA=[],phqOk=PHQ_Q.every((_,i)=>{const r=form.querySelector(`input[name="phq_${i}"]:checked`);if(r)phqA.push(parseInt(r.value));return r;});
+    const adhdA=[],adhdOk=ADHD_Q.every((_,i)=>{const r=form.querySelector(`input[name="adhd_${i}"]:checked`);if(r)adhdA.push(parseInt(r.value));return r;});
+    const phqT=phqOk?phqA.reduce((a,b)=>a+b,0):null;
+    const phqSev=phqOk?getSev(phqT):null;
+    const adhdT=adhdOk?adhdA.reduce((a,b)=>a+b,0):null;
+    const adhdI=adhdOk?adhdA.slice(0,9).reduce((a,b)=>a+b,0):null;
+    const adhdH=adhdOk?adhdA.slice(9).reduce((a,b)=>a+b,0):null;
+    const adhdSev=adhdOk?getAdhdSev(adhdT,adhdI,adhdH):null;
+
+    setOverlayMsg('กำลังบันทึกข้อมูลผู้เรียน (1/3)...');
+    await post('learner',sd);
+
+    if(phqOk){
+      setOverlayMsg('กำลังบันทึก PHQ-A (2/3)...');
+      const pr={_id:id,_ts:ts,fullname:fn,level:lv,classroom:cl,gender:sd.gender||'',phq_total:phqT,phq_severity:phqSev.key,...Object.fromEntries(phqA.map((v,i)=>[`phq_q${i+1}`,v])),ai_analysis:''};
+      await post('phq',pr);
+      bgFetchPHQ(pr,phqSev,phqA);
+    }
+    if(adhdOk){
+      setOverlayMsg('กำลังบันทึก ADHD (3/3)...');
+      const ar={_id:id,_ts:ts,fullname:fn,level:lv,classroom:cl,gender:sd.gender||'',adhd_total:adhdT,adhd_inatt:adhdI,adhd_hyper:adhdH,adhd_severity:adhdSev.key,...Object.fromEntries(adhdA.map((v,i)=>[`adhd_q${i+1}`,v])),ai_analysis:''};
+      await post('adhd',ar);
+      bgFetchADHD(ar,adhdSev);
+    }
+
+    hideOverlay();
+    showSuccess(sd);
+  }catch(err){
+    hideOverlay();
+    alert('เกิดข้อผิดพลาด: '+err.message+'\nตรวจสอบ:\n1. SCRIPT_URL ถูกต้องหรือไม่\n2. เชื่อมต่ออินเทอร์เน็ตอยู่หรือไม่\n3. Deploy Apps Script เป็น Anyone แล้วหรือยัง');
+    console.error(err);
+  }
+}
+
+async function post(type,record){
+  await fetch(SCRIPT_URL,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({type,record}),
+  });
+  // no-cors: ไม่อ่าน response ได้ แต่ Apps Script รับได้ทุกกรณี
+  // ถ้าต้องการอ่าน response → ต้องใช้ mode:'cors' และตั้ง Access-Control-Allow-Origin ใน doPost
+}
+
+async function bgFetchPHQ(rec,sev,ans){
+  const hi=ans.map((s,i)=>({s,q:PHQ_Q[i]})).filter(x=>x.s>=2);
+  const sl={none:'ปกติ',mild:'น้อย',moderate:'ปานกลาง',moderately_severe:'ค่อนข้างรุนแรง',severe:'รุนแรง'};
+  const p=`วิเคราะห์ PHQ-A นักเรียนอาชีวศึกษาไทย\nชื่อ:${rec.fullname} ชั้น:${rec.level} ${rec.classroom}\nคะแนน:${rec.phq_total}/27 ระดับ:${sl[rec.phq_severity]||rec.phq_severity}\nข้อสูง:${hi.map(x=>`"${x.q}"(${x.s})`).join(',')||'ไม่มี'}\nข้อ9:${rec.phq_q9}\n\nภาษาไทย ≤160คำ:\n1.**สรุป** 2.**จุดที่ควรสนใจ** 3.**คำแนะนำครู** 4.**ขั้นตอนต่อไป**`;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,messages:[{role:'user',content:p}]})});
+    const d=await r.json();
+    const t=d.content?.map(c=>c.text||'').join('')||'';
+    if(t)await post('phq',{_id:rec._id,ai_analysis:t,_update:true});
+  }catch(e){console.error('PHQ AI:',e);}
+}
+
+async function bgFetchADHD(rec,sev){
+  const p=`วิเคราะห์ ADHD นักเรียนอาชีวศึกษา อายุ 14-20 ปี\nชื่อ:${rec.fullname} ชั้น:${rec.level} ${rec.classroom}\nรวม:${rec.adhd_total}/54 สมาธิ:${rec.adhd_inatt}/27 ซน:${rec.adhd_hyper}/27 ระดับ:${sev.label}\n\nภาษาไทย ≤180คำ:\n1.**สรุป** 2.**จุดเด่น** 3.**แนวทางสอน(3ข้อ)** 4.**ข้อแนะนำ**\n(ผลเป็นการคัดกรองเบื้องต้น ไม่ใช่วินิจฉัยทางคลินิก)`;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,messages:[{role:'user',content:p}]})});
+    const d=await r.json();
+    const t=d.content?.map(c=>c.text||'').join('')||'';
+    if(t)await post('adhd',{_id:rec._id,ai_analysis:t,_update:true});
+  }catch(e){console.error('ADHD AI:',e);}
+}
+
+function calcRisk(d){
+  let s=0;
+  if(d.has_computer==='none')s+=3;if(d.has_computer==='school_only')s+=1;
+  if(d.home_internet==='none')s+=3;if(d.home_internet==='mobile_data')s+=1;
+  if(d.absence==='7+')s+=3;if(d.absence==='4-6')s+=2;
+  if(d.submission_habit==='1')s+=2;if(d.submission_habit==='2')s+=1;
+  if(d.computer_skill_level==='1')s+=2;if(d.part_time==='weekly')s+=2;
+  if(d.family_support==='1')s+=2;if(d.sleep_hours==='under5')s+=1;
+  if(d.challenge_attitude==='avoid')s+=2;if(d.help_seeking==='skip')s+=2;
+  if(d.gpax==='below2')s+=2;return s;
+}
+function classify(d){
+  const sk=parseInt(d.computer_skill_level||0);
+  const gm={'3.5-4.0':4,'3.0-3.49':3,'2.5-2.99':2,'2.0-2.49':1,'below2':0,'new':2};
+  const gp=gm[d.gpax]??2,sb=parseInt(d.submission_habit||3);
+  if(sk>=4&&gp>=3&&sb>=4)return'advanced';
+  if((sk+gp+sb)<=5||(sk<=1&&gp<=1))return'struggling';
+  return'intermediate';
+}
+function getSev(s){
+  if(s<=4)return{key:'none',label:'ปกติ'};if(s<=9)return{key:'mild',label:'น้อย'};
+  if(s<=14)return{key:'moderate',label:'ปานกลาง'};if(s<=19)return{key:'moderately_severe',label:'ค่อนข้างรุนแรง'};
+  return{key:'severe',label:'รุนแรง'};
+}
+function getAdhdSev(t,i,h){
+  if(i>=12&&h>=12)return{key:'combined',label:'แนวโน้ม ADHD แบบรวม'};
+  if(i>=12)return{key:'inattentive',label:'แนวโน้ม ADHD ด้านขาดสมาธิ'};
+  if(h>=12)return{key:'hyperactive',label:'แนวโน้ม ADHD ด้านซน/หุนหัน'};
+  if(t>=18)return{key:'subclinical',label:'มีบางอาการ ต้องติดตาม'};
+  return{key:'none',label:'ไม่พบแนวโน้ม ADHD'};
+}
+
+function showOverlay(msg,sub){const el=document.getElementById('so');el.classList.add('vis');document.getElementById('sm').textContent=msg;document.getElementById('sm2').textContent=sub||'';document.getElementById('btnNext').disabled=true;}
+function setOverlayMsg(msg){document.getElementById('sm').textContent=msg;}
+function hideOverlay(){document.getElementById('so').classList.remove('vis');document.getElementById('btnNext').disabled=false;}
+function showSuccess(sd){
+  ['surveyForm','navBar','heroSection'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('smMeta').innerHTML=`<div class="mc">ชื่อ: <strong>${sd.fullname||'—'}</strong></div><div class="mc">ห้อง: <strong>${sd.classroom||''} ${sd.level||''}</strong></div><div class="mc">วันที่: <strong>${sd._ts}</strong></div>`;
+  document.getElementById('spPg').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function resetForm(){
+  cur=0;document.getElementById('surveyForm').reset();
+  ['surveyForm','navBar','heroSection'].forEach(id=>document.getElementById(id).style.display='');
+  document.getElementById('spPg').style.display='none';
+  buildPHQ();buildADHD();updateUI();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
