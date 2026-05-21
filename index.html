@@ -344,7 +344,7 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
 // !! แก้ URL ตรงนี้ !!
 // วาง Web App URL จาก Apps Script Deploy
 // ================================================================
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEeliG_Rb65dQP4Tz-_s6iJPnfZImpPeIhUyU5yY81lK6N5sPvuMQ0O4ZJp-sUxNSO/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyxV_DScOWSQFrcShTopmKwmmr_ODFlyNM8EZ56V9uc5aLfL6LMiGUsTcjLV_-YSlAa/exec';
 
 // ================================================================
 const SECTIONS=[
@@ -417,7 +417,7 @@ async function submitForm(){
   const lv=form.querySelector('[name="level"]').value;
   const cl=form.querySelector('[name="classroom"]').value.trim();
   if(!fn||!lv||!cl){alert('กรุณากรอกชื่อ ระดับชั้น และห้องเรียน');cur=0;updateUI();return;}
-  if(!SCRIPT_URL||SCRIPT_URL==='YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'){alert('ยังไม่ได้ตั้งค่า SCRIPT_URL\nกรุณาแก้ไขในโค้ดก่อน');return;}
+  if(!SCRIPT_URL||SCRIPT_URL==='https://script.google.com/macros/s/AKfycbyxV_DScOWSQFrcShTopmKwmmr_ODFlyNM8EZ56V9uc5aLfL6LMiGUsTcjLV_-YSlAa/exec'){alert('ยังไม่ได้ตั้งค่า SCRIPT_URL\nกรุณาแก้ไขในโค้ดก่อน');return;}
 
   showOverlay('กำลังบันทึกข้อมูล...','กรุณารอสักครู่');
 
