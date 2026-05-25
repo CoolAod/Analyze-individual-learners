@@ -1,19 +1,20 @@
 // ================================================================
-// Code.gs  —  Google Apps Script Web App Backend
+// Code.gs  —  Google Apps Script Web App Backend  v3-FINAL
+// ระบบวิเคราะห์ผู้เรียนรายบุคคล
 // วิทยาลัยเทคนิคประจวบคีรีขันธ์  แผนก ทดธ.
 //
-// วิธี Deploy:
+// วิธีใช้:
 //   1. วางโค้ดนี้ใน Apps Script (Extensions → Apps Script)
-//   2. Deploy → New deployment → Web app
-//   3. Execute as: Me  |  Who has access: Anyone
-//   4. Copy URL ที่ได้ → ใส่ใน SCRIPT_URL ของ index.html และ dashboard.html
+//   2. รัน setupSheets() ครั้งแรกเพื่อสร้าง sheet
+//   3. Deploy → New deployment → Web app
+//      Execute as: Me | Who has access: Anyone
+//   4. Copy URL ไปใส่ใน SCRIPT_URL ของ index.html และ dashboard.html
 // ================================================================
 
-const SHEET_LEARNER = 'learner_data';
-const SHEET_PHQ     = 'phq_data';
-const SHEET_ADHD    = 'adhd_data';
+const SH_LEARNER = 'learner_data';
+const SH_PHQ     = 'phq_data';
+const SH_ADHD    = 'adhd_data';
 
-// ─── Headers ──────────────────────────────────────────────────
 const HDR_LEARNER = [
   '_id','_ts','fullname','level','classroom','student_no',
   'gender','gpax','phone','parent_phone',
@@ -26,7 +27,6 @@ const HDR_LEARNER = [
   'digital_biz_exp','programs_used',
   '_risk','learning_group'
 ];
-
 const HDR_PHQ = [
   '_id','_ts','fullname','level','classroom','gender',
   'phq_total','phq_severity',
@@ -34,7 +34,6 @@ const HDR_PHQ = [
   'phq_q6','phq_q7','phq_q8','phq_q9',
   'ai_analysis'
 ];
-
 const HDR_ADHD = [
   '_id','_ts','fullname','level','classroom','gender',
   'adhd_total','adhd_inatt','adhd_hyper','adhd_severity',
@@ -45,42 +44,44 @@ const HDR_ADHD = [
 ];
 
 // ================================================================
-// GET — ดึงข้อมูล
+// GET
 // ================================================================
 function doGet(e) {
   try {
     const type = (e && e.parameter && e.parameter.type) ? e.parameter.type : 'learner';
     const data = readAll(type);
-    return respond({ ok: true, data: data });
+    return jsonOut({ ok: true, data: data });
   } catch(err) {
-    return respond({ ok: false, error: err.message });
+    Logger.log('doGet error: ' + err.message);
+    return jsonOut({ ok: false, error: err.message });
   }
 }
 
 // ================================================================
-// POST — บันทึก/อัปเดตข้อมูล
+// POST
 // ================================================================
 function doPost(e) {
   try {
-    const payload = JSON.parse(e.postData.contents);
-    const type    = payload.type   || 'learner';
+    const body    = e.postData ? e.postData.contents : '{}';
+    const payload = JSON.parse(body);
+    const type    = payload.type || 'learner';
     const record  = payload.record;
     if (!record) throw new Error('No record');
 
     if (record._update) {
-      // อัปเดต ai_analysis กลับไป (จาก AI fetch background)
       updateAI(type, record._id, record.ai_analysis);
     } else {
       upsert(type, record);
     }
-    return respond({ ok: true, id: record._id });
+    return jsonOut({ ok: true, id: record._id || '' });
   } catch(err) {
-    return respond({ ok: false, error: err.message });
+    Logger.log('doPost error: ' + err.message);
+    return jsonOut({ ok: false, error: err.message });
   }
 }
 
 // ================================================================
-// อ่านทุก row → array of objects
+// readAll
 // ================================================================
 function readAll(type) {
   const ss    = SpreadsheetApp.getActiveSpreadsheet();
@@ -88,42 +89,39 @@ function readAll(type) {
   if (!sheet) return [];
   const vals = sheet.getDataRange().getValues();
   if (vals.length <= 1) return [];
-  const headers = vals[0];
+  const headers = vals[0].map(String);
   return vals.slice(1).map(row => {
     const obj = {};
-    headers.forEach((h, i) => { obj[h] = row[i] !== undefined ? row[i] : ''; });
+    headers.forEach((h, i) => {
+      const v = row[i];
+      obj[h] = (v !== undefined && v !== null) ? String(v) : '';
+    });
     return obj;
   });
 }
 
 // ================================================================
-// Upsert — ถ้ามี _id ซ้ำให้แทนที่, ไม่มีให้เพิ่มแถวใหม่
+// upsert
 // ================================================================
 function upsert(type, record) {
   const ss      = SpreadsheetApp.getActiveSpreadsheet();
   const name    = sheetName(type);
-  const headers = headerList(type);
+  const headers = hdrList(type);
   let   sheet   = ss.getSheetByName(name);
 
-  // สร้าง sheet ใหม่พร้อม header ถ้ายังไม่มี
   if (!sheet) {
     sheet = ss.insertSheet(name);
-    const hdrRange = sheet.getRange(1, 1, 1, headers.length);
-    hdrRange.setValues([headers]);
-    hdrRange.setBackground('#E86A2E').setFontColor('#FFFFFF').setFontWeight('bold');
-    sheet.setFrozenRows(1);
-    sheet.setColumnWidth(1, 120);
+    setupHeader(sheet, headers);
   }
 
-  const vals = sheet.getDataRange().getValues();
-  const idCol = headers.indexOf('_id'); // index ใน headers
-  let existingRow = -1;
+  const idIdx = headers.indexOf('_id');
+  const allVals = sheet.getDataRange().getValues();
+  let existRow = -1;
 
-  // ค้นหา row ที่มี _id ตรงกัน
-  if (vals.length > 1 && record._id) {
-    for (let r = 1; r < vals.length; r++) {
-      if (String(vals[r][idCol]) === String(record._id)) {
-        existingRow = r + 1; // Sheets row number (1-based)
+  if (record._id && allVals.length > 1) {
+    for (let r = 1; r < allVals.length; r++) {
+      if (String(allVals[r][idIdx]) === String(record._id)) {
+        existRow = r + 1;
         break;
       }
     }
@@ -131,60 +129,82 @@ function upsert(type, record) {
 
   const row = headers.map(h => {
     const v = record[h];
+    if (v === undefined || v === null) return '';
     if (Array.isArray(v)) return v.join(', ');
-    return (v !== undefined && v !== null) ? v : '';
+    return String(v);
   });
 
-  if (existingRow > 0) {
-    sheet.getRange(existingRow, 1, 1, row.length).setValues([row]);
+  if (existRow > 0) {
+    sheet.getRange(existRow, 1, 1, row.length).setValues([row]);
   } else {
     sheet.appendRow(row);
   }
+  SpreadsheetApp.flush();
 }
 
 // ================================================================
-// updateAI — เขียน ai_analysis กลับไปยัง row ที่มี _id ตรงกัน
+// updateAI
 // ================================================================
 function updateAI(type, id, aiText) {
   if (!id || !aiText) return;
   const ss      = SpreadsheetApp.getActiveSpreadsheet();
-  const name    = sheetName(type);
-  const sheet   = ss.getSheetByName(name);
+  const sheet   = ss.getSheetByName(sheetName(type));
   if (!sheet) return;
 
-  const headers = headerList(type);
-  const aiCol   = headers.indexOf('ai_analysis') + 1; // 1-based
+  const headers = hdrList(type);
+  const aiCol   = headers.indexOf('ai_analysis') + 1;
+  const idIdx   = headers.indexOf('_id');
   if (aiCol < 1) return;
 
   const vals = sheet.getDataRange().getValues();
-  const idCol = headers.indexOf('_id'); // 0-based
-
   for (let r = 1; r < vals.length; r++) {
-    if (String(vals[r][idCol]) === String(id)) {
-      sheet.getRange(r + 1, aiCol).setValue(aiText);
-      break;
+    if (String(vals[r][idIdx]) === String(id)) {
+      sheet.getRange(r + 1, aiCol).setValue(String(aiText));
+      SpreadsheetApp.flush();
+      return;
     }
   }
+}
+
+// ================================================================
+// setupSheets — รันครั้งแรก เพื่อสร้าง sheet ให้ครบ
+// ================================================================
+function setupSheets() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ['learner', 'phq', 'adhd'].forEach(type => {
+    const name    = sheetName(type);
+    const headers = hdrList(type);
+    let sheet = ss.getSheetByName(name);
+    if (!sheet) sheet = ss.insertSheet(name);
+    setupHeader(sheet, headers);
+    Logger.log('✅ Sheet ready: ' + name);
+  });
+  SpreadsheetApp.flush();
+  Browser.msgBox('✅ Setup เสร็จแล้ว!\nสร้าง Sheet: learner_data, phq_data, adhd_data');
 }
 
 // ================================================================
 // Helpers
 // ================================================================
 function sheetName(type) {
-  if (type === 'phq')  return SHEET_PHQ;
-  if (type === 'adhd') return SHEET_ADHD;
-  return SHEET_LEARNER;
+  if (type === 'phq')  return SH_PHQ;
+  if (type === 'adhd') return SH_ADHD;
+  return SH_LEARNER;
 }
-
-function headerList(type) {
+function hdrList(type) {
   if (type === 'phq')  return HDR_PHQ;
   if (type === 'adhd') return HDR_ADHD;
   return HDR_LEARNER;
 }
-
-function respond(obj) {
-  const output = ContentService
+function setupHeader(sheet, headers) {
+  const r = sheet.getRange(1, 1, 1, headers.length);
+  r.setValues([headers]);
+  r.setBackground('#E86A2E').setFontColor('#FFFFFF').setFontWeight('bold');
+  sheet.setFrozenRows(1);
+  sheet.setColumnWidths(1, headers.length, 120);
+}
+function jsonOut(obj) {
+  return ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
-  return output;
 }
