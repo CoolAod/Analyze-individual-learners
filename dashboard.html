@@ -201,7 +201,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
 .sv-r{display:grid;grid-template-columns:130px 1fr 44px;align-items:center;gap:.675rem;margin-bottom:.675rem}
 .sv-t{height:11px;background:var(--g1);border-radius:6px;overflow:hidden}
 .sv-f{height:100%;border-radius:6px;transition:width .55s}
-.fn{background:var(--grn)}.fm{background:var(--amb)}.fmo{background:var(--o)}.fse{background:var(--red)}
+.fn{background:var(--grn)}.fm{background:var(--amb)}.fmo{background:var(--o)}.fse{background:var(--red)}.fms{background:#C2410C}
 .rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.875rem}
 .rc3{background:var(--w);border-radius:var(--rl);border:1px solid var(--g2);padding:1rem;transition:var(--tr)}
 .rc3:hover{box-shadow:var(--shm)}
@@ -353,11 +353,12 @@ tr:hover td{background:var(--o4);cursor:pointer}
       <select class="fsel" id="fRm" onchange="applyPF()"><option value="">ทุกห้อง</option></select>
     </div>
   </div>
-  <div class="sg sg5">
+  <div class="sg">
     <div class="sc"><div class="si" style="background:var(--pbg)">👥</div><div><div class="sn cp" id="pTot">0</div><div class="sl">กรอกแล้ว</div></div></div>
     <div class="sc"><div class="si" style="background:var(--gbg)">✅</div><div><div class="sn cg" id="pNone">0</div><div class="sl">ปกติ (0–4)</div></div></div>
     <div class="sc"><div class="si" style="background:var(--abg)">⚠️</div><div><div class="sn ca" id="pMild">0</div><div class="sl">น้อย (5–9)</div></div></div>
-    <div class="sc"><div class="si" style="background:var(--o3)">🔶</div><div><div class="sn co" id="pMod">0</div><div class="sl">ปานกลาง (10–19)</div></div></div>
+    <div class="sc"><div class="si" style="background:var(--o3)">🔶</div><div><div class="sn co" id="pMod">0</div><div class="sl">ปานกลาง (10–14)</div></div></div>
+    <div class="sc"><div class="si" style="background:#FDE3D0">🟧</div><div><div class="sn co" id="pMS" style="color:#C2410C">0</div><div class="sl">ค่อนข้างรุนแรง (15–19)</div></div></div>
     <div class="sc"><div class="si" style="background:var(--rbg)">🔴</div><div><div class="sn cr" id="pSev">0</div><div class="sl">รุนแรง (20+)</div></div></div>
   </div>
   <div class="tb">
@@ -392,7 +393,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
     <div class="rc4">
       <select class="rsel" id="rpRm" onchange="renderReport()"><option value="">ทุกห้อง</option></select>
       <select class="rsel" id="rpLv" onchange="renderReport()"><option value="">ทุกชั้น</option><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></select>
-      <select class="rsel" id="rpSev" onchange="renderReport()"><option value="0">ทุกระดับ</option><option value="5">ต้องติดตาม (≥5)</option><option value="10">ปานกลาง+ (≥10)</option><option value="20">รุนแรง (≥20)</option></select>
+      <select class="rsel" id="rpSev" onchange="renderReport()"><option value="0">ทุกระดับ</option><option value="5">ต้องติดตาม (≥5)</option><option value="10">ปานกลาง+ (≥10)</option><option value="15">ค่อนข้างรุนแรง+ (≥15)</option><option value="20">รุนแรง (≥20)</option></select>
       <button onclick="window.print()" style="padding:8px 16px;border-radius:var(--rm);background:var(--o);color:#fff;border:none;cursor:pointer;font-family:'Sarabun',sans-serif;font-size:.84rem;font-weight:600">🖨️ พิมพ์/PDF</button>
     </div>
     <div id="reportContent"><div class="es"><div class="ei">📄</div>เลือกตัวกรองเพื่อสร้างรีพอร์ต</div></div>
@@ -435,7 +436,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
 // CONFIG
 // ══════════════════════════════════════════════════════════════
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbzybh8hNNz06nRiPaNgTItuJGrarO2Kah02bQOoMIckvk7EIDds6t4n2MpCT73JzINN/exec';
-const ADMIN_USER='admin', ADMIN_PASS='admin1234';
+let REFRESH_TIMER=null;   // (v4) การล็อกอิน/ตรวจสิทธิ์ย้ายไปที่ Apps Script แล้ว
 
 // ══════════════════════════════════════════════════════════════
 // STATE
@@ -446,20 +447,47 @@ const PHQ_Q=['รู้สึกหดหู่ เศร้า หรือส�
 // ══════════════════════════════════════════════════════════════
 // LOGIN
 // ══════════════════════════════════════════════════════════════
-function doLogin(){
+async function apiCall(payload){
+  const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
+}
+async function doLogin(){
   const u=document.getElementById('lU').value.trim();
   const p=document.getElementById('lP').value;
-  if(u===ADMIN_USER&&p===ADMIN_PASS){
-    sessionStorage.setItem('da','1');
-    document.getElementById('loginPage').style.display='none';
-    init();
-  } else {
-    document.getElementById('lErr').style.display='block';
-    document.getElementById('lP').value='';
-  }
+  const err=document.getElementById('lErr');
+  const btn=document.querySelector('#loginPage .l-btn');
+  err.style.display='none';
+  if(!u||!p){err.textContent='⚠️ กรุณากรอกชื่อผู้ใช้และรหัสผ่าน';err.style.display='block';return;}
+  btn.disabled=true;btn.textContent='กำลังตรวจสอบ...';
+  try{
+    const r=await apiCall({action:'login',username:u,password:p});
+    if(r.ok&&r.token){
+      sessionStorage.setItem('dt',r.token);
+      document.getElementById('lP').value='';
+      document.getElementById('loginPage').style.display='none';
+      init();
+    }else{
+      err.textContent=r.error==='locked'?'⛔ ลองผิดหลายครั้ง กรุณารอ 10 นาทีแล้วลองใหม่':'⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+      err.style.display='block';document.getElementById('lP').value='';
+    }
+  }catch(e){
+    err.textContent='⚠️ เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่';err.style.display='block';
+  }finally{btn.disabled=false;btn.textContent='🔐 เข้าสู่ระบบ';}
 }
-function doLogout(){sessionStorage.removeItem('da');location.reload();}
-if(sessionStorage.getItem('da')==='1'){
+function doLogout(){
+  const tk=sessionStorage.getItem('dt');
+  sessionStorage.removeItem('dt');
+  const done=()=>location.reload();
+  if(tk){Promise.race([apiCall({action:'logout',token:tk}),new Promise(r=>setTimeout(r,800))]).catch(()=>{}).then(done);}else done();
+}
+function forceRelogin(){
+  sessionStorage.removeItem('dt');
+  if(REFRESH_TIMER){clearInterval(REFRESH_TIMER);REFRESH_TIMER=null;}
+  const e=document.getElementById('lErr');e.textContent='⏱️ เซสชันหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง';e.style.display='block';
+  document.getElementById('loginPage').style.display='';
+}
+if(sessionStorage.getItem('dt')){
   document.getElementById('loginPage').style.display='none';
   window.addEventListener('DOMContentLoaded',init);
 }
@@ -474,27 +502,18 @@ function showLoad(msg){
 }
 function hideLoad(){document.getElementById('loadCover').classList.remove('vis');}
 
-async function fetchSheet(type){
-  try{
-    const url=SCRIPT_URL+'?type='+type+'&t='+Date.now();
-    const res=await fetch(url,{method:'GET',mode:'cors',cache:'no-cache'});
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    const data=await res.json();
-    return Array.isArray(data.data)?data.data:[];
-  }catch(e){
-    console.error('fetchSheet ['+type+'] error:',e.message);
-    return [];
-  }
+async function fetchAll(){
+  const r=await apiCall({action:'read',token:sessionStorage.getItem('dt')||'',types:['learner','phq','adhd']});
+  if(!r.ok){if(r.error==='unauthorized')forceRelogin();throw new Error(r.error||'read_failed');}
+  return r.data||{};
 }
 
 async function reloadAll(){
   showLoad('กำลังดึงข้อมูลจาก Google Sheets...');
   try{
-    [ALL,PHQ,ADHD]=await Promise.all([
-      fetchSheet('learner'),
-      fetchSheet('phq'),
-      fetchSheet('adhd')
-    ]);
+    const _d=await fetchAll();
+    ALL=_d.learner||[];PHQ=_d.phq||[];ADHD=_d.adhd||[];
+    normalizeAll();
     // populate classroom selects
     const rooms=[...new Set([...ALL,...PHQ,...ADHD].map(d=>d.classroom).filter(Boolean))].sort();
     ['fClass','fRm','rpRm','afRm'].forEach(id=>{
@@ -507,6 +526,9 @@ async function reloadAll(){
     renderLearner();
     applyPF();
     applyAF();
+  }catch(e){
+    console.error('reloadAll:',e.message);
+    const ls=document.getElementById('lSub');if(ls)ls.textContent='⚠️ โหลดข้อมูลไม่สำเร็จ — จะลองใหม่อัตโนมัติ';
   }finally{
     hideLoad();
   }
@@ -514,7 +536,7 @@ async function reloadAll(){
 
 async function init(){
   await reloadAll();
-  setInterval(reloadAll,60000); // auto-refresh 1 นาที
+  REFRESH_TIMER=setInterval(reloadAll,60000); // auto-refresh 1 นาที
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -525,6 +547,72 @@ function switchDash(t){
     document.getElementById('d-'+k).classList.toggle('act',k===t);
     document.getElementById('dt-'+k).classList.toggle('act',k===t);
   });
+}
+
+// ══════════════════════════════════════════════════════════════
+// NORMALIZE (v4) — escape HTML, แปลงวันที่, คำนวณคะแนน PHQ/ADHD ใหม่จากรายข้อ
+// ══════════════════════════════════════════════════════════════
+const _ESC={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+const _UNESC={'&lt;':'<','&gt;':'>','&quot;':'"','&#39;':"'",'&amp;':'&'};
+function esc(s){return String(s).replace(/[&<>"']/g,c=>_ESC[c]);}
+function unesc(s){return typeof s==='string'?s.replace(/&lt;|&gt;|&quot;|&#39;|&amp;/g,m=>_UNESC[m]):s;}
+let PHQ_BAD=0,ADHD_BAD=0;
+function numOr(v){return(v===''||v===null||v===undefined)?NaN:Number(v);}
+function normTs(v){
+  if(v===undefined||v===null||v==='')return '';
+  const s=String(v).trim();
+  const m=s.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/);
+  if(m){ // รูปแบบ ISO จาก Sheets (Date) → dd/MM/พ.ศ. HH:mm:ss เวลาไทย
+    const t=new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5],+m[6])+7*3600*1000);
+    let y=t.getUTCFullYear();if(y<2400)y+=543;
+    const p=n=>String(n).padStart(2,'0');
+    return `${p(t.getUTCDate())}/${p(t.getUTCMonth()+1)}/${y} ${p(t.getUTCHours())}:${p(t.getUTCMinutes())}:${p(t.getUTCSeconds())}`;
+  }
+  return s;
+}
+function dayKey(day){const m=String(day).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);return m?m[3]+m[2].padStart(2,'0')+m[1].padStart(2,'0'):'0'+day;}
+function phqSevKey(s){return s<=4?'none':s<=9?'mild':s<=14?'moderate':s<=19?'moderately_severe':'severe';}
+// เกณฑ์คัดกรอง ADHD (อิง DSM-5 / SNAP-IV 18 ข้อ): นับข้อที่ตอบ ≥2 ("บ่อยครั้ง"/"บ่อยมาก")
+// ≥ ADHD_CUT จาก 9 ข้อของด้านใดด้านหนึ่ง = มีแนวโน้ม (DSM-5: 6 ข้อ สำหรับอายุ ≤16 ปี, 5 ข้อ สำหรับอายุ ≥17 ปี — ปรับค่าได้ที่นี่)
+const ADHD_CUT=6,ADHD_WATCH=4;
+function adhdSevKey(ci,ch){
+  if(ci>=ADHD_CUT&&ch>=ADHD_CUT)return'combined';
+  if(ci>=ADHD_CUT)return'inattentive';
+  if(ch>=ADHD_CUT)return'hyperactive';
+  if(ci>=ADHD_WATCH||ch>=ADHD_WATCH)return'subclinical';
+  return'none';
+}
+function normPHQ(d){
+  const q=[];let ok=true;
+  for(let i=1;i<=9;i++){const n=numOr(d['phq_q'+i]);if(!(n>=0&&n<=3)){ok=false;break;}q.push(n);}
+  let t=ok?q.reduce((a,b)=>a+b,0):numOr(d.phq_total);
+  if(!ok&&!(t>=0&&t<=27)){const alt=numOr(d.phq_severity);if(alt>=0&&alt<=27)t=alt;}  // ชีตเดิม: หัวคอลัมน์ total/severity สลับกัน   // รวมจากรายข้อเป็นหลัก
+  if(!(t>=0&&t<=27))return null;                          // ใช้คำนวณไม่ได้ → ไม่นับ (ไม่ปล่อยเป็น NaN)
+  d.phq_total=t;d.phq_severity=phqSevKey(t);
+  if(ok)q.forEach((v,i)=>{d['phq_q'+(i+1)]=v;});
+  return d;
+}
+function normADHD(d){
+  const a=[];let ok=true;
+  for(let i=1;i<=18;i++){const n=numOr(d['adhd_q'+i]);if(!(n>=0&&n<=3)){ok=false;break;}a.push(n);}
+  let I,H,t,CI,CH;
+  if(ok){
+    I=a.slice(0,9).reduce((x,y)=>x+y,0);H=a.slice(9).reduce((x,y)=>x+y,0);t=I+H;
+    CI=a.slice(0,9).filter(v=>v>=2).length;CH=a.slice(9).filter(v=>v>=2).length;
+  }else{ // ไม่มีคะแนนรายข้อ → ใช้ค่าที่เก็บไว้ได้เฉพาะเมื่อมีจำนวนข้อครบ
+    t=numOr(d.adhd_total);I=numOr(d.adhd_inatt);H=numOr(d.adhd_hyper);CI=numOr(d.adhd_inatt_cnt);CH=numOr(d.adhd_hyper_cnt);
+    if(![t,I,H,CI,CH].every(Number.isFinite))return null;
+  }
+  d.adhd_total=t;d.adhd_inatt=I;d.adhd_hyper=H;d.adhd_inatt_cnt=CI;d.adhd_hyper_cnt=CH;
+  d.adhd_severity=adhdSevKey(CI,CH);
+  return d;
+}
+function normalizeAll(){
+  const clean=d=>{const o={};Object.keys(d).forEach(k=>{o[k]=esc(d[k]===null||d[k]===undefined?'':d[k]);});o._ts=normTs(d._ts);return o;};
+  ALL=ALL.map(clean);
+  const p=PHQ.map(clean).map(normPHQ);PHQ_BAD=p.filter(x=>!x).length;PHQ=p.filter(Boolean);
+  const a=ADHD.map(clean).map(normADHD);ADHD_BAD=a.filter(x=>!x).length;ADHD=a.filter(Boolean);
+  if(PHQ_BAD||ADHD_BAD)console.warn('ข้อมูลคะแนนไม่สมบูรณ์ (ไม่นำมาคำนวณ): PHQ',PHQ_BAD,'ADHD',ADHD_BAD,'— รัน repairSheets() ใน Apps Script');
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -698,7 +786,7 @@ function openModal(id){
   if(!d)return;
   const phq=fPHQ(d),adhd=fADHD(d);
   const g=classify(d),gc=g==='advanced'?'var(--grn)':g==='intermediate'?'var(--amb)':'var(--red)',gl=g==='advanced'?'🏆 กลุ่มเก่ง':g==='intermediate'?'📚 กลุ่มกลาง':'🚨 กลุ่มต้องดูแล';
-  const sb=s=>{const n=parseInt(s);if(n<=4)return['b-g','ปกติ'];if(n<=9)return['b-a','น้อย'];if(n<=14)return['b-o','ปานกลาง'];if(n<=19)return['b-o','ค่อนข้างรุนแรง'];return['b-r','รุนแรง'];};
+  const sb=s=>{const n=parseInt(s);if(!Number.isFinite(n))return['b-gy','—'];if(n<=4)return['b-g','ปกติ'];if(n<=9)return['b-a','น้อย'];if(n<=14)return['b-o','ปานกลาง'];if(n<=19)return['b-o','ค่อนข้างรุนแรง'];return['b-r','รุนแรง'];};
   let phqSec='',adhdSec='',noteSec='';
   if(phq){
     const[bc,bl]=sb(phq.phq_total);const q9=parseInt(phq.phq_q9||0);
@@ -715,6 +803,7 @@ function openModal(id){
     const asl={none:'ไม่พบแนวโน้ม',subclinical:'ต้องติดตาม',inattentive:'ขาดสมาธิ',hyperactive:'ซน/หุนหัน',combined:'แบบรวม'};
     adhdSec=`<div class="ms"><div class="mst tu">🧩 ผลประเมิน ADHD</div>
       <div class="chip" style="background:var(--tbg);color:var(--tel)">รวม ${adhd.adhd_total}/54 · สมาธิ ${adhd.adhd_inatt}/27 · ซน ${adhd.adhd_hyper}/27</div>
+      <div style="font-size:.76rem;color:var(--g5);margin-bottom:.4rem">ข้อที่ตอบ "บ่อยครั้ง/บ่อยมาก": ขาดสมาธิ ${adhd.adhd_inatt_cnt}/9 · ซน/หุนหัน ${adhd.adhd_hyper_cnt}/9 (เกณฑ์ ≥${ADHD_CUT} ข้อต่อด้าน)</div>
       <div style="margin-bottom:.625rem"><span class="badge b-t">${asl[adhd.adhd_severity]||adhd.adhd_severity}</span></div>
       <div style="font-size:.77rem;font-weight:600;color:var(--g5);margin-bottom:.3rem">🤖 AI วิเคราะห์ ADHD:</div>
       <div class="ai-box ai-t">${adhd.ai_analysis?adhd.ai_analysis.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'):'<span style="color:var(--g4)">AI กำลังวิเคราะห์เบื้องหลัง...</span>'}</div>
@@ -768,24 +857,24 @@ function applyPF(){
 }
 function renderPHQ(){
   const n=PHQF.length;
-  document.getElementById('pSub').textContent=`ข้อมูลทั้งหมด ${PHQ.length} คน | แสดง ${n} คน`;
-  const c={none:0,mild:0,mod:0,sev:0};
-  PHQF.forEach(d=>{const s=parseInt(d.phq_total||0);if(s<=4)c.none++;else if(s<=9)c.mild++;else if(s<=19)c.mod++;else c.sev++;});
-  document.getElementById('pTot').textContent=n;document.getElementById('pNone').textContent=c.none;document.getElementById('pMild').textContent=c.mild;document.getElementById('pMod').textContent=c.mod;document.getElementById('pSev').textContent=c.sev;
+  document.getElementById('pSub').textContent=`ข้อมูลทั้งหมด ${PHQ.length} คน | แสดง ${n} คน${PHQ_BAD?` | ⚠️ ข้อมูลไม่สมบูรณ์ ${PHQ_BAD} ราย (ไม่นับ)`:''}`;
+  const c={none:0,mild:0,mod:0,ms:0,sev:0};
+  PHQF.forEach(d=>{const s=parseInt(d.phq_total||0);if(s<=4)c.none++;else if(s<=9)c.mild++;else if(s<=14)c.mod++;else if(s<=19)c.ms++;else c.sev++;});
+  document.getElementById('pTot').textContent=n;document.getElementById('pNone').textContent=c.none;document.getElementById('pMild').textContent=c.mild;document.getElementById('pMod').textContent=c.mod;document.getElementById('pMS').textContent=c.ms;document.getElementById('pSev').textContent=c.sev;
   renderPHQOverview(c,n);renderTrend();renderByRoom();renderQHeat();renderPHQTable(PHQF);renderQ9Risk();renderReport();
 }
 function renderPHQOverview(c,n){
   const el=document.getElementById('sevBars');
   if(!n){el.innerHTML='<div class="es"><div class="ei">💜</div>ยังไม่มีข้อมูล PHQ-A</div>';return;}
   document.getElementById('ovNote').textContent=`ค่าเฉลี่ย ${(PHQF.reduce((a,d)=>a+parseInt(d.phq_total||0),0)/n).toFixed(1)}/27`;
-  const rows=[{l:'ปกติ (0–4)',n:c.none,f:'fn'},{l:'น้อย (5–9)',n:c.mild,f:'fm'},{l:'ปานกลาง (10–19)',n:c.mod,f:'fmo'},{l:'รุนแรง (20+)',n:c.sev,f:'fse'}];
+  const rows=[{l:'ปกติ (0–4)',n:c.none,f:'fn'},{l:'น้อย (5–9)',n:c.mild,f:'fm'},{l:'ปานกลาง (10–14)',n:c.mod,f:'fmo'},{l:'ค่อนข้างรุนแรง (15–19)',n:c.ms,f:'fms'},{l:'รุนแรง (20+)',n:c.sev,f:'fse'}];
   el.innerHTML=rows.map(r=>`<div class="sv-r"><div style="font-size:.855rem;color:var(--g6)">${r.l}</div><div class="sv-t"><div class="sv-f ${r.f}" style="width:${n?r.n/n*100:0}%"></div></div><div style="font-weight:600">${r.n}</div></div>`).join('');
 }
 function renderTrend(){
   const el=document.getElementById('trendChart');
   if(!PHQF.length){el.innerHTML='<div style="color:var(--g4);font-size:.83rem">ยังไม่มีข้อมูล</div>';return;}
   const bd={};PHQF.forEach(d=>{const day=(d._ts||'?').split(' ')[0];if(!bd[day])bd[day]=[];bd[day].push(parseInt(d.phq_total||0));});
-  el.innerHTML=Object.entries(bd).sort((a,b)=>a[0].localeCompare(b[0])).slice(-12).map(([day,sc])=>{
+  el.innerHTML=Object.entries(bd).sort((a,b)=>dayKey(a[0]).localeCompare(dayKey(b[0]))).slice(-12).map(([day,sc])=>{
     const avg=(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1),c=avg>=10?'var(--red)':avg>=5?'var(--amb)':'var(--grn)';
     return`<div class="tp"><div class="td">${day}</div><div class="ta2" style="color:${c}">${avg}</div><div class="tn2">${sc.length} คน</div></div>`;
   }).join('')||'<div style="color:var(--g4)">ยังไม่มีข้อมูล</div>';
@@ -796,9 +885,9 @@ function renderByRoom(){
   const rooms={};PHQF.forEach(d=>{const k=`${d.level||''} ${d.classroom||''}`.trim()||'ไม่ระบุ';if(!rooms[k])rooms[k]=[];rooms[k].push(d);});
   el.innerHTML=Object.entries(rooms).sort((a,b)=>a[0].localeCompare(b[0])).map(([room,sts])=>{
     const n=sts.length,avg=(sts.reduce((a,d)=>a+parseInt(d.phq_total||0),0)/n).toFixed(1);
-    const none=sts.filter(d=>d.phq_total<=4).length,mild=sts.filter(d=>d.phq_total>=5&&d.phq_total<=9).length,mod=sts.filter(d=>d.phq_total>=10&&d.phq_total<=19).length,sev=sts.filter(d=>d.phq_total>=20).length;
+    const none=sts.filter(d=>d.phq_total<=4).length,mild=sts.filter(d=>d.phq_total>=5&&d.phq_total<=9).length,mod=sts.filter(d=>d.phq_total>=10&&d.phq_total<=14).length,ms=sts.filter(d=>d.phq_total>=15&&d.phq_total<=19).length,sev=sts.filter(d=>d.phq_total>=20).length;
     const ac=avg>=10?'var(--red)':avg>=5?'var(--amb)':'var(--grn)',ab=avg>=10?'var(--rbg)':avg>=5?'var(--abg)':'var(--gbg)';
-    return`<div class="rc3"><div class="rc3-h"><div class="rn2">${room}</div><span class="ra" style="background:${ab};color:${ac}">เฉลี่ย ${avg}</span></div><div style="font-size:.77rem;color:var(--g4);margin-bottom:.55rem">${n} คน</div><div class="rb-st"><div class="rb-sg" style="width:${none/n*100}%;background:var(--grn)"></div><div class="rb-sg" style="width:${mild/n*100}%;background:var(--amb)"></div><div class="rb-sg" style="width:${mod/n*100}%;background:var(--o)"></div><div class="rb-sg" style="width:${sev/n*100}%;background:var(--red)"></div></div><div class="rleg"><span class="rli"><span class="rld" style="background:var(--grn)"></span>ปกติ ${none}</span><span class="rli"><span class="rld" style="background:var(--amb)"></span>น้อย ${mild}</span><span class="rli"><span class="rld" style="background:var(--o)"></span>ปานกลาง ${mod}</span><span class="rli"><span class="rld" style="background:var(--red)"></span>รุนแรง ${sev}</span></div></div>`;
+    return`<div class="rc3"><div class="rc3-h"><div class="rn2">${room}</div><span class="ra" style="background:${ab};color:${ac}">เฉลี่ย ${avg}</span></div><div style="font-size:.77rem;color:var(--g4);margin-bottom:.55rem">${n} คน</div><div class="rb-st"><div class="rb-sg" style="width:${none/n*100}%;background:var(--grn)"></div><div class="rb-sg" style="width:${mild/n*100}%;background:var(--amb)"></div><div class="rb-sg" style="width:${mod/n*100}%;background:var(--o)"></div><div class="rb-sg" style="width:${ms/n*100}%;background:#C2410C"></div><div class="rb-sg" style="width:${sev/n*100}%;background:var(--red)"></div></div><div class="rleg"><span class="rli"><span class="rld" style="background:var(--grn)"></span>ปกติ ${none}</span><span class="rli"><span class="rld" style="background:var(--amb)"></span>น้อย ${mild}</span><span class="rli"><span class="rld" style="background:var(--o)"></span>ปานกลาง ${mod}</span><span class="rli"><span class="rld" style="background:#C2410C"></span>ค่อนข้างรุนแรง ${ms}</span><span class="rli"><span class="rld" style="background:var(--red)"></span>รุนแรง ${sev}</span></div></div>`;
   }).join('');
 }
 function renderQHeat(){
@@ -813,7 +902,7 @@ function renderPHQTable(data){
   if(sf)d2=data.filter(d=>{const t=parseInt(d.phq_total||0);if(sf==='none')return t<=4;if(sf==='mild')return t>=5&&t<=9;if(sf==='moderate')return t>=10&&t<=14;if(sf==='moderately_severe')return t>=15&&t<=19;if(sf==='severe')return t>=20;return true;});
   const tbody=document.getElementById('phqTbody');
   if(!d2.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--g4)">ไม่พบข้อมูล</td></tr>';return;}
-  const sb=s=>{const n=parseInt(s);if(n<=4)return['b-g','ปกติ'];if(n<=9)return['b-a','น้อย'];if(n<=14)return['b-o','ปานกลาง'];if(n<=19)return['b-o','ค่อนข้างรุนแรง'];return['b-r','รุนแรง'];};
+  const sb=s=>{const n=parseInt(s);if(!Number.isFinite(n))return['b-gy','—'];if(n<=4)return['b-g','ปกติ'];if(n<=9)return['b-a','น้อย'];if(n<=14)return['b-o','ปานกลาง'];if(n<=19)return['b-o','ค่อนข้างรุนแรง'];return['b-r','รุนแรง'];};
   tbody.innerHTML=d2.map((d,i)=>{
     const[bc,bl]=sb(d.phq_total);const q9=parseInt(d.phq_q9||0);
     const ad=ADHD.find(a=>a._id===d._id||a.fullname===d.fullname&&a.classroom===d.classroom);
@@ -838,7 +927,7 @@ function renderReport(){
   const el=document.getElementById('reportContent');
   if(!data.length){el.innerHTML='<div class="es"><div class="ei">📄</div>ไม่พบข้อมูลตามเงื่อนไข</div>';return;}
   const byRoom={};data.forEach(d=>{const k=`${d.level||''} ${d.classroom||''}`.trim()||'ไม่ระบุ';if(!byRoom[k])byRoom[k]=[];byRoom[k].push(d);});
-  const sb=s=>{const n=parseInt(s);if(n<=4)return['b-g','ปกติ'];if(n<=9)return['b-a','น้อย'];if(n<=14)return['b-o','ปานกลาง'];if(n<=19)return['b-o','ค่อนข้างรุนแรง'];return['b-r','รุนแรง'];};
+  const sb=s=>{const n=parseInt(s);if(!Number.isFinite(n))return['b-gy','—'];if(n<=4)return['b-g','ปกติ'];if(n<=9)return['b-a','น้อย'];if(n<=14)return['b-o','ปานกลาง'];if(n<=19)return['b-o','ค่อนข้างรุนแรง'];return['b-r','รุนแรง'];};
   el.innerHTML=Object.entries(byRoom).sort((a,b)=>a[0].localeCompare(b[0])).map(([room,sts])=>{
     const avg=(sts.reduce((a,d)=>a+parseInt(d.phq_total||0),0)/sts.length).toFixed(1),atr=sts.filter(d=>parseInt(d.phq_total||0)>=10).length,q9a=sts.filter(d=>parseInt(d.phq_q9||0)>0).length;
     const rows=sts.sort((a,b)=>parseInt(b.phq_total||0)-parseInt(a.phq_total||0)).map((d,i)=>{const[bc,bl]=sb(d.phq_total);const q9=parseInt(d.phq_q9||0);return`<tr><td style="font-size:.74rem;color:var(--g4)">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td style="font-size:.79rem">${d.gender||'—'}</td><td><strong>${d.phq_total}/27</strong></td><td><span class="badge ${bc}">${bl}</span></td><td>${q9>0?`<span class="badge b-r">⚠️ ${q9}</span>`:`<span class="badge b-gy">0</span>`}</td><td style="font-size:.74rem;color:var(--g4)">${d._ts||'—'}</td></tr>`;}).join('');
@@ -860,7 +949,7 @@ function applyAF(){
 }
 function renderADHD(){
   const n=ADHDF.length;
-  document.getElementById('aSub').textContent=`ข้อมูลทั้งหมด ${ADHD.length} คน | แสดง ${n} คน`;
+  document.getElementById('aSub').textContent=`ข้อมูลทั้งหมด ${ADHD.length} คน | แสดง ${n} คน${ADHD_BAD?` | ⚠️ ข้อมูลไม่สมบูรณ์ ${ADHD_BAD} ราย (ไม่นับ)`:''}`;
   const none=ADHDF.filter(d=>d.adhd_severity==='none').length;
   const sub=ADHDF.filter(d=>d.adhd_severity==='subclinical').length;
   const inatt=ADHDF.filter(d=>d.adhd_severity==='inattentive').length;
@@ -877,8 +966,8 @@ function renderADHDTable(data){
     <td style="color:var(--g4);font-size:.74rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td>
     <td><span class="badge b-gy">${d.level||''} ${d.classroom||''}</span></td>
     <td><strong>${d.adhd_total}/54</strong></td>
-    <td><span style="color:var(--blu);font-weight:600">${d.adhd_inatt}/27</span></td>
-    <td><span style="color:var(--o);font-weight:600">${d.adhd_hyper}/27</span></td>
+    <td><span style="color:var(--blu);font-weight:600">${d.adhd_inatt}/27</span> <small style="color:var(--g4)">(${d.adhd_inatt_cnt}/9 ข้อ)</small></td>
+    <td><span style="color:var(--o);font-weight:600">${d.adhd_hyper}/27</span> <small style="color:var(--g4)">(${d.adhd_hyper_cnt}/9 ข้อ)</small></td>
     <td><span class="badge ${sb2[d.adhd_severity]||'b-gy'}">${sl[d.adhd_severity]||d.adhd_severity}</span></td>
     <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.76rem;color:var(--g5)">${d.ai_analysis?String(d.ai_analysis).replace(/<[^>]*>/g,'').slice(0,80)+'...':'—'}</td>
     <td style="font-size:.74rem;color:var(--g4)">${d._ts||'—'}</td>
@@ -915,7 +1004,7 @@ function showAT(id,btn){document.querySelectorAll('#d-a .pan').forEach(p=>p.clas
 function exportExcelLearner(){
   if(!ALL.length){alert('ยังไม่มีข้อมูลผู้เรียน');return;}
   const hdr=['_id','_ts','fullname','level','classroom','student_no','gender','gpax','phone','parent_phone','computer_skill_level','typing_speed','english_tech','problem_solving','learning_style','challenge_attitude','planning_habit','multitasking','submission_habit','absence','help_seeking','part_time','sleep_hours','has_computer','home_internet','smartphone_os','uses_ai','family_support','living_status','career_goal','stress_level','special_skills','social_platforms','student_note','digital_biz_exp','programs_used','_risk','learning_group'];
-  const rows=ALL.map(d=>hdr.map(k=>d[k]??''));
+  const rows=ALL.map(d=>hdr.map(k=>unesc(d[k]??'')));
   const ws=XLSX.utils.aoa_to_sheet([hdr,...rows]);ws['!cols']=hdr.map(()=>({wch:18}));
   const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'ผู้เรียน');
   XLSX.writeFile(wb,`learner_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
@@ -923,15 +1012,15 @@ function exportExcelLearner(){
 function exportExcelPHQ(){
   if(!PHQ.length){alert('ยังไม่มีข้อมูล PHQ-A');return;}
   const hdr=['_id','_ts','fullname','level','classroom','gender','phq_total','phq_severity','phq_q1','phq_q2','phq_q3','phq_q4','phq_q5','phq_q6','phq_q7','phq_q8','phq_q9','ai_analysis'];
-  const rows=PHQ.map(d=>hdr.map(k=>d[k]??''));
+  const rows=PHQ.map(d=>hdr.map(k=>unesc(d[k]??'')));
   const ws=XLSX.utils.aoa_to_sheet([hdr,...rows]);
   const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'PHQ-A');
   XLSX.writeFile(wb,`phq_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
 }
 function exportExcelADHD(){
   if(!ADHD.length){alert('ยังไม่มีข้อมูล ADHD');return;}
-  const hdr=['_id','_ts','fullname','level','classroom','gender','adhd_total','adhd_inatt','adhd_hyper','adhd_severity','adhd_q1','adhd_q2','adhd_q3','adhd_q4','adhd_q5','adhd_q6','adhd_q7','adhd_q8','adhd_q9','adhd_q10','adhd_q11','adhd_q12','adhd_q13','adhd_q14','adhd_q15','adhd_q16','adhd_q17','adhd_q18','ai_analysis'];
-  const rows=ADHD.map(d=>hdr.map(k=>d[k]??''));
+  const hdr=['_id','_ts','fullname','level','classroom','gender','adhd_total','adhd_inatt','adhd_hyper','adhd_severity','adhd_inatt_cnt','adhd_hyper_cnt','adhd_q1','adhd_q2','adhd_q3','adhd_q4','adhd_q5','adhd_q6','adhd_q7','adhd_q8','adhd_q9','adhd_q10','adhd_q11','adhd_q12','adhd_q13','adhd_q14','adhd_q15','adhd_q16','adhd_q17','adhd_q18','ai_analysis'];
+  const rows=ADHD.map(d=>hdr.map(k=>unesc(d[k]??'')));
   const ws=XLSX.utils.aoa_to_sheet([hdr,...rows]);
   const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'ADHD');
   XLSX.writeFile(wb,`adhd_${new Date().toLocaleDateString('th-TH').replace(/\//g,'-')}.xlsx`);
