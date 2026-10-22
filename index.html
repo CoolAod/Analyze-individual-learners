@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<title>แบบสำรวจผู้เรียน | ทดธ. วท.ประจวบคีรีขันธ์</title>
+<title>แบบสำรวจผู้เรียน | แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล วท.ประจวบคีรีขันธ์</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -217,7 +217,7 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
 <div class="fcb"><div class="fg">
   <div class="fl ff"><label class="flb">ชื่อ – นามสกุล <span class="req">*</span></label><input class="fi" type="text" name="fullname" placeholder="กรอกชื่อ-นามสกุลจริง (ภาษาไทย)" required></div>
   <div class="fl"><label class="flb">ระดับชั้น <span class="req">*</span></label><select class="fs" name="level" required><option value="">-- เลือก --</option><optgroup label="ปวช."><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option></optgroup><optgroup label="ปวส."><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></optgroup></select></div>
-  <div class="fl"><label class="flb">ห้องเรียน <span class="req">*</span></label><input class="fi" type="text" name="classroom" placeholder="เช่น ทดธ.1/1"></div>
+  <div class="fl"><label class="flb">ห้องเรียน <span class="req">*</span></label><input class="fi" type="text" name="classroom" placeholder="เช่น .1/1"></div>
   <div class="fl"><label class="flb">รหัสนักเรียน</label><input class="fi" type="number" name="student_no" placeholder="6921910XXXX"></div>
   <div class="fl"><label class="flb">เพศ</label><div class="rr"><label class="rc"><input type="radio" name="gender" value="ชาย"><span class="em">👦</span><span>ชาย</span></label><label class="rc"><input type="radio" name="gender" value="หญิง"><span class="em">👧</span><span>หญิง</span></label><label class="rc"><input type="radio" name="gender" value="อื่นๆ"><span class="em">🌈</span><span>อื่นๆ</span></label></div></div>
   <div class="fl"><label class="flb">เกรดเฉลี่ย (GPAX)</label><select class="fs" name="gpax"><option value="">-- เลือก --</option><option value="3.5-4.0">🌟 3.50-4.00</option><option value="3.0-3.49">⭐ 3.00-3.49</option><option value="2.5-2.99">👍 2.50-2.99</option><option value="2.0-2.49">📚 2.00-2.49</option><option value="below2">💪 ต่ำกว่า 2.00</option><option value="new">🆕 นักเรียนใหม่</option></select></div>
@@ -317,6 +317,7 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
   <h2 class="stt">บันทึกข้อมูลสำเร็จแล้ว! 🎉</h2>
   <p class="ssd">ขอบคุณที่กรอกข้อมูล ครูจะนำไปใช้ดูแลและออกแบบการเรียนรู้ที่เหมาะกับคุณ</p>
   <div class="sm-mt" id="smMeta"></div>
+  <div id="careBox" style="display:none;max-width:420px;margin:0 auto 1rem;padding:.875rem 1rem;border-radius:12px;background:#F3E8FF;color:#4A148C;font-size:.86rem;line-height:1.6;text-align:left">💜 ขอบคุณที่บอกให้ครูรู้นะ ความรู้สึกของเธอสำคัญ ครูอยากดูแลเธอ จึงอาจมีครูมาพูดคุยด้วยเร็ว ๆ นี้<br>ถ้าตอนนี้รู้สึกไม่ปลอดภัยหรืออยากทำร้ายตัวเอง โปรดบอกครูหรือผู้ใหญ่ที่ไว้ใจทันที หรือโทร <strong>1323</strong> (สายด่วนสุขภาพจิต 24 ชม.) / เหตุฉุกเฉิน <strong>1669</strong></div>
   <div style="display:flex;gap:.625rem;justify-content:center;flex-wrap:wrap">
     <button class="btn bp" onclick="resetForm()">➕ กรอกข้อมูลคนต่อไป</button>
   </div>
@@ -434,7 +435,7 @@ async function submitForm(){
   showOverlay('กำลังเตรียมข้อมูล...','กรุณารอสักครู่');
 
   try{
-    const id=Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    const id=window._sid||(window._sid='S'+Date.now().toString(36)+Math.random().toString(36).slice(2,8));
     const ts=new Date().toLocaleString('th-TH');
 
     // รวบรวมข้อมูลแบบสำรวจ
@@ -474,33 +475,18 @@ async function submitForm(){
     const adhdH=adhdOk?adhdA.slice(9).reduce((a,b)=>a+b,0):null;
     const adhdSev=adhdOk?getAdhdSev(adhdT,adhdI,adhdH):null;
 
-    // ส่งข้อมูล
-    setMsg('กำลังบันทึกข้อมูลผู้เรียน (1/3)...');
-    await sendPost('learner',sd);
-
-    if(phqOk){
-      setMsg('กำลังบันทึก PHQ-A (2/3)...');
-      const pr={_id:id,_ts:ts,fullname:fn,level:lv,classroom:cl,gender:sd.gender||'',
-        phq_total:phqT,phq_severity:phqSev.key,
-        ...Object.fromEntries(phqA.map((v,i)=>[`phq_q${i+1}`,v])),
-        ai_analysis:''};
-      await sendPost('phq',pr);
-      // AI วิเคราะห์เบื้องหลัง
-      fetchPHQAI(pr,phqSev,phqA);
-    }
-
-    if(adhdOk){
-      setMsg('กำลังบันทึก ADHD (3/3)...');
-      const ar={_id:id,_ts:ts,fullname:fn,level:lv,classroom:cl,gender:sd.gender||'',
-        adhd_total:adhdT,adhd_inatt:adhdI,adhd_hyper:adhdH,adhd_severity:adhdSev.key,
-        ...Object.fromEntries(adhdA.map((v,i)=>[`adhd_q${i+1}`,v])),
-        ai_analysis:''};
-      await sendPost('adhd',ar);
-      fetchADHDAI(ar,adhdSev);
-    }
+    // ส่งข้อมูลครั้งเดียว (เซิร์ฟเวอร์คำนวณคะแนน/จัดกลุ่ม/แจ้งเตือนข้อ 9 และเรียก AI เอง)
+    setMsg('กำลังบันทึกข้อมูล...');
+    const records={learner:sd};
+    if(phqOk)records.phq={fullname:fn,level:lv,classroom:cl,gender:sd.gender||'',
+      ...Object.fromEntries(phqA.map((v,i)=>[`phq_q${i+1}`,v]))};
+    if(adhdOk)records.adhd={fullname:fn,level:lv,classroom:cl,gender:sd.gender||'',
+      ...Object.fromEntries(adhdA.map((v,i)=>[`adhd_q${i+1}`,v]))};
+    await sendSubmit(id,records);
+    window._sid=null;
 
     hideOverlay();
-    showSuccess(sd);
+    showSuccess(sd,phqOk?phqA[8]:0);
 
   }catch(err){
     hideOverlay();
@@ -509,69 +495,28 @@ async function submitForm(){
   }
 }
 
-// ===== sendPost — ใช้ no-cors + text/plain หลีก CORS preflight =====
-async function sendPost(type,record){
-  const body=JSON.stringify({type,record});
-  // no-cors mode: ส่งสำเร็จแต่อ่าน response ไม่ได้ — ใช้กับ Apps Script ได้
-  const resp=await fetch(SCRIPT_URL,{
-    method:'POST',
-    mode:'no-cors',
-    headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:body,
-  });
-  // no-cors จะไม่ throw แม้ error — ถือว่าส่งแล้ว
-  return resp;
-}
-
-// ===== AI Background Fetch =====
-async function fetchPHQAI(rec,sev,ans){
-  const hi=ans.map((s,i)=>({s,q:PHQ_Q[i]})).filter(x=>x.s>=2);
-  const sl={none:'ปกติ',mild:'น้อย',moderate:'ปานกลาง',moderately_severe:'ค่อนข้างรุนแรง',severe:'รุนแรง'};
-  const prompt=`วิเคราะห์ PHQ-A นักเรียนอาชีวศึกษาไทย
-ชื่อ: ${rec.fullname} ชั้น: ${rec.level} ${rec.classroom} เพศ: ${rec.gender||'ไม่ระบุ'}
-คะแนน: ${rec.phq_total}/27 ระดับ: ${sl[rec.phq_severity]||rec.phq_severity}
-ข้อที่มีคะแนนสูง: ${hi.map(x=>`"${x.q}"(${x.s})`).join(', ')||'ไม่มี'}
-ข้อ 9 (ความคิดทำร้ายตัวเอง): ${rec.phq_q9}
-
-วิเคราะห์ภาษาไทย ≤160 คำ:
-1. **สรุปภาพรวม**
-2. **จุดที่ควรสนใจ**
-3. **คำแนะนำสำหรับครู** (2-3 ข้อ)
-4. **ขั้นตอนต่อไป**`;
-  try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,messages:[{role:'user',content:prompt}]})
-    });
-    const d=await r.json();
-    const t=d.content?.map(c=>c.text||'').join('')||'';
-    if(t) await sendPost('phq',{_id:rec._id,ai_analysis:t,_update:true});
-  }catch(e){console.error('PHQ AI error:',e);}
-}
-
-async function fetchADHDAI(rec,sev){
-  const prompt=`วิเคราะห์ ADHD นักเรียนอาชีวศึกษาไทย อายุ 14-20 ปี
-ชื่อ: ${rec.fullname} ชั้น: ${rec.level} ${rec.classroom}
-รวม: ${rec.adhd_total}/54 | สมาธิ: ${rec.adhd_inatt}/27 | ซน/หุนหัน: ${rec.adhd_hyper}/27
-ระดับ: ${sev.label}
-
-วิเคราะห์ภาษาไทย ≤180 คำ:
-1. **สรุปภาพรวม**
-2. **จุดเด่นที่ต้องดูแล**
-3. **แนวทางการสอนที่เหมาะสม** (3 ข้อ)
-4. **ข้อแนะนำเพิ่มเติม**
-(หมายเหตุ: ผลนี้เป็นการคัดกรองเบื้องต้น ไม่ใช่การวินิจฉัยทางคลินิก)`;
-  try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,messages:[{role:'user',content:prompt}]})
-    });
-    const d=await r.json();
-    const t=d.content?.map(c=>c.text||'').join('')||'';
-    if(t) await sendPost('adhd',{_id:rec._id,ai_analysis:t,_update:true});
-  }catch(e){console.error('ADHD AI error:',e);}
+// ===== sendSubmit — ส่งแบบ text/plain (ไม่มี preflight) และอ่านผลจากเซิร์ฟเวอร์จริง =====
+const _sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function sendSubmit(id,records){
+  const opts={method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'submit',id,records})};
+  let lastErr=null;
+  for(let attempt=1;attempt<=3;attempt++){
+    try{
+      const resp=await fetch(SCRIPT_URL,opts);
+      const r=await resp.json();
+      if(r&&r.ok)return r;
+      if(r&&r.error==='busy'){lastErr=new Error('ระบบกำลังรับข้อมูลจำนวนมาก');await _sleep(1500*attempt);continue;}
+      if(r&&r.error==='invalid')throw new Error('ข้อมูลไม่ครบหรือไม่ถูกต้อง (ตรวจสอบ ชื่อ / ระดับชั้น / ห้อง และการตอบแบบประเมิน)');
+      throw new Error('เซิร์ฟเวอร์ปฏิเสธข้อมูล ('+((r&&r.error)||'unknown')+')');
+    }catch(e){
+      lastErr=e;
+      if(e.message&&/^(ข้อมูลไม่ครบ|เซิร์ฟเวอร์ปฏิเสธ)/.test(e.message))throw e;
+      await _sleep(1000*attempt);
+    }
+  }
+  // ทางสุดท้าย: ส่งแบบ no-cors (อ่านผลไม่ได้) — เซิร์ฟเวอร์ upsert ด้วย id เดิม จึงไม่ซ้ำ
+  try{await fetch(SCRIPT_URL,{...opts,mode:'no-cors'});return{ok:true,unconfirmed:true};}
+  catch(e){throw lastErr||e;}
 }
 
 // ===== HELPERS =====
@@ -621,16 +566,19 @@ function hideOverlay(){
   document.getElementById('so').classList.remove('vis');
   document.getElementById('btnNext').disabled=false;
 }
-function showSuccess(sd){
+const escH=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function showSuccess(sd,q9){
   ['surveyForm','navBar','heroSection'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('smMeta').innerHTML=
-    `<div class="mc">ชื่อ: <strong>${sd.fullname||'—'}</strong></div>`+
-    `<div class="mc">ห้อง: <strong>${sd.classroom||''} ${sd.level||''}</strong></div>`+
+    `<div class="mc">ชื่อ: <strong>${escH(sd.fullname||'—')}</strong></div>`+
+    `<div class="mc">ห้อง: <strong>${escH(sd.classroom||'')} ${escH(sd.level||'')}</strong></div>`+
     `<div class="mc">วันที่: <strong>${sd._ts}</strong></div>`;
+  document.getElementById('careBox').style.display=(q9>0)?'block':'none';
   document.getElementById('spPg').style.display='block';
   scrollTo(0,0);
 }
 function resetForm(){
+  window._sid=null;
   cur=0;
   document.getElementById('surveyForm').reset();
   ['surveyForm','navBar','heroSection'].forEach(id=>document.getElementById(id).style.display='');
