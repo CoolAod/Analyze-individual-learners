@@ -265,6 +265,22 @@ tr:hover td{background:var(--o4);cursor:pointer}
 .footer{text-align:center;padding:1.125rem;font-size:.77rem;color:var(--g4);border-top:1px solid var(--g2);background:var(--w);display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap;margin-top:2rem}
 
 @media print{#loginPage,.hd,.dtb,.tb,.fw,.ha,.rc4 button{display:none!important}.dp,.pan{display:block!important}.pc,.r-blk{box-shadow:none;break-inside:avoid}body{background:white}}
+.adv-pri{padding:.7rem .9rem;border-radius:10px;font-size:.86rem;font-weight:600;margin-bottom:.7rem;line-height:1.55}
+.adv-why{font-weight:400;font-size:.78rem;margin-top:.25rem;opacity:.9}
+.adv-urgent{background:#FEE9E7;color:#B3261E}.adv-high{background:#FDE3D0;color:#9A3412}.adv-watch{background:#FEF5E4;color:#8A5300}.adv-normal{background:#E5F5EC;color:#14693C}
+.adv-h{font-size:.8rem;font-weight:700;color:var(--g6);margin:.75rem 0 .25rem}
+.adv-ul{margin:0 0 .2rem 1.1rem;padding:0;font-size:.82rem;color:var(--g6);line-height:1.7}
+.adv-note{font-size:.74rem;color:var(--g5);margin-top:.6rem;line-height:1.55}
+.q9b{background:#FEE9E7;border-bottom:3px solid #B3261E;padding:.75rem 1rem}
+.q9b-in{max-width:1200px;margin:0 auto}
+.q9b-t{font-weight:700;color:#B3261E;font-size:.92rem;margin-bottom:.4rem}
+.q9b-r{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;padding:.4rem 0;border-top:1px solid #F5C6C1;font-size:.84rem;color:#4a1511}
+.q9b-lv{padding:2px 9px;border-radius:99px;font-size:.72rem;font-weight:700;color:#fff}
+.q9b-lv.u{background:#8B0000}.q9b-lv.w{background:#E86A2E}
+.q9b-act{margin-left:auto;display:flex;gap:.4rem}
+.q9b-act button{padding:5px 11px;border-radius:8px;border:1px solid #B3261E;background:#fff;color:#B3261E;font-size:.78rem;font-weight:600;cursor:pointer}
+.q9b-act button.ok{background:#B3261E;color:#fff}
+.q9b-n,.q9b-more{font-size:.74rem;color:#7a2a24;margin-top:.35rem;line-height:1.5}
 </style>
 </head>
 <body>
@@ -282,7 +298,8 @@ tr:hover td{background:var(--o4);cursor:pointer}
     <div class="l-f"><label>รหัสผ่าน</label><input type="password" id="lP" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <div class="l-err" id="lErr">⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
     <button class="l-btn" onclick="doLogin()">🔐 เข้าสู่ระบบ</button>
-    <div class="l-foot">ระบบวิเคราะห์ผู้เรียน v3 — สำหรับครูผู้สอนเท่านั้น</div>
+    <div class="l-foot" style="margin-bottom:.35rem">ลืมรหัสผ่าน? ติดต่อผู้ดูแลระบบ (เจ้าของ Google Sheet) เพื่อรีเซ็ตรหัสผ่าน</div>
+    <div class="l-foot">ระบบวิเคราะห์ผู้เรียน v4 — สำหรับครูผู้สอนเท่านั้น</div>
   </div>
 </div>
 
@@ -291,7 +308,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
   <div class="hd-i">
     <a class="brand" href="index.html">
       <div class="b-logo"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2.5L2.5 7.5v10h5v-4.5h5V17.5h5v-10L10 2.5z" fill="white" opacity=".9"/></svg></div>
-      <div class="b-tx"><span class="b-s">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="b-d">แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span></div>
+      <div class="b-tx"><span class="b-s">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="b-d">แผนก ทดธ.</span></div>
     </a>
     <nav class="hn"><a href="index.html" class="np">📋 แบบสำรวจ</a><a href="dashboard.html" class="np act">📊 แดชบอร์ด</a></nav>
     <div class="ha">
@@ -299,10 +316,12 @@ tr:hover td{background:var(--o4);cursor:pointer}
       <button class="bxs bp2" onclick="exportExcelPHQ()">📥 PHQ</button>
       <button class="bxs bt2" onclick="exportExcelADHD()">📥 ADHD</button>
       <button class="bxs bg2" onclick="reloadAll()" title="โหลดข้อมูลใหม่">🔄</button>
+      <button class="bxs bg2" onclick="openPwModal()" title="เปลี่ยนรหัสผ่าน">🔑</button>
       <button class="bxs bgr" onclick="doLogout()">🚪 ออก</button>
     </div>
   </div>
 </header>
+<div class="q9b" id="q9Banner" style="display:none"></div>
 
 <!-- DASH TABS -->
 <div class="dtb"><div class="dtb-i">
@@ -484,6 +503,7 @@ function doLogout(){
 function forceRelogin(){
   sessionStorage.removeItem('dt');
   if(REFRESH_TIMER){clearInterval(REFRESH_TIMER);REFRESH_TIMER=null;}
+  document.title=DASH_TITLE;const _b=document.getElementById('q9Banner');if(_b){_b.style.display='none';_b.innerHTML='';}
   const e=document.getElementById('lErr');e.textContent='⏱️ เซสชันหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง';e.style.display='block';
   document.getElementById('loginPage').style.display='';
 }
@@ -508,6 +528,63 @@ async function fetchAll(){
   return r.data||{};
 }
 
+// ══════════════════════════════════════════════════════════════
+// ALERT ข้อ 9 บนแดชบอร์ด (แทนอีเมล/LINE) + รับทราบ + เปลี่ยนรหัสผ่าน
+// ══════════════════════════════════════════════════════════════
+const DASH_TITLE=document.title;
+function renderQ9Banner(){
+  const el=document.getElementById('q9Banner');if(!el)return;
+  const q9=d=>parseInt(d.phq_q9||0)||0;
+  const open=PHQ.filter(d=>q9(d)>=1&&!d.alert_ack).sort((a,b)=>q9(b)-q9(a));
+  document.title=(open.length?`(${open.length}) `:'')+DASH_TITLE;
+  if(!open.length){el.style.display='none';el.innerHTML='';return;}
+  const urg=open.filter(d=>q9(d)>=2).length;
+  const rows=open.slice(0,6).map(d=>{const u=q9(d)>=2;
+    return`<div class="q9b-r"><span class="q9b-lv ${u?'u':'w'}">${u?'ด่วน':'ติดตาม'}</span><b>${d.fullname||'—'}</b><span>${d.level||''} ${d.classroom||''}</span><span>ข้อ 9 = ${d.phq_q9} · PHQ-A ${d.phq_total}/27</span><span class="q9b-act"><button onclick="openModal('${d._id}')">ดูรายละเอียด</button><button class="ok" onclick="ackQ9('${d._id}')">✓ รับทราบ</button></span></div>`;}).join('');
+  el.innerHTML=`<div class="q9b-in"><div class="q9b-t">🔴 แจ้งเตือน: นักเรียนตอบข้อ 9 (ความคิดทำร้ายตนเอง) ที่ยังไม่ได้รับทราบ ${open.length} ราย${urg?` — ด่วน ${urg} ราย`:''}</div>${rows}${open.length>6?`<div class="q9b-more">และอีก ${open.length-6} ราย — ดูที่แท็บ "💜 รายงาน PHQ-A" → "🔴 ความเสี่ยง Q9"</div>`:''}<div class="q9b-n">กด "รับทราบ" เมื่อได้พูดคุยหรือประสานครูแนะแนวแล้ว ระบบจะบันทึกเวลา · สายด่วนสุขภาพจิต 1323 · เหตุฉุกเฉิน 1669</div></div>`;
+  el.style.display='block';
+}
+async function ackQ9(id){
+  if(!confirm('ยืนยันว่าได้พูดคุย/ประสานผู้เกี่ยวข้องกับนักเรียนรายนี้แล้ว?'))return;
+  try{
+    const r=await apiCall({action:'ack',token:sessionStorage.getItem('dt')||'',id});
+    if(r.ok){const p=PHQ.find(x=>x._id===id);if(p)p.alert_ack=esc(r.ts||'✓');renderQ9Banner();renderQ9Risk();}
+    else if(r.error==='unauthorized')forceRelogin();
+    else alert('บันทึกการรับทราบไม่สำเร็จ ('+(r.error||'unknown')+')');
+  }catch(e){alert('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่');}
+}
+function openPwModal(){
+  const f='style="width:100%;padding:9px 12px;border:1.5px solid var(--g2);border-radius:10px;font-size:.9rem;margin:.2rem 0 .7rem;box-sizing:border-box"';
+  const l='style="font-size:.8rem;font-weight:600;color:var(--g6)"';
+  document.getElementById('modalWrap').innerHTML=`<div class="mo" onclick="closeModal(event)"><div class="mb" onclick="event.stopPropagation()" style="max-width:420px">
+    <div class="mh"><div><div class="mt3">🔑 เปลี่ยนรหัสผ่าน</div><div style="font-size:.79rem;color:var(--g4);margin-top:2px">อย่างน้อย 10 ตัวอักษร · เปลี่ยนแล้วเครื่องอื่นจะถูกออกจากระบบ</div></div><button class="mx" onclick="closeModal()">✕</button></div>
+    <div class="mbody">
+      <label ${l}>รหัสผ่านเดิม</label><input type="password" id="pwOld" autocomplete="current-password" ${f}>
+      <label ${l}>รหัสผ่านใหม่</label><input type="password" id="pwNew" autocomplete="new-password" ${f}>
+      <label ${l}>ยืนยันรหัสผ่านใหม่</label><input type="password" id="pwNew2" autocomplete="new-password" ${f} onkeydown="if(event.key==='Enter')submitPw()">
+      <div id="pwMsg" style="font-size:.82rem;min-height:1.3rem;margin-bottom:.5rem"></div>
+      <button class="bxs bo" id="pwBtn" onclick="submitPw()" style="padding:9px 18px;font-size:.88rem">บันทึกรหัสผ่านใหม่</button>
+    </div></div></div>`;
+  document.getElementById('modalWrap').style.display='block';
+  setTimeout(()=>document.getElementById('pwOld')?.focus(),50);
+}
+async function submitPw(){
+  const o=document.getElementById('pwOld').value,n1=document.getElementById('pwNew').value,n2=document.getElementById('pwNew2').value;
+  const msg=document.getElementById('pwMsg'),btn=document.getElementById('pwBtn');
+  const say=(m,ok)=>{msg.textContent=m;msg.style.color=ok?'var(--grn)':'var(--red)';};
+  if(!o||!n1)return say('กรุณากรอกรหัสผ่านให้ครบ');
+  if(n1.length<10)return say('รหัสผ่านใหม่ต้องมีอย่างน้อย 10 ตัวอักษร');
+  if(n1!==n2)return say('รหัสผ่านใหม่และช่องยืนยันไม่ตรงกัน');
+  btn.disabled=true;
+  try{
+    const r=await apiCall({action:'changePassword',token:sessionStorage.getItem('dt')||'',oldPassword:o,newPassword:n1});
+    if(r.ok){sessionStorage.setItem('dt',r.token);say('✅ เปลี่ยนรหัสผ่านเรียบร้อย',true);setTimeout(()=>closeModal(),1300);return;}
+    if(r.error==='unauthorized'){closeModal();forceRelogin();return;}
+    say(r.error==='wrong_old'?'รหัสผ่านเดิมไม่ถูกต้อง':r.error==='weak'?'รหัสผ่านใหม่คาดเดาง่ายหรือซ้ำรหัสเดิม — ลองใช้ให้ยาวและหลากหลายขึ้น':r.error==='locked'?'ใส่ผิดหลายครั้ง ระบบล็อกชั่วคราว (รอ 10 นาที)':'เปลี่ยนรหัสผ่านไม่สำเร็จ ('+(r.error||'unknown')+')');
+  }catch(e){say('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่');}
+  btn.disabled=false;
+}
+
 async function reloadAll(){
   showLoad('กำลังดึงข้อมูลจาก Google Sheets...');
   try{
@@ -526,6 +603,7 @@ async function reloadAll(){
     renderLearner();
     applyPF();
     applyAF();
+    renderQ9Banner();
   }catch(e){
     console.error('reloadAll:',e.message);
     const ls=document.getElementById('lSub');if(ls)ls.textContent='⚠️ โหลดข้อมูลไม่สำเร็จ — จะลองใหม่อัตโนมัติ';
@@ -781,6 +859,186 @@ function showLT(id,btn){document.querySelectorAll('#d-l .pan').forEach(p=>p.clas
 // ══════════════════════════════════════════════════════════════
 // MODAL
 // ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+// ADVICE (v4.2) — คำแนะนำสำหรับครูแบบสำเร็จรูป
+// ทำงานในเบราว์เซอร์จากเกณฑ์ที่กำหนดไว้ ไม่เรียก AI/บริการภายนอก
+// ครูแก้ถ้อยคำได้ที่อ็อบเจ็กต์ ADVICE และตาราง ADV_RULES ด้านล่าง
+// เป็นแนวทางเบื้องต้นประกอบดุลยพินิจของครู ไม่ใช่การวินิจฉัย
+// ══════════════════════════════════════════════════════════════
+const ADVICE={
+  hotline:'สายด่วนสุขภาพจิต 1323 (24 ชม.) · เหตุฉุกเฉิน 1669',
+  priority:{
+    3:{cls:'adv-urgent',t:'🔴 เร่งด่วน — ควรพบนักเรียนและประสานครูแนะแนวภายในวันนี้',f:'ติดตามใกล้ชิดทุกวันจนกว่าจะมีผู้เชี่ยวชาญรับช่วงต่อ'},
+    2:{cls:'adv-high',t:'🟠 ติดตามใกล้ชิด — ควรพูดคุยกับนักเรียนภายใน 2–3 วัน',f:'ติดตามอย่างน้อยสัปดาห์ละครั้ง'},
+    1:{cls:'adv-watch',t:'🟡 เฝ้าระวัง — ควรสังเกตและพูดคุยภายใน 1–2 สัปดาห์',f:'คัดกรองซ้ำหรือติดตามภายใน 2–4 สัปดาห์'},
+    0:{cls:'adv-normal',t:'🟢 ดูแลตามปกติ — ไม่พบสัญญาณที่ต้องติดตามเป็นพิเศษ',f:'คัดกรองตามรอบปกติของวิทยาลัย (เช่น ต้นภาคเรียนถัดไป)'}
+  },
+  phq:{
+    none:{t:'ไม่พบสัญญาณภาวะซึมเศร้าจากแบบคัดกรอง',tips:[
+      'ไม่ต้องดำเนินการพิเศษ ทักทายและสังเกตตามปกติ',
+      'ชมสิ่งที่นักเรียนทำได้ดี เพื่อรักษาความสัมพันธ์ที่ดีกับครู',
+      'หากพบพฤติกรรมเปลี่ยนไปชัดเจน (ซึม ขาดเรียน แยกตัว) ให้พูดคุยและคัดกรองซ้ำ']},
+    mild:{t:'อาการเล็กน้อย — เฝ้าสังเกตและให้กำลังใจ',tips:[
+      'ทักทายพูดคุยสั้น ๆ เป็นการส่วนตัวภายใน 1–2 สัปดาห์ เช่น "ช่วงนี้เป็นอย่างไรบ้าง" โดยไม่ตัดสิน',
+      'ส่งเสริมกิจวัตรที่ช่วยอารมณ์: นอนให้พอ ออกกำลังกาย ทำกิจกรรมกับเพื่อนหรือชมรม',
+      'สังเกตการมาเรียน การส่งงาน และความสัมพันธ์กับเพื่อน หากแย่ลงให้ประสานครูแนะแนว']},
+    moderate:{t:'ระดับปานกลาง — ควรพูดคุยและประสานครูแนะแนว',tips:[
+      'นัดพูดคุยเป็นการส่วนตัวภายใน 1 สัปดาห์ ฟังโดยไม่รีบแก้ปัญหาหรือตัดสิน',
+      'แจ้งครูแนะแนวหรือผู้รับผิดชอบงานสุขภาพจิตของวิทยาลัยเพื่อประเมินต่อ',
+      'ปรับภาระงานชั่วคราวให้พอดี (แบ่งงานเป็นขั้นย่อย ยืดหยุ่นกำหนดส่งเท่าที่จำเป็น) โดยยังให้กำลังใจว่านักเรียนทำได้',
+      'ประเมินซ้ำภายใน 2 สัปดาห์ หากไม่ดีขึ้นหรือกระทบการเรียนและชีวิตประจำวัน ให้แนะนำผู้ปกครองพาพบผู้เชี่ยวชาญด้านสุขภาพจิต']},
+    moderately_severe:{t:'ระดับค่อนข้างรุนแรง — ควรติดตามเร่งด่วน',tips:[
+      'พูดคุยเป็นการส่วนตัวภายใน 2–3 วัน และแจ้งครูแนะแนวทันที',
+      'ประสานผู้ปกครองตามแนวปฏิบัติของวิทยาลัย เพื่อพิจารณาพบจิตแพทย์ นักจิตวิทยา หรือสถานพยาบาล',
+      'ลดแรงกดดันด้านการเรียนชั่วคราว และให้ครูหรือเพื่อนที่ไว้ใจคอยดูแลใกล้ชิด',
+      'ติดตามอย่างน้อยสัปดาห์ละครั้งจนกว่าจะมีผู้เชี่ยวชาญรับช่วงต่อ']},
+    severe:{t:'ระดับรุนแรง — ต้องดำเนินการทันที',tips:[
+      'พบนักเรียนและแจ้งครูแนะแนว/ผู้บริหารตามขั้นตอนภายในวันนี้',
+      'ติดต่อผู้ปกครองและส่งต่อสถานพยาบาลหรือผู้เชี่ยวชาญด้านสุขภาพจิตโดยเร็ว',
+      'หากมีสัญญาณไม่ปลอดภัย ไม่ปล่อยให้นักเรียนอยู่คนเดียว',
+      'บันทึกการช่วยเหลือและเก็บข้อมูลเป็นความลับ']}
+  },
+  q9:[
+    'ถามตรง ๆ ด้วยท่าทีใส่ใจ เช่น "ครูเป็นห่วง ช่วงนี้เคยคิดอยากทำร้ายตัวเองหรือไม่อยากมีชีวิตอยู่บ้างไหม" การถามตรง ๆ อย่างอ่อนโยนไม่ได้ทำให้ความเสี่ยงเพิ่มขึ้น',
+    'ฟังอย่างสงบ ไม่ตำหนิ ไม่ลดทอนความรู้สึก และไม่สัญญาว่าจะเก็บเป็นความลับในทุกกรณี (ต้องแจ้งผู้เกี่ยวข้องเพื่อความปลอดภัย)',
+    'หากนักเรียนมีแผน มีวิธีการ หรือรู้สึกไม่ปลอดภัยตอนนี้ ห้ามปล่อยอยู่คนเดียว ให้นำส่งสถานพยาบาลหรือโทร 1669 และแจ้งผู้ปกครอง',
+    'แจ้งช่องทางขอความช่วยเหลือแก่นักเรียน: สายด่วนสุขภาพจิต 1323'
+  ],
+  phqItems:{ // คำแนะนำตามข้อที่ตอบ ≥2 (ข้อ 1–8)
+    1:'รู้สึกเศร้า/สิ้นหวัง: ชวนเล่าสิ่งที่กังวลหรือเกิดขึ้นช่วงนี้ และช่วยหาผู้ใหญ่หรือเพื่อนที่ไว้ใจเป็นที่พึ่ง',
+    2:'ไม่สนใจสิ่งที่เคยชอบ: ชวนทำกิจกรรมเล็ก ๆ ที่เคยสนุก หรือมอบบทบาทที่ถนัดเพื่อให้กลับมามีส่วนร่วม',
+    3:'ปัญหาการนอน: ชวนสำรวจเวลานอน การเล่นมือถือก่อนนอน และงานพิเศษ แนะนำเข้านอนเป็นเวลา',
+    4:'อ่อนเพลีย: ถามเรื่องการกิน การนอน และภาระงาน หากเหนื่อยต่อเนื่องแนะนำตรวจสุขภาพทั่วไป',
+    5:'การกินผิดปกติ: สังเกตการกินและน้ำหนักอย่างเงียบ ๆ หลีกเลี่ยงการวิจารณ์รูปร่าง หากผิดปกติต่อเนื่องแนะนำพบแพทย์',
+    6:'รู้สึกแย่กับตัวเอง: ชี้จุดแข็งที่เป็นจริงของนักเรียน และหลีกเลี่ยงการเปรียบเทียบกับเพื่อนต่อหน้าผู้อื่น',
+    7:'สมาธิลดลง: แบ่งงานเป็นขั้นสั้น ๆ และให้คำสั่งเป็นลายลักษณ์อักษรควบคู่การบอก',
+    8:'กระวนกระวายหรือเชื่องช้าผิดปกติ: สอบถามความรู้สึกอย่างใส่ใจ และสังเกตต่อเนื่อง'
+  },
+  adhd:{
+    none:{t:'ไม่พบแนวโน้มจากเกณฑ์คัดกรอง',tips:['จัดการเรียนการสอนตามปกติ']},
+    subclinical:{t:'มีบางอาการ — สังเกตต่อ',tips:[
+      'สังเกตพฤติกรรมในห้องเรียนและงานปฏิบัติ 2–4 สัปดาห์ พร้อมจดสถานการณ์ที่เกิดปัญหา',
+      'ใช้กลยุทธ์พื้นฐาน: ให้คำสั่งสั้น ชัด ทีละขั้น และเตือนกำหนดส่งงาน',
+      'หากอาการรบกวนการเรียนชัดเจน ให้ปรึกษาครูแนะแนว']},
+    inattentive:{t:'แนวโน้มด้านขาดสมาธิ',tips:[
+      'จัดที่นั่งใกล้ครู ห่างจากสิ่งรบกวน (ประตู หน้าต่าง)',
+      'แบ่งงานเป็นขั้นย่อยพร้อมเช็กลิสต์และกำหนดส่งย่อย',
+      'ให้คำสั่งทีละขั้น พูดควบคู่เขียนบนกระดาน แล้วให้นักเรียนทวนซ้ำ',
+      'เตือนกำหนดส่งล่วงหน้า (ปฏิทิน กลุ่มแชท) และจัดช่วงบทเรียนสั้น 15–20 นาทีสลับกิจกรรม']},
+    hyperactive:{t:'แนวโน้มด้านซน/หุนหันพลันแล่น',tips:[
+      'เปิดโอกาสให้เคลื่อนไหวอย่างเหมาะสม เช่น ช่วยแจกอุปกรณ์ ลบกระดาน หรือเป็นผู้ช่วยในงานปฏิบัติ',
+      'ตกลงกติกาและสัญญาณเตือนส่วนตัว (เช่น สัญญาณมือ) เพื่อไม่ต้องตำหนิต่อหน้าเพื่อน',
+      'ฝึกการรอคิวและผลัดกันพูด พร้อมชมเชยทันทีเมื่อทำได้',
+      'งานที่ใช้เครื่องมือหรือเครื่องจักร ควรกำกับใกล้ชิดและย้ำกฎความปลอดภัยทุกครั้ง']},
+    combined:{t:'แนวโน้มแบบรวม (ขาดสมาธิ + ซน/หุนหัน)',tips:[
+      'จัดที่นั่งใกล้ครูและลดสิ่งรบกวน พร้อมแบ่งงานเป็นขั้นย่อยและมีเช็กลิสต์',
+      'ให้คำสั่งสั้น ๆ ทีละขั้น พูดควบคู่เขียน และเปิดโอกาสเคลื่อนไหวด้วยบทบาทหน้าที่ที่เหมาะสม',
+      'ตกลงสัญญาณเตือนส่วนตัว ชมเชยทันทีเมื่อทำตามกติกาได้',
+      'งานที่ใช้เครื่องมือหรือเครื่องจักร ควรกำกับใกล้ชิดและย้ำกฎความปลอดภัยทุกครั้ง']}
+  },
+  adhdRefer:'ผลนี้เป็นการคัดกรอง ไม่ใช่การวินิจฉัย หากพฤติกรรมกระทบการเรียนต่อเนื่อง ให้ปรึกษาครูแนะแนวและผู้ปกครองเพื่อพิจารณาพบแพทย์',
+  comorbid:'พบทั้งแนวโน้ม ADHD และอาการซึมเศร้า ซึ่งพบร่วมกันได้บ่อย ควรให้ผู้เชี่ยวชาญประเมินร่วมกัน และให้ความสำคัญกับการดูแลด้านอารมณ์และความปลอดภัยก่อน',
+  group:{
+    advanced:{t:'🏆 กลุ่มเก่ง',tips:[
+      'มอบงานท้าทายหรือโครงงานต่อยอดเพื่อไม่ให้เบื่อ',
+      'เปิดโอกาสเป็นผู้ช่วยสอนหรือติวเพื่อน (เมื่อนักเรียนสะดวกและไม่เป็นภาระเกินไป)',
+      'แนะนำการแข่งขันทักษะหรือใบรับรองวิชาชีพที่เกี่ยวข้อง']},
+    intermediate:{t:'📚 กลุ่มกลาง',tips:[
+      'ตั้งเป้าหมายรายสัปดาห์ร่วมกับนักเรียนและทบทวนผลทุกสัปดาห์',
+      'มอบงานที่ท้าทายขึ้นทีละขั้น จับกลุ่มผสมความสามารถ',
+      'ชมความก้าวหน้า เพื่อดันขึ้นสู่กลุ่มเก่ง']},
+    struggling:{t:'🚨 กลุ่มต้องดูแล',tips:[
+      'ทบทวนพื้นฐานที่จำเป็นก่อนเนื้อหาใหม่ ด้วยใบงานง่ายไปยาก (scaffolding)',
+      'จับคู่กับเพื่อนช่วยเหลือ (buddy) และติดตามความก้าวหน้ารายสัปดาห์',
+      'ตรวจสอบสาเหตุเบื้องหลังก่อนสรุปว่าไม่ตั้งใจเรียน เช่น อุปกรณ์/อินเทอร์เน็ต การขาดเรียน งานพิเศษ สุขภาพ']}
+  },
+  footer:'ข้อมูลสุขภาพจิตเป็นความลับ: พูดคุยเป็นการส่วนตัว ไม่เปิดเผยผลต่อหน้าเพื่อนหรือในกลุ่มแชทของห้อง · คำแนะนำนี้สร้างอัตโนมัติจากเกณฑ์ที่กำหนดไว้ ใช้ประกอบดุลยพินิจของครูและแนวปฏิบัติของวิทยาลัย'
+};
+// กฎจากแบบสำรวจ: w = ความสำคัญ (มากกว่า = แสดงก่อน) แสดงสูงสุด 6 ข้อหลัก + 2 ข้อจุดแข็ง/สไตล์การเรียน
+const ADV_RULES=[
+  {w:10,when:d=>!!(d.student_note&&String(d.student_note).trim()),t:'นักเรียนเขียนข้อความถึงครู (ดูหัวข้อ "สิ่งที่นักเรียนอยากให้ครูรู้"): ควรอ่านและตอบกลับ แม้สั้น ๆ เพื่อให้นักเรียนรู้ว่ามีคนรับฟัง'},
+  {w:9,when:d=>d.absence==='7+'||d.absence==='4-6',t:'ขาดเรียนบ่อย: ติดต่อสอบถามสาเหตุอย่างเป็นมิตร (สุขภาพ การเดินทาง ค่าใช้จ่าย งานพิเศษ) และวางแผนช่วยตามงานที่พลาด'},
+  {w:8,when:d=>d.has_computer==='none'||d.home_internet==='none',t:'ไม่มีคอมพิวเตอร์หรืออินเทอร์เน็ตที่บ้าน: เปิดโอกาสใช้ห้องปฏิบัติการนอกเวลา เตรียมเอกสาร/ไฟล์แบบออฟไลน์ และให้ทำงานที่ต้องใช้เน็ตที่วิทยาลัย'},
+  {w:8,when:d=>parseInt(d.stress_level||0)>=4,t:'รายงานความเครียดสูง: เปิดโอกาสให้พูดคุย สอนเทคนิคผ่อนคลายง่าย ๆ และจัดตารางงานไม่ให้กำหนดส่งทับซ้อนกัน'},
+  {w:7,when:d=>parseInt(d.submission_habit||5)<=2,t:'ส่งงานล่าช้าหรือไม่ค่อยส่ง: แบ่งงานเป็นชิ้นเล็ก กำหนดส่งย่อย และเตือนล่วงหน้า'},
+  {w:7,when:d=>d.sleep_hours==='under5',t:'นอนน้อยกว่า 5 ชั่วโมง: ชวนคุยสาเหตุ (งานพิเศษ เกม มือถือ) และแนะนำการนอนเป็นเวลา'},
+  {w:7,when:d=>parseInt(d.family_support||5)<=2&&d.family_support!=='',t:'ได้รับการสนับสนุนจากครอบครัวน้อย (ข้อมูลลับ ห้ามเปิดเผย): ให้ครูแนะแนวช่วยหาแหล่งสนับสนุน เช่น ทุนการศึกษา ชมรม ครูที่ปรึกษา'},
+  {w:6,when:d=>d.part_time==='weekly',t:'ทำงานพิเศษทุกสัปดาห์: ตรวจสอบภาระงานและเวลานอน และให้กำหนดส่งที่ยืดหยุ่นพอเหมาะ'},
+  {w:6,when:d=>d.challenge_attitude==='avoid'||d.challenge_attitude==='worry'||d.help_seeking==='skip',t:'หลีกเลี่ยงงานยากหรือไม่ค่อยขอความช่วยเหลือ: สร้างบรรยากาศที่ถามได้โดยไม่ถูกตำหนิ เริ่มจากงานที่สำเร็จได้แล้วเพิ่มความยากทีละขั้น'},
+  {w:5,when:d=>d.living_status==='alone',t:'อาศัยอยู่คนเดียว: ถามไถ่ความเป็นอยู่ (อาหาร ค่าใช้จ่าย ความปลอดภัย) เป็นระยะ'},
+  {w:5,when:d=>parseInt(d.computer_skill_level||5)<=2&&d.computer_skill_level!=='',t:'ทักษะคอมพิวเตอร์พื้นฐานน้อย: ใช้ใบงานมีภาพประกอบทีละขั้น และจับคู่กับเพื่อนที่ชำนาญ'},
+  {w:4,when:d=>d.has_computer==='shared'||d.has_computer==='school_only'||d.home_internet==='slow_wifi'||d.home_internet==='mobile_data',t:'อุปกรณ์หรืออินเทอร์เน็ตจำกัด: เตรียมสื่อให้ดาวน์โหลดล่วงหน้า และเผื่อเวลาส่งงานที่ต้องใช้เน็ต'},
+  {w:4,when:d=>d.planning_habit==='never'||d.planning_habit==='rarely',t:'ไม่ค่อยวางแผนงาน: สอนทำรายการงานและเรียงลำดับความสำคัญประจำสัปดาห์'},
+  {w:4,when:d=>d.problem_solving==='wait',t:'เมื่อติดปัญหามักรอ: สอนลำดับการขอความช่วยเหลือ (ลองเอง → ค้นหา → ถามเพื่อน → ถามครู)'},
+  {w:3,when:d=>d.typing_speed==='under20',t:'พิมพ์ช้า: เผื่อเวลาในงานพิมพ์ และแนะนำโปรแกรมฝึกพิมพ์'},
+  {w:3,when:d=>d.english_tech==='1'||d.english_tech==='2',t:'ภาษาอังกฤษเชิงเทคนิคเป็นอุปสรรค: ทำคำศัพท์ประจำบทเป็นไทยคู่อังกฤษ'},
+  {w:3,when:d=>!!(d.special_skills&&String(d.special_skills).trim())||(!!d.digital_biz_exp&&d.digital_biz_exp!=='none'),t:'มีทักษะพิเศษหรือประสบการณ์ที่ระบุไว้: มอบบทบาทที่ได้แสดงความสามารถ เช่น ผู้ช่วยครูหรือหัวหน้ากลุ่ม'},
+  {w:2,when:d=>d.learning_style==='video',t:'ชอบเรียนจากวิดีโอ: แนบคลิปสั้นประกอบบทเรียน'},
+  {w:2,when:d=>d.learning_style==='practice',t:'ชอบเรียนจากการลงมือทำ: เริ่มด้วยงานปฏิบัติสั้น ๆ แล้วค่อยอธิบายทฤษฎี'},
+  {w:2,when:d=>d.learning_style==='read',t:'ชอบเรียนจากการอ่าน: จัดใบความรู้หรือเอกสารสรุปให้'},
+  {w:2,when:d=>d.learning_style==='listen',t:'ชอบเรียนจากการฟัง: อธิบายด้วยวาจาและเปิดโอกาสถามตอบ'},
+  {w:2,when:d=>d.learning_style==='group',t:'ชอบเรียนเป็นกลุ่ม: ให้ทำงานคู่หรือกลุ่มเล็ก'},
+  {w:2,when:d=>d.career_goal==='own_biz'||d.career_goal==='freelance',t:'มีเป้าหมายทำธุรกิจ/ฟรีแลนซ์: เชื่อมงานในรายวิชากับโครงงานที่ใช้งานจริงได้'},
+  {w:2,when:d=>d.career_goal==='study_more',t:'ตั้งใจเรียนต่อ: ให้คำแนะนำด้านผลการเรียนและการเตรียมสอบ/ต่อยอด'},
+  {w:2,when:d=>d.career_goal==='company',t:'ต้องการทำงานบริษัท: เน้นทักษะที่ตลาดงานต้องการและโอกาสฝึกงาน'},
+  {w:2,when:d=>d.career_goal==='unsure',t:'ยังไม่แน่ใจเป้าหมาย: ชวนสำรวจความสนใจและแนะแนวอาชีพ'}
+];
+function advPriority(d,phq,adhd){
+  const reasons=[];let lv=0;
+  const up=(n,why)=>{if(n>lv)lv=n;reasons.push(why);};
+  if(phq){
+    const t=Number(phq.phq_total),q9=parseInt(phq.phq_q9||0)||0;
+    if(q9>=2)up(3,`ตอบข้อ 9 (ความคิดทำร้ายตนเอง) = ${q9}`);
+    else if(q9===1)up(2,'ตอบข้อ 9 (ความคิดทำร้ายตนเอง) = 1');
+    if(t>=20)up(3,`PHQ-A ${t}/27 (รุนแรง)`);
+    else if(t>=15)up(2,`PHQ-A ${t}/27 (ค่อนข้างรุนแรง)`);
+    else if(t>=10)up(1,`PHQ-A ${t}/27 (ปานกลาง)`);
+  }
+  if(adhd&&['combined','inattentive','hyperactive'].includes(adhd.adhd_severity))up(1,'ผลคัดกรอง ADHD เข้าเกณฑ์แนวโน้ม');
+  const rk=riskOf(d);
+  if(rk>=8)up(1,`คะแนนความเสี่ยงด้านการเรียน ${rk}`);
+  if(parseInt(d.stress_level||0)>=4)up(1,'รายงานความเครียดสูง');
+  return{lv,reasons};
+}
+function buildAdvice(d,phq,adhd){
+  const ul=a=>`<ul class="adv-ul">${a.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  const h=(icon,t)=>`<div class="adv-h">${icon} ${t}</div>`;
+  const pr=advPriority(d,phq,adhd),pm=ADVICE.priority[pr.lv];
+  let html=`<div class="adv-pri ${pm.cls}">${pm.t}${pr.reasons.length?`<div class="adv-why">เหตุผล: ${pr.reasons.join(' · ')}</div>`:''}<div class="adv-why">การติดตาม: ${pm.f}</div></div>`;
+
+  // ด้านอารมณ์ (PHQ-A)
+  if(phq){
+    const t=Number(phq.phq_total),q9=parseInt(phq.phq_q9||0)||0,A=ADVICE.phq[phqSevKey(t)];
+    html+=h('💜',`ด้านอารมณ์ (PHQ-A ${t}/27): ${A.t}`)+ul(A.tips);
+    if(q9>0){html+=h('⚠️','ข้อ 9 — ความคิดทำร้ายตนเอง')+ul(ADVICE.q9);}
+    const hi=[];for(let i=1;i<=8;i++){const v=parseInt(phq['phq_q'+i]||0);if(v>=2)hi.push([i,v]);}
+    hi.sort((a,b)=>b[1]-a[1]||a[0]-b[0]);
+    if(hi.length)html+=h('🔎','ข้อที่ตอบบ่อย (คะแนน ≥2)')+ul(hi.slice(0,3).map(x=>ADVICE.phqItems[x[0]]));
+  }else html+=`<div class="adv-note">ยังไม่มีผล PHQ-A ของนักเรียนคนนี้ — แนะนำให้ทำแบบประเมินเพื่อให้คำแนะนำด้านอารมณ์ครบถ้วน</div>`;
+
+  // ADHD
+  if(adhd){
+    const k=adhd.adhd_severity||'none',A=ADVICE.adhd[k]||ADVICE.adhd.none;
+    html+=h('🧩',`ด้านสมาธิ/พฤติกรรม (ADHD): ${A.t}`)+ul(A.tips);
+    if(['combined','inattentive','hyperactive'].includes(k)){
+      html+=`<div class="adv-note">${ADVICE.adhdRefer}</div>`;
+      if(phq&&Number(phq.phq_total)>=10)html+=`<div class="adv-pri adv-watch" style="margin-top:.5rem">${ADVICE.comorbid}</div>`;
+    }
+  }
+
+  // กลุ่มผู้เรียน
+  const G=ADVICE.group[classify(d)];
+  if(G)html+=h('🎓',`แนวทางการสอน: ${G.t}`)+ul(G.tips);
+
+  // จากแบบสำรวจ
+  const hit=ADV_RULES.filter(r=>{try{return r.when(d);}catch(e){return false;}}).sort((a,b)=>b.w-a.w);
+  const main=hit.filter(r=>r.w>=4).slice(0,6),extra=hit.filter(r=>r.w<4).slice(0,2);
+  if(main.length||extra.length)html+=h('📋','จากข้อมูลแบบสำรวจ')+ul(main.concat(extra).map(r=>r.t));
+
+  html+=`<div class="adv-note">${ADVICE.footer}</div>`;
+  return`<div class="ms"><div class="mst ou">💡 คำแนะนำสำหรับครู <span style="font-weight:400;font-size:.72rem;color:var(--g4)">(สร้างอัตโนมัติ ไม่ใช้ AI)</span></div>${html}</div>`;
+}
+
 function openModal(id){
   const d=ALL.find(s=>s._id===id);
   if(!d)return;
@@ -795,8 +1053,8 @@ function openModal(id){
       <div class="chip" style="background:var(--pbg);color:var(--pur)">คะแนน ${phq.phq_total}/27 <span class="badge ${bc}" style="margin-left:5px">${bl}</span>${q9>0?`<span class="rt q9" style="margin-left:6px">⚠️ Q9:${q9}</span>`:''}</div>
       ${q9>0?`<div class="q9-box">⚠️ ตอบข้อ 9 = ${q9} — กรุณาพูดคุยและแจ้งครูแนะแนวทันที</div>`:''}
       <div class="bmi">${ans.map((v,i)=>`<span style="font-size:.72rem;padding:2px 6px;border-radius:5px;font-weight:600;background:${v==0?'var(--gbg)':v==1?'var(--abg)':v==2?'var(--o3)':'var(--rbg)'};color:${v==0?'var(--grn)':v==1?'var(--amb)':v==2?'var(--o)':'var(--red)'}">ข${i+1}:${v}</span>`).join(' ')}</div>
-      <div style="font-size:.77rem;font-weight:600;color:var(--g5);margin:.625rem 0 .3rem">🤖 AI วิเคราะห์ PHQ-A:</div>
-      <div class="ai-box ai-p">${phq.ai_analysis?phq.ai_analysis.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'):'<span style="color:var(--g4)">AI กำลังวิเคราะห์เบื้องหลัง... (รีเฟรชหน้าในอีกสักครู่)</span>'}</div>
+${phq.ai_analysis?`<div style="font-size:.77rem;font-weight:600;color:var(--g5);margin:.625rem 0 .3rem">🤖 AI วิเคราะห์ PHQ-A:</div>
+      <div class="ai-box ai-p">${phq.ai_analysis.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>`:''}
     </div>`;
   }
   if(adhd){
@@ -805,8 +1063,8 @@ function openModal(id){
       <div class="chip" style="background:var(--tbg);color:var(--tel)">รวม ${adhd.adhd_total}/54 · สมาธิ ${adhd.adhd_inatt}/27 · ซน ${adhd.adhd_hyper}/27</div>
       <div style="font-size:.76rem;color:var(--g5);margin-bottom:.4rem">ข้อที่ตอบ "บ่อยครั้ง/บ่อยมาก": ขาดสมาธิ ${adhd.adhd_inatt_cnt}/9 · ซน/หุนหัน ${adhd.adhd_hyper_cnt}/9 (เกณฑ์ ≥${ADHD_CUT} ข้อต่อด้าน)</div>
       <div style="margin-bottom:.625rem"><span class="badge b-t">${asl[adhd.adhd_severity]||adhd.adhd_severity}</span></div>
-      <div style="font-size:.77rem;font-weight:600;color:var(--g5);margin-bottom:.3rem">🤖 AI วิเคราะห์ ADHD:</div>
-      <div class="ai-box ai-t">${adhd.ai_analysis?adhd.ai_analysis.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'):'<span style="color:var(--g4)">AI กำลังวิเคราะห์เบื้องหลัง...</span>'}</div>
+${adhd.ai_analysis?`<div style="font-size:.77rem;font-weight:600;color:var(--g5);margin:.625rem 0 .3rem">🤖 AI วิเคราะห์ ADHD:</div>
+      <div class="ai-box ai-t">${adhd.ai_analysis.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div>`:''}
     </div>`;
   }
   if(d.student_note&&d.student_note.trim()){
@@ -815,6 +1073,7 @@ function openModal(id){
     </div>`;
   }
   const r=riskOf(d);
+  const advSec=buildAdvice(d,phq,adhd);
   document.getElementById('modalWrap').innerHTML=`<div class="mo" onclick="closeModal(event)">
     <div class="mb" onclick="event.stopPropagation()">
       <div class="mh"><div><div class="mt3">${d.fullname||'—'}</div><div style="font-size:.79rem;color:var(--g4);margin-top:2px">${d.level||''} ${d.classroom||''} ${d.gender?'· '+d.gender:''}</div></div><button class="mx" onclick="closeModal()">✕</button></div>
@@ -833,7 +1092,7 @@ function openModal(id){
             ${d.part_time?`💼 ${d.part_time==='none'?'ไม่ทำงานพิเศษ':d.part_time==='weekend'?'ทำวันหยุด':'ทำทุกสัปดาห์'} &nbsp;`:''}
           </div>
         </div>
-        ${phqSec}${adhdSec}${noteSec}
+        ${phqSec}${adhdSec}${advSec}${noteSec}
       </div>
     </div>
   </div>`;
@@ -917,7 +1176,7 @@ function renderQ9Risk(){
   el.innerHTML=q9s.map(d=>`<div class="ri" onclick="openModal('${d._id||''}')">
     <div class="rd" style="background:${parseInt(d.phq_q9)>=2?'#8B0000':'var(--red)'}"></div>
     <div class="ri-i"><span class="rn">${d.fullname||'—'}</span><span class="rc2">${d.level||''} ${d.classroom||''} ${d.gender?'· '+d.gender:''}</span>
-      <div class="rts"><span class="rt q9">ข้อ 9: ${d.phq_q9} ${parseInt(d.phq_q9)>=2?'(สูงมาก — แจ้งด่วน)':'(ควรติดตาม)'}</span><span class="rt">คะแนนรวม ${d.phq_total}/27</span></div>
+      <div class="rts"><span class="rt q9">ข้อ 9: ${d.phq_q9} ${parseInt(d.phq_q9)>=2?'(สูงมาก — แจ้งด่วน)':'(ควรติดตาม)'}</span><span class="rt">คะแนนรวม ${d.phq_total}/27</span>${d.alert_ack?`<span class="rt" style="background:var(--gbg);color:var(--grn)">✓ รับทราบแล้ว ${d.alert_ack}</span>`:`<button class="bxs bo" onclick="event.stopPropagation();ackQ9('${d._id}')">✓ รับทราบ</button>`}</div>
     </div><div style="font-size:.74rem;color:var(--g4)">${d._ts||'—'}</div>
   </div>`).join('');
 }
