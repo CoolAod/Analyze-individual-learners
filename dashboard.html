@@ -281,6 +281,12 @@ tr:hover td{background:var(--o4);cursor:pointer}
 .q9b-act button{padding:5px 11px;border-radius:8px;border:1px solid #B3261E;background:#fff;color:#B3261E;font-size:.78rem;font-weight:600;cursor:pointer}
 .q9b-act button.ok{background:#B3261E;color:#fff}
 .q9b-n,.q9b-more{font-size:.74rem;color:#7a2a24;margin-top:.35rem;line-height:1.5}
+.grp-bar{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin:0 0 .75rem}
+.gchip{padding:6px 13px;border-radius:99px;border:1.5px solid var(--g2);background:#fff;font-size:.82rem;font-weight:600;color:var(--g6);cursor:pointer}
+.gchip b{margin-left:3px}.gchip.on{background:var(--o);border-color:var(--o);color:#fff}
+.gsort{margin-left:auto;font-size:.8rem;color:var(--g5)}.gsort select{padding:5px 9px;border:1.5px solid var(--g2);border-radius:8px;font-size:.8rem;margin-left:4px}
+.gc.sel{box-shadow:0 0 0 3px rgba(0,0,0,.2)}.gc:hover{filter:brightness(.98)}
+@media print{.q9b,.grp-bar{display:none!important}}
 </style>
 </head>
 <body>
@@ -336,13 +342,13 @@ tr:hover td{background:var(--o4);cursor:pointer}
 <div class="dp act" id="d-l">
   <div class="ph">
     <div><div class="pt">📊 แดชบอร์ดวิเคราะห์ผู้เรียน</div><div class="ps" id="lSub">กำลังโหลด...</div></div>
-    <div class="fw"><select class="fsel" id="fClass" onchange="renderLearner()"><option value="all">ทุกห้อง</option></select></div>
+    <div class="fw"><button class="bxs bo" onclick="openPrintModal()" style="padding:7px 13px">🖨️ ปริ๊นรายงานห้อง</button><select class="fsel" id="fClass" onchange="renderLearner()"><option value="all">ทุกห้อง</option></select></div>
   </div>
   <div class="sg" id="sg">
     <div class="sc"><div class="si" style="background:var(--o3)">👥</div><div><div class="sn" id="sTot">0</div><div class="sl">นักเรียนทั้งหมด</div><div class="ss" id="sTotS">—</div></div></div>
-    <div class="sc"><div class="si" style="background:var(--gbg)">🏆</div><div><div class="sn cg" id="sAdv">0</div><div class="sl">กลุ่มเก่ง</div><div class="ss">Advanced</div></div></div>
-    <div class="sc"><div class="si" style="background:var(--abg)">📚</div><div><div class="sn ca" id="sInt">0</div><div class="sl">กลุ่มกลาง</div><div class="ss">Intermediate</div></div></div>
-    <div class="sc"><div class="si" style="background:var(--rbg)">🚨</div><div><div class="sn cr" id="sStr">0</div><div class="sl">กลุ่มต้องดูแล</div><div class="ss">Struggling</div></div></div>
+    <div class="sc" style="cursor:pointer" onclick="goGroup('advanced')" title="คลิกเพื่อดูรายชื่อกลุ่มนี้"><div class="si" style="background:var(--gbg)">🏆</div><div><div class="sn cg" id="sAdv">0</div><div class="sl">กลุ่มเก่ง</div><div class="ss">Advanced</div></div></div>
+    <div class="sc" style="cursor:pointer" onclick="goGroup('intermediate')" title="คลิกเพื่อดูรายชื่อกลุ่มนี้"><div class="si" style="background:var(--abg)">📚</div><div><div class="sn ca" id="sInt">0</div><div class="sl">กลุ่มกลาง</div><div class="ss">Intermediate</div></div></div>
+    <div class="sc" style="cursor:pointer" onclick="goGroup('struggling')" title="คลิกเพื่อดูรายชื่อกลุ่มนี้"><div class="si" style="background:var(--rbg)">🚨</div><div><div class="sn cr" id="sStr">0</div><div class="sl">กลุ่มต้องดูแล</div><div class="ss">Struggling</div></div></div>
     <div class="sc"><div class="si" style="background:var(--abg)">💻</div><div><div class="sn ca" id="sNoDev">0</div><div class="sl">ขาดอุปกรณ์</div><div class="ss">ไม่มีคอมส่วนตัว</div></div></div>
     <div class="sc"><div class="si" style="background:var(--gbg)">⭐</div><div><div class="sn cg" id="sSp">0</div><div class="sl">ทักษะพิเศษ</div><div class="ss">ดิจิทัล</div></div></div>
   </div>
@@ -355,12 +361,13 @@ tr:hover td{background:var(--o4);cursor:pointer}
   </div>
   <div class="pan act" id="lp-grp">
     <div class="gg" id="groupGrid"><div class="es" style="grid-column:1/-1"><div class="ei">📊</div>ยังไม่มีข้อมูล</div></div>
-    <div class="pc"><div class="ph2"><div class="pt2">📋 รายละเอียดการจัดกลุ่ม</div><div class="pn">ทักษะคอม + GPAX + ส่งงาน</div></div><div class="pb2" style="padding:0"><div class="tw"><table><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ห้อง</th><th>ทักษะคอม</th><th>GPAX</th><th>ส่งงาน</th><th>กลุ่ม</th><th>PHQ-A</th><th>ADHD</th></tr></thead><tbody id="grpTbody"><tr><td colspan="9" class="es">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div></div>
+    <div id="grpBar" class="grp-bar"></div>
+    <div class="pc"><div class="ph2"><div class="pt2" id="grpTitle">📋 รายละเอียดการจัดกลุ่ม</div><div class="pn" id="grpNote">ทักษะคอม + GPAX + ส่งงาน</div></div><div class="pb2" style="padding:0"><div class="tw"><table><thead><tr><th>#</th><th>รหัส</th><th>ชื่อ-นามสกุล</th><th>ห้อง</th><th>ทักษะคอม</th><th>GPAX</th><th>ส่งงาน</th><th>กลุ่ม</th><th>PHQ-A</th><th>ADHD</th></tr></thead><tbody id="grpTbody"><tr><td colspan="10" class="es">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div></div>
   </div>
   <div class="pan" id="lp-risk"><div class="pc"><div class="ph2"><div class="pt2">🚨 นักเรียนกลุ่มเสี่ยง</div><div class="pn">เรียงความเสี่ยงมาก→น้อย · Q9≥1 แจ้งครูแนะแนว</div></div><div class="pb2" id="riskBody"><div class="es"><div class="ei">📋</div>ยังไม่มีข้อมูล</div></div></div></div>
   <div class="pan" id="lp-sk"><div class="pc"><div class="ph2"><div class="pt2">⭐ ภาพรวมทักษะ</div></div><div class="pb2"><div class="sl3"><div class="sub-c"><div class="sub-t">📊 ค่าเฉลี่ยทักษะหลัก (1–5)</div><div id="skillBars"></div></div><div><div class="sub-c"><div class="sub-t">✨ ทักษะพิเศษ</div><div class="tc" id="spTags"><span class="tg">ยังไม่มีข้อมูล</span></div></div><div class="sub-c"><div class="sub-t">📱 Social Media</div><div class="tc" id="platTags"><span class="tg">ยังไม่มีข้อมูล</span></div></div><div class="sub-c"><div class="sub-t">🎯 เป้าหมายอาชีพ</div><div id="careerChart"></div></div></div></div></div></div></div>
   <div class="pan" id="lp-dev"><div class="pc"><div class="ph2"><div class="pt2">📱 ความพร้อมด้านอุปกรณ์</div></div><div class="pb2"><div class="dg" id="devGrid"><div class="es"><div class="ei">💻</div>ยังไม่มีข้อมูล</div></div></div></div></div>
-  <div class="pan" id="lp-stu"><div class="pc"><div class="ph2"><div class="pt2">📋 รายชื่อทั้งหมด</div><input class="si2" type="text" placeholder="🔍 ค้นหา..." oninput="filterLT(this.value)"></div><div class="pb2" style="padding:0"><div class="tw"><table><thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ชั้น/ห้อง</th><th>คอม</th><th>อุปกรณ์</th><th>เน็ต</th><th>เสี่ยง</th><th>กลุ่ม</th><th>PHQ-A</th><th>ADHD</th></tr></thead><tbody id="stuTbody"><tr><td colspan="10" class="es">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div></div></div>
+  <div class="pan" id="lp-stu"><div class="pc"><div class="ph2"><div class="pt2">📋 รายชื่อทั้งหมด</div><input class="si2" type="text" placeholder="🔍 ค้นหา..." oninput="filterLT(this.value)"></div><div class="pb2" style="padding:0"><div class="tw"><table><thead><tr><th>#</th><th>รหัส</th><th>ชื่อ-นามสกุล</th><th>ชั้น/ห้อง</th><th>คอม</th><th>อุปกรณ์</th><th>เน็ต</th><th>เสี่ยง</th><th>กลุ่ม</th><th>PHQ-A</th><th>ADHD</th></tr></thead><tbody id="stuTbody"><tr><td colspan="11" class="es">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div></div></div>
 </div>
 
 <!-- ══ PHQ ═══════════════════════════════════════════════════════ -->
@@ -722,6 +729,190 @@ function riskOf(d){
 // ══════════════════════════════════════════════════════════════
 // LEARNER RENDER
 // ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+// GROUPS (v4.3) — เลือกดูรายชื่อรายกลุ่ม + เรียงลำดับ + ปริ๊นรายงานรายห้อง
+// ══════════════════════════════════════════════════════════════
+const GRP_ORDER={advanced:0,intermediate:1,struggling:2};
+const GRP_META={
+  advanced:{ic:'🏆',l:'กลุ่มเก่ง',b:'b-g'},
+  intermediate:{ic:'📚',l:'กลุ่มกลาง',b:'b-a'},
+  struggling:{ic:'🚨',l:'กลุ่มต้องดูแล',b:'b-r'}
+};
+let GRP_SEL='all',GRP_SORT='group';
+const COLL=new Intl.Collator('th',{numeric:true,sensitivity:'base'});
+// เรียงตามรหัสนักเรียน (ตัวเลขเรียงตามค่า, ช่องว่างไว้ท้าย) แล้วตามด้วยชื่อ
+function cmpSno(a,b){
+  const x=String(a.student_no||'').trim(),y=String(b.student_no||'').trim();
+  if(!x&&y)return 1;if(x&&!y)return -1;
+  return COLL.compare(x,y)||COLL.compare(a.fullname||'',b.fullname||'');
+}
+// mode: 'group' = เก่ง→กลาง→ต้องดูแล แล้วตามรหัส | 'sno' = ตามรหัสนักเรียน | 'name' = ตามชื่อ
+function sortStudents(arr,mode){
+  const a=arr.slice();
+  if(mode==='sno')return a.sort(cmpSno);
+  if(mode==='name')return a.sort((p,q)=>COLL.compare(p.fullname||'',q.fullname||''));
+  return a.sort((p,q)=>GRP_ORDER[classify(p)]-GRP_ORDER[classify(q)]||cmpSno(p,q));
+}
+function selGroup(k,fromChip){GRP_SEL=(!fromChip&&GRP_SEL===k)?'all':k;renderGroups();}
+function setGrpSort(v){GRP_SORT=v;renderGroups();}
+function goGroup(k){
+  GRP_SEL=k;
+  switchDash('l');
+  const b=document.querySelector('#d-l .tb .tbt');if(b)showLT('grp',b);
+  renderGroups();
+  const bar=document.getElementById('grpBar');if(bar)bar.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderGrpTable(data){
+  const tbody=document.getElementById('grpTbody'),bar=document.getElementById('grpBar');
+  const ttl=document.getElementById('grpTitle'),note=document.getElementById('grpNote');
+  if(!data.length){
+    if(bar)bar.innerHTML='';
+    tbody.innerHTML='<tr><td colspan="10" class="es">ยังไม่มีข้อมูล</td></tr>';return;
+  }
+  const cnt={advanced:0,intermediate:0,struggling:0};
+  data.forEach(d=>{cnt[classify(d)]++;});
+  const chip=(k,l,n)=>`<button class="gchip${GRP_SEL===k?' on':''}" onclick="selGroup('${k}',true)">${l} <b>${n}</b></button>`;
+  const opt=(v,l)=>`<option value="${v}"${GRP_SORT===v?' selected':''}>${l}</option>`;
+  bar.innerHTML=chip('all','ทั้งหมด',data.length)+chip('advanced','🏆 เก่ง',cnt.advanced)+chip('intermediate','📚 กลาง',cnt.intermediate)+chip('struggling','🚨 ต้องดูแล',cnt.struggling)+
+    `<span class="gsort">เรียงตาม <select onchange="setGrpSort(this.value)">${opt('group','กลุ่ม (เก่ง → กลาง → ต้องดูแล)')}${opt('sno','รหัสนักเรียน')}${opt('name','ชื่อ-นามสกุล')}</select></span>`;
+  let rows=GRP_SEL==='all'?data:data.filter(d=>classify(d)===GRP_SEL);
+  rows=sortStudents(rows,GRP_SORT);
+  if(ttl)ttl.textContent=GRP_SEL==='all'?`📋 รายชื่อทุกกลุ่ม (${rows.length} คน)`:`${GRP_META[GRP_SEL].ic} รายชื่อ${GRP_META[GRP_SEL].l} (${rows.length} คน)`;
+  if(note)note.textContent='คลิกที่แถวเพื่อดูรายละเอียดและคำแนะนำรายบุคคล';
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="10" class="es">ไม่มีนักเรียนในกลุ่มนี้</td></tr>';return;}
+  const gm={'3.5-4.0':'3.5+','3.0-3.49':'3.0+','2.5-2.99':'2.5+','2.0-2.49':'2.0+','below2':'<2.0','new':'ใหม่'};
+  const sm={5:'⭐ เสมอ',4:'👍 ส่วนใหญ่',3:'🙂 บางครั้ง',2:'😅 ช้า',1:'😓 ไม่ส่ง'};
+  tbody.innerHTML=rows.map((d,i)=>{
+    const g=classify(d),gb=GRP_META[g].b,gl=g==='advanced'?'🏆 เก่ง':g==='intermediate'?'📚 กลาง':'🚨 ต้องดูแล';
+    const phq=fPHQ(d),adhd=fADHD(d);
+    const pt=parseInt(phq?.phq_total||0);
+    const pb=phq?`<span class="badge ${pt<=4?'b-g':pt<=9?'b-a':pt<=14?'b-o':'b-r'}">${pt}/27</span>`:'<span class="badge b-gy">—</span>';
+    const ab=adhd?`<span class="badge b-t">${adhd.adhd_total}/54</span>`:'<span class="badge b-gy">—</span>';
+    return`<tr onclick="openModal('${d._id}')"><td style="color:var(--g4);font-size:.74rem">${i+1}</td><td style="font-size:.8rem;font-variant-numeric:tabular-nums">${d.student_no||'—'}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge b-gy">${d.level||''} ${d.classroom||''}</span></td><td>${d.computer_skill_level?`${d.computer_skill_level}/5`:'—'}</td><td>${gm[d.gpax]||d.gpax||'—'}</td><td>${sm[parseInt(d.submission_habit)]||'—'}</td><td><span class="badge ${gb}">${gl}</span></td><td>${pb}</td><td>${ab}</td></tr>`;
+  }).join('');
+}
+
+// ───────── ปริ๊นรายงานรายห้อง ─────────
+function openPrintModal(){
+  const rooms=[];const seen={};
+  ALL.forEach(d=>{const k=(d.level||'')+'|'+(d.classroom||'');if(!seen[k]){seen[k]={level:d.level||'',classroom:d.classroom||'',n:0};rooms.push(seen[k]);}seen[k].n++;});
+  rooms.sort((a,b)=>COLL.compare(a.level+' '+a.classroom,b.level+' '+b.classroom));
+  const cur=document.getElementById('fClass')?.value||'all';
+  const opts='<option value="__all">ทุกห้อง (แยกหน้าละห้อง)</option>'+rooms.map(r=>`<option value="${r.level}|${r.classroom}"${r.classroom===cur?' selected':''}>${r.level} ${r.classroom} (${r.n} คน)</option>`).join('');
+  const L='style="font-size:.8rem;font-weight:600;color:var(--g6);display:block;margin:.55rem 0 .2rem"';
+  const F='style="width:100%;padding:8px 11px;border:1.5px solid var(--g2);border-radius:10px;font-size:.88rem;box-sizing:border-box"';
+  const R='style="display:flex;align-items:center;gap:.45rem;font-size:.84rem;margin:.2rem 0;cursor:pointer"';
+  document.getElementById('modalWrap').innerHTML=`<div class="mo" onclick="closeModal(event)"><div class="mb" onclick="event.stopPropagation()" style="max-width:460px">
+    <div class="mh"><div><div class="mt3">🖨️ ปริ๊นรายงานผลรายห้อง</div><div style="font-size:.79rem;color:var(--g4);margin-top:2px">เลือกห้องและลำดับ แล้วกดพิมพ์ (หรือบันทึกเป็น PDF จากหน้าต่างพิมพ์)</div></div><button class="mx" onclick="closeModal()">✕</button></div>
+    <div class="mbody">
+      <label ${L}>ห้องเรียน</label><select id="prRoom" ${F}>${opts}</select>
+      <label ${L}>เรียงลำดับ</label>
+      <label ${R}><input type="radio" name="prSort" value="group" checked> กลุ่ม: เก่ง → กลาง → ต้องดูแล (ภายในกลุ่มเรียงตามรหัสนักเรียน)</label>
+      <label ${R}><input type="radio" name="prSort" value="sno"> รหัสนักเรียน (น้อย → มาก)</label>
+      <label ${L}>ภาคเรียน / ปีการศึกษา (ไม่บังคับ)</label><input id="prTerm" type="text" placeholder="เช่น ภาคเรียนที่ 2 ปีการศึกษา 2569" ${F}>
+      <label ${L}>แนวกระดาษ</label>
+      <select id="prOri" ${F}><option value="portrait">แนวตั้ง (A4)</option><option value="landscape">แนวนอน (A4) — เหมาะเมื่อแสดงผล PHQ-A/ADHD</option></select>
+      <div style="margin-top:.7rem">
+        <label ${R}><input type="checkbox" id="prNote" checked> เพิ่มช่องหมายเหตุและช่องลงชื่อครู</label>
+        <label ${R}><input type="checkbox" id="prMH"> แสดงผล PHQ-A / ADHD <span style="color:var(--red);font-size:.76rem">(ข้อมูลลับ — เปิดเฉพาะเมื่อจำเป็น)</span></label>
+      </div>
+      <div style="display:flex;gap:.5rem;margin-top:1rem"><button class="bxs bo" onclick="doPrintReport()" style="padding:9px 18px;font-size:.88rem">🖨️ พิมพ์รายงาน</button><button class="bxs bg2" onclick="closeModal()" style="padding:9px 14px;font-size:.88rem">ยกเลิก</button></div>
+    </div></div></div>`;
+  document.getElementById('modalWrap').style.display='block';
+}
+function doPrintReport(){
+  const sel=document.getElementById('prRoom').value;
+  const rooms=[];const seen={};
+  ALL.forEach(d=>{const k=(d.level||'')+'|'+(d.classroom||'');if(!seen[k]){seen[k]={level:d.level||'',classroom:d.classroom||''};rooms.push(seen[k]);}});
+  rooms.sort((a,b)=>COLL.compare(a.level+' '+a.classroom,b.level+' '+b.classroom));
+  const pick=sel==='__all'?rooms:rooms.filter(r=>(r.level+'|'+r.classroom)===sel);
+  if(!pick.length){alert('ไม่พบข้อมูลของห้องที่เลือก');return;}
+  const html=buildPrintHTML({
+    rooms:pick,
+    sort:document.querySelector('input[name="prSort"]:checked').value,
+    term:esc(document.getElementById('prTerm').value.trim().slice(0,80)),
+    orient:document.getElementById('prOri').value,
+    note:document.getElementById('prNote').checked,
+    mh:document.getElementById('prMH').checked
+  });
+  closeModal();
+  printHTML(html);
+}
+function printHTML(html){
+  let f=document.getElementById('printFrame');if(f)f.remove();
+  f=document.createElement('iframe');f.id='printFrame';
+  f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+  document.body.appendChild(f);
+  const w=f.contentWindow,doc=f.contentDocument;doc.open();doc.write(html);doc.close();
+  const go=()=>{try{w.focus();w.print();}catch(e){alert('ไม่สามารถเปิดหน้าต่างพิมพ์ได้ — ลองใช้เบราว์เซอร์บนคอมพิวเตอร์');}};
+  const fonts=(doc.fonts&&doc.fonts.ready)?doc.fonts.ready:Promise.resolve();
+  Promise.race([fonts,new Promise(r=>setTimeout(r,1500))]).then(()=>setTimeout(go,200));
+}
+function buildPrintHTML(o){
+  const gm={'3.5-4.0':'3.50–4.00','3.0-3.49':'3.00–3.49','2.5-2.99':'2.50–2.99','2.0-2.49':'2.00–2.49','below2':'ต่ำกว่า 2.00','new':'นักเรียนใหม่'};
+  const sm={5:'ตรงเวลาเสมอ',4:'ส่วนใหญ่',3:'บางครั้ง',2:'ล่าช้า',1:'ไม่ค่อยส่ง'};
+  const dl={own:'มีคอมส่วนตัว',shared:'ใช้ร่วม',school_only:'ใช้ที่วิทยาลัย',none:'ไม่มีคอม'};
+  const nl={fast_wifi:'WiFi เร็ว',slow_wifi:'WiFi ช้า',mobile_data:'Data มือถือ',none:'ไม่มีเน็ต'};
+  const asl={none:'ไม่พบแนวโน้ม',subclinical:'ต้องติดตาม',inattentive:'ขาดสมาธิ',hyperactive:'ซน/หุนหัน',combined:'แบบรวม'};
+  const psev=t=>t<=4?'ปกติ':t<=9?'น้อย':t<=14?'ปานกลาง':t<=19?'ค่อนข้างรุนแรง':'รุนแรง';
+  const rsk=r=>r>=8?'สูง':r>=5?'กลาง':r>=3?'ต่ำ':'ปลอดภัย';
+  const cols=9+(o.mh?2:0)+(o.note?1:0);
+  const today=new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+  const sortLabel=o.sort==='sno'?'รหัสนักเรียน':'กลุ่ม เก่ง → กลาง → ต้องดูแล (แล้วตามรหัสนักเรียน)';
+  const pages=o.rooms.map(r=>{
+    const st=sortStudents(ALL.filter(d=>(d.level||'')===r.level&&(d.classroom||'')===r.classroom),o.sort);
+    const cnt={advanced:0,intermediate:0,struggling:0};st.forEach(d=>{cnt[classify(d)]++;});
+    let mhSum='';
+    if(o.mh){
+      const ph=st.map(d=>fPHQ(d)).filter(Boolean);
+      mhSum=` · PHQ-A ≥10: <b>${ph.filter(p=>Number(p.phq_total)>=10).length}</b> คน · ตอบข้อ 9: <b>${ph.filter(p=>(parseInt(p.phq_q9||0)||0)>0).length}</b> คน`;
+    }
+    let rows='',n=0,last='';
+    st.forEach(d=>{
+      const g=classify(d);
+      if(o.sort==='group'&&g!==last){last=g;rows+=`<tr class="gh ${g}"><td colspan="${cols}">${GRP_META[g].l} — ${cnt[g]} คน</td></tr>`;}
+      n++;
+      const rk=riskOf(d);
+      let mh='';
+      if(o.mh){
+        const p=fPHQ(d),a=fADHD(d);
+        mh=`<td>${p?`${p.phq_total}/27 ${psev(Number(p.phq_total))}${(parseInt(p.phq_q9||0)||0)>0?' <b>⚠ข้อ9</b>':''}`:'—'}</td><td>${a?(asl[a.adhd_severity]||a.adhd_severity):'—'}</td>`;
+      }
+      rows+=`<tr><td class="c">${n}</td><td class="c">${d.student_no||'—'}</td><td class="nm">${d.fullname||'—'}</td><td class="c g-${g}">${GRP_META[g].l.replace('กลุ่ม','')}</td><td class="c">${d.computer_skill_level?d.computer_skill_level+'/5':'—'}</td><td class="c">${gm[d.gpax]||d.gpax||'—'}</td><td class="sb">${sm[parseInt(d.submission_habit)]||'—'}</td><td>${dl[d.has_computer]||'—'} / ${nl[d.home_internet]||'—'}</td><td class="c">${rk} (${rsk(rk)})</td>${mh}${o.note?'<td class="nt"></td>':''}</tr>`;
+    });
+    const head=`<tr><th>ลำดับ</th><th>รหัสนักเรียน</th><th class="nm">ชื่อ-นามสกุล</th><th>กลุ่ม</th><th>ทักษะคอม</th><th>GPAX</th><th>การส่งงาน</th><th>อุปกรณ์ / อินเทอร์เน็ต</th><th>ความเสี่ยง</th>${o.mh?'<th>PHQ-A</th><th>ADHD</th>':''}${o.note?'<th class="ntw">หมายเหตุ</th>':''}</tr>`;
+    return`<section class="room">
+      <div class="hd"><div class="t1">รายงานผลการวิเคราะห์ผู้เรียนรายห้อง</div><div class="t2">วิทยาลัยเทคนิคประจวบคีรีขันธ์ · แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</div></div>
+      <div class="meta"><span>ห้อง <b>${r.level} ${r.classroom}</b></span>${o.term?`<span>${o.term}</span>`:''}<span>เรียงตาม: ${sortLabel}</span><span>พิมพ์เมื่อ ${today}</span></div>
+      <div class="sum">นักเรียนที่กรอกข้อมูล <b>${st.length}</b> คน · เก่ง <b>${cnt.advanced}</b> · กลาง <b>${cnt.intermediate}</b> · ต้องดูแล <b>${cnt.struggling}</b>${mhSum}</div>
+      <table><thead>${head}</thead><tbody>${rows||`<tr><td colspan="${cols}" class="c">ไม่มีข้อมูล</td></tr>`}</tbody></table>
+      <div class="legend">เกณฑ์การจัดกลุ่ม: <b>เก่ง</b> = ทักษะคอม ≥4, GPAX ≥3.0 และส่งงานตรงเวลา · <b>ต้องดูแล</b> = คะแนนรวม (ทักษะคอม + GPAX + การส่งงาน) ต่ำ หรือทักษะคอมและ GPAX ต่ำพร้อมกัน · <b>กลาง</b> = อื่น ๆ</div>
+      ${o.note?'<div class="sig"><div>ลงชื่อ ................................................ ครูที่ปรึกษา</div><div>วันที่ ........ / ........ / ............</div></div>':''}
+      <div class="conf">เอกสารนี้เป็นข้อมูลลับ ใช้เพื่อการดูแลและพัฒนาผู้เรียนเท่านั้น${o.mh?' · มีข้อมูลผลคัดกรองสุขภาพจิต ห้ามเปิดเผยต่อบุคคลที่ไม่เกี่ยวข้อง':''}</div>
+    </section>`;
+  }).join('');
+  return`<!doctype html><html lang="th"><head><meta charset="utf-8"><title>รายงานผลรายห้อง</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+@page{size:A4 ${o.orient};margin:12mm}
+*{box-sizing:border-box}body{margin:0;font-family:'Sarabun','TH Sarabun New','Noto Sans Thai',Tahoma,sans-serif;font-size:11.5px;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.room{page-break-after:always}.room:last-child{page-break-after:auto}
+.hd{text-align:center;margin-bottom:6px}.t1{font-size:17px;font-weight:700}.t2{font-size:12px;color:#444}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:12px;margin:6px 0 4px;padding-bottom:5px;border-bottom:1.5px solid #333}
+.sum{margin:6px 0 8px;font-size:12px}
+table{width:100%;border-collapse:collapse}thead{display:table-header-group}tr{page-break-inside:avoid}
+th,td{border:1px solid #777;padding:3px 5px;vertical-align:middle;line-height:1.35}
+th{background:#e9e9e9;font-weight:700;text-align:center}.c{text-align:center}.nt{min-width:70px}.ntw{width:12%}.nm{min-width:150px;white-space:nowrap}.sb{white-space:nowrap}td.g-advanced,td.g-intermediate,td.g-struggling{white-space:nowrap}
+tr.gh td{font-weight:700;font-size:12px;padding:4px 6px}
+tr.gh.advanced td{background:#d6f0de}tr.gh.intermediate td{background:#fdf0cf}tr.gh.struggling td{background:#fbd9d5}
+.g-advanced{color:#0f6b3a;font-weight:700}.g-intermediate{color:#8a5a00;font-weight:700}.g-struggling{color:#b3261e;font-weight:700}
+.legend{font-size:10.5px;color:#444;margin-top:7px;line-height:1.5}
+.sig{display:flex;justify-content:space-between;margin-top:26px;font-size:12px}
+.conf{font-size:10px;color:#777;margin-top:8px;text-align:center}
+</style></head><body>${pages}</body></html>`;
+}
+
 function renderLearner(){
   const cls=document.getElementById('fClass').value;
   FILT=cls==='all'?ALL:ALL.filter(d=>d.classroom===cls);
@@ -750,26 +941,11 @@ function renderGroups(){
     {k:'intermediate',l:'📚 กลุ่มกลาง (Intermediate)',desc:'มีพื้นฐานพอใช้ เน้นฝึกจุดอ่อน'},
     {k:'struggling',l:'🚨 กลุ่มต้องดูแล (Struggling)',desc:'ต้องการความช่วยเหลือพิเศษ ติดตามใกล้ชิด'}
   ];
-  gg.innerHTML=defs.map(d=>`<div class="gc ${d.k}">
+  gg.innerHTML=defs.map(d=>`<div class="gc ${d.k}${GRP_SEL===d.k?' sel':''}" style="cursor:pointer" onclick="selGroup('${d.k}')" title="คลิกเพื่อดูรายชื่อกลุ่มนี้">
     <div class="gc-h"><div class="gc-ic">${d.k==='advanced'?'🏆':d.k==='intermediate'?'📚':'🚨'}</div><div style="flex:1"><div class="gc-t">${d.l}</div></div><div class="gc-n">${groups[d.k].length}</div></div>
     <div class="gc-b">${d.desc}<div class="ntl">${groups[d.k].slice(0,6).map(s=>`<span class="ntg">${s.fullname||'—'}</span>`).join('')}${groups[d.k].length>6?`<span class="ntg">+${groups[d.k].length-6}</span>`:''}</div></div>
   </div>`).join('');
   renderGrpTable(FILT);
-}
-
-function renderGrpTable(data){
-  const tbody=document.getElementById('grpTbody');
-  if(!data.length){tbody.innerHTML='<tr><td colspan="9" class="es">ยังไม่มีข้อมูล</td></tr>';return;}
-  const gm={'3.5-4.0':'3.5+','3.0-3.49':'3.0+','2.5-2.99':'2.5+','2.0-2.49':'2.0+','below2':'<2.0','new':'ใหม่'};
-  const sm={5:'⭐ เสมอ',4:'👍 ส่วนใหญ่',3:'🙂 บางครั้ง',2:'😅 ช้า',1:'😓 ไม่ส่ง'};
-  tbody.innerHTML=data.map((d,i)=>{
-    const g=classify(d),gb=g==='advanced'?'b-g':g==='intermediate'?'b-a':'b-r',gl=g==='advanced'?'🏆 เก่ง':g==='intermediate'?'📚 กลาง':'🚨 อ่อน';
-    const phq=fPHQ(d),adhd=fADHD(d);
-    const pt=parseInt(phq?.phq_total||0);
-    const pb=phq?`<span class="badge ${pt<=4?'b-g':pt<=9?'b-a':pt<=14?'b-o':'b-r'}">${pt}/27</span>`:'<span class="badge b-gy">—</span>';
-    const ab=adhd?`<span class="badge b-t">${adhd.adhd_total}/54</span>`:'<span class="badge b-gy">—</span>';
-    return`<tr onclick="openModal('${d._id}')"><td style="color:var(--g4);font-size:.74rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge b-gy">${d.level||''} ${d.classroom||''}</span></td><td>${d.computer_skill_level?`${d.computer_skill_level}/5`:'—'}</td><td>${gm[d.gpax]||d.gpax||'—'}</td><td>${sm[parseInt(d.submission_habit)]||'—'}</td><td><span class="badge ${gb}">${gl}</span></td><td>${pb}</td><td>${ab}</td></tr>`;
-  }).join('');
 }
 
 function renderRisk(){
@@ -839,9 +1015,10 @@ function renderDevices(){
 
 function renderLearnerTable(data){
   const tbody=document.getElementById('stuTbody');
-  if(!data.length){tbody.innerHTML='<tr><td colspan="10" class="es">ยังไม่มีข้อมูล</td></tr>';return;}
+  if(!data.length){tbody.innerHTML='<tr><td colspan="11" class="es">ยังไม่มีข้อมูล</td></tr>';return;}
   const dl={own:'✅ ส่วนตัว',shared:'🤝 ร่วม',school_only:'🏫 โรงเรียน',none:'❌ ไม่มี'};
   const nl={fast_wifi:'⚡ เร็ว',slow_wifi:'📶 ช้า',mobile_data:'📱 Data',none:'❌ ไม่มี'};
+  data=sortStudents(data,'sno');
   tbody.innerHTML=data.map((d,i)=>{
     const r=riskOf(d),rb=r>=8?'b-r':r>=5?'b-a':r>=3?'b-gy':'b-g',rl=r>=8?'🔴 สูง':r>=5?'🟡 กลาง':r>=3?'⚪ ต่ำ':'🟢 ปลอดภัย';
     const g=classify(d),gb=g==='advanced'?'b-g':g==='intermediate'?'b-a':'b-r',gl=g==='advanced'?'🏆 เก่ง':g==='intermediate'?'📚 กลาง':'🚨 อ่อน';
@@ -849,7 +1026,7 @@ function renderLearnerTable(data){
     const pt=parseInt(phq?.phq_total||0);
     const pb=phq?`<span class="badge ${pt<=4?'b-g':pt<=9?'b-a':pt<=14?'b-o':'b-r'}">${pt}/27${parseInt(phq?.phq_q9||0)>0?' ⚠️':''}</span>`:'<span class="badge b-gy">—</span>';
     const ab=adhd?`<span class="badge b-t">${adhd.adhd_total}/54</span>`:'<span class="badge b-gy">—</span>';
-    return`<tr onclick="openModal('${d._id}')"><td style="color:var(--g4);font-size:.74rem">${i+1}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge b-gy">${d.level||''} ${d.classroom||''}</span></td><td>${d.computer_skill_level?`${d.computer_skill_level}/5`:'—'}</td><td style="font-size:.78rem">${dl[d.has_computer]||'—'}</td><td style="font-size:.78rem">${nl[d.home_internet]||'—'}</td><td><span class="badge ${rb}">${rl}</span></td><td><span class="badge ${gb}">${gl}</span></td><td>${pb}</td><td>${ab}</td></tr>`;
+    return`<tr onclick="openModal('${d._id}')"><td style="color:var(--g4);font-size:.74rem">${i+1}</td><td style="font-size:.8rem;font-variant-numeric:tabular-nums">${d.student_no||'—'}</td><td><strong>${d.fullname||'—'}</strong></td><td><span class="badge b-gy">${d.level||''} ${d.classroom||''}</span></td><td>${d.computer_skill_level?`${d.computer_skill_level}/5`:'—'}</td><td style="font-size:.78rem">${dl[d.has_computer]||'—'}</td><td style="font-size:.78rem">${nl[d.home_internet]||'—'}</td><td><span class="badge ${rb}">${rl}</span></td><td><span class="badge ${gb}">${gl}</span></td><td>${pb}</td><td>${ab}</td></tr>`;
   }).join('');
 }
 
