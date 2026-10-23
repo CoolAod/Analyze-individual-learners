@@ -1,7 +1,7 @@
 // ================================================================
 // Code.gs — Google Apps Script Web App Backend  v4 (Secure)
 // ระบบวิเคราะห์ผู้เรียนรายบุคคล
-// วิทยาลัยเทคนิคประจวบคีรีขันธ์  แผนก ทดธ.
+// วิทยาลัยเทคนิคประจวบคีรีขันธ์  แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล
 //
 // สิ่งที่เปลี่ยนจาก v3:
 //   1) doGet ไม่คืนข้อมูลอีกต่อไป  — อ่านข้อมูลได้เฉพาะผู้ที่ login (token ฝั่งเซิร์ฟเวอร์)
@@ -9,17 +9,22 @@
 //   3) AI วิเคราะห์ทำที่หลังบ้าน (API key อยู่ใน Script Properties) ผ่าน trigger ทุก 5 นาที
 //      และไม่ส่งชื่อ-นามสกุลนักเรียนไปยัง AI
 //   4) LockService กันข้อมูลชนกัน + ส่งข้อมูลครั้งเดียวต่อคน (learner+phq+adhd)
-//   5) PHQ-A ข้อ 9 > 0 → แถบสีใน Sheet + อีเมลแจ้งครู (ส่งครั้งเดียวต่อคน)
+//   5) PHQ-A ข้อ 9 > 0 → แถบสีใน Sheet + แจ้งเตือนบนแดชบอร์ด (มีปุ่ม "รับทราบ" บันทึกเวลา) — ไม่ส่งอีเมล/LINE
 //   6) เซิร์ฟเวอร์คำนวณคะแนน PHQ/ADHD/_risk/กลุ่มผู้เรียนเอง (ไม่เชื่อค่าจากเบราว์เซอร์)
 //   7) เก็บ _ts / เบอร์โทร / รหัสนักเรียน เป็น "ข้อความ" (กัน Sheets แปลงเป็นวันที่/ตัดเลข 0)
 //
 // วิธีติดตั้ง (ทำตามลำดับ):
 //   1. วางโค้ดนี้ใน Apps Script (Extensions → Apps Script) แทนของเดิม แล้ว Save
-//   2. รัน setupSecurity()  → ตั้งผู้ใช้/รหัสผ่านแอดมิน, API key, อีเมลแจ้งเตือน (ครั้งเดียว)
+//   2. รัน setupSecurity()  → ตั้งผู้ใช้/รหัสผ่านแอดมิน และ API key (ไม่บังคับ) ครั้งเดียว
 //   3. รัน diagnoseSheets() → ดูผลตรวจโครงสร้างชีตเดิมที่ View → Logs / Execution log
 //   4. รัน repairSheets()   → ซ่อมข้อมูลเดิม (วันที่, เบอร์โทร, คะแนนที่เป็น NaN)
 //   5. Deploy → Manage deployments → Edit → New version  (Execute as: Me | Anyone)
 //      *ต้อง "New version" ทุกครั้งที่แก้โค้ด URL เดิมจึงจะใช้โค้ดใหม่*
+//
+// ลืมรหัสผ่าน / ถูกล็อก:
+//   • resetAdminPassword() → ตั้งรหัสผ่านใหม่ (และแสดงชื่อผู้ใช้เดิม) — รันได้เฉพาะเจ้าของสคริปต์
+//   • unlockLogin()        → ปลดล็อกหลังใส่รหัสผิดเกิน 5 ครั้ง (ไม่ต้องรอ 10 นาที)
+//   • เปลี่ยนรหัสผ่านปกติ: กดปุ่ม 🔑 บนแดชบอร์ด
 // ================================================================
 
 const SH = { learner: 'learner_data', phq: 'phq_data', adhd: 'adhd_data' };
@@ -37,7 +42,7 @@ const SUBMIT_PER_MIN  = 150;                   // เบรกกันถูก
 // ≥ ADHD_CUT จาก 9 ข้อของด้านใดด้านหนึ่ง = มีแนวโน้ม  (DSM-5: 6 ข้อ อายุ ≤16 ปี | 5 ข้อ อายุ ≥17 ปี)
 const ADHD_CUT = 6, ADHD_WATCH = 4;
 
-const TEXT_COLS = ['_id', '_ts', 'student_no', 'phone', 'parent_phone'];
+const TEXT_COLS = ['_id', '_ts', 'student_no', 'phone', 'parent_phone', 'alert_ack'];
 const LONG_COLS = { student_note: 1000, special_skills: 300, social_platforms: 300, programs_used: 300, digital_biz_exp: 300 };
 
 const PHQ_ITEMS = [
@@ -69,7 +74,7 @@ const HDR_PHQ = [
   'phq_total','phq_severity',
   'phq_q1','phq_q2','phq_q3','phq_q4','phq_q5',
   'phq_q6','phq_q7','phq_q8','phq_q9',
-  'q9_alert','alert_sent',
+  'q9_alert','alert_ack',
   'ai_analysis'
 ];
 const HDR_ADHD = [
@@ -100,6 +105,8 @@ function doPost(e) {
       case 'login':  return jsonOut(handleLogin(req));
       case 'read':   return jsonOut(handleRead(req));
       case 'logout': return jsonOut(handleLogout(req));
+      case 'ack':    return jsonOut(handleAck(req));
+      case 'changePassword': return jsonOut(handleChangePassword(req));
       default:       return jsonOut({ ok: false, error: 'bad_action' });
     }
   } catch (err) {
@@ -131,21 +138,76 @@ function handleLogin(req) {
     return { ok: false, error: 'invalid' };
   }
   cache.remove('loginfail');
-  const token = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
-  cache.put('tok:' + token, '1', TOKEN_TTL_SEC);
-  return { ok: true, token: token, expiresIn: TOKEN_TTL_SEC };
+  return { ok: true, token: issueToken(), expiresIn: TOKEN_TTL_SEC };
 }
 
 function handleLogout(req) {
   const t = String(req.token || '');
-  if (t) CacheService.getScriptCache().remove('tok:' + t);
+  if (t) CacheService.getScriptCache().remove(tokKey(t));
   return { ok: true };
 }
 
+// token ผูกกับ "epoch" — เปลี่ยน/รีเซ็ตรหัสผ่านแล้ว epoch เพิ่ม ทำให้ทุกเซสชันเก่าใช้ไม่ได้ทันที
+function epoch() { return PropertiesService.getScriptProperties().getProperty('TOKEN_EPOCH') || '0'; }
+function bumpEpoch() {
+  const props = PropertiesService.getScriptProperties();
+  const n = String(Number(props.getProperty('TOKEN_EPOCH') || '0') + 1);
+  props.setProperty('TOKEN_EPOCH', n);
+  return n;
+}
+function tokKey(token) { return 'tok:' + epoch() + ':' + token; }
+function issueToken() {
+  const token = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
+  CacheService.getScriptCache().put(tokKey(token), '1', TOKEN_TTL_SEC);
+  return token;
+}
 function checkToken(token) {
   const t = String(token || '');
   if (t.length < 40) return false;
-  return CacheService.getScriptCache().get('tok:' + t) === '1';
+  return CacheService.getScriptCache().get(tokKey(t)) === '1';
+}
+function isStrongPass(p) {
+  p = String(p);
+  return p.length >= 10 && !/admin1234/i.test(p) && new Set(p.split('')).size >= 4;
+}
+
+function handleChangePassword(req) {
+  if (!checkToken(req.token)) return { ok: false, error: 'unauthorized' };
+  const cache = CacheService.getScriptCache();
+  const fails = Number(cache.get('loginfail') || 0);
+  if (fails >= MAX_LOGIN_FAILS) return { ok: false, error: 'locked' };
+  const props = PropertiesService.getScriptProperties();
+  const oldPw = String(req.oldPassword || ''), newPw = String(req.newPassword || '');
+  if (!constEq(hashPass(oldPw, props.getProperty('ADMIN_SALT') || ''), props.getProperty('ADMIN_HASH') || '')) {
+    cache.put('loginfail', String(fails + 1), LOGIN_LOCK_SEC);
+    Utilities.sleep(700);
+    return { ok: false, error: 'wrong_old' };
+  }
+  if (!isStrongPass(newPw) || newPw === oldPw) return { ok: false, error: 'weak' };
+  const salt = Utilities.getUuid();
+  props.setProperties({ ADMIN_SALT: salt, ADMIN_HASH: hashPass(newPw, salt) });
+  bumpEpoch();                                   // ออกจากระบบทุกอุปกรณ์
+  return { ok: true, token: issueToken() };      // เครื่องที่เปลี่ยนรหัสยังใช้งานต่อได้
+}
+
+// ครูกด "รับทราบ" ที่แดชบอร์ด → บันทึกเวลาลงคอลัมน์ alert_ack ของชีต phq_data
+function handleAck(req) {
+  if (!checkToken(req.token)) return { ok: false, error: 'unauthorized' };
+  const id = String(req.id || '');
+  if (!/^[A-Za-z0-9]{5,30}$/.test(id)) return { ok: false, error: 'invalid' };
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(15000)) return { ok: false, error: 'busy' };
+  try {
+    const sh = getSheet('phq');
+    const headers = readHeaders(sh);
+    const row = findRow(sh, headers.indexOf('_id') + 1, id);
+    if (row < 0) return { ok: false, error: 'not_found' };
+    const cell = sh.getRange(row, headers.indexOf('alert_ack') + 1);
+    let ts = cellStr(cell.getValue());
+    if (!ts) { ts = nowThai(); cell.setNumberFormat('@'); cell.setValue(ts); }
+    sh.getRange(row, 1, 1, headers.length).setBackground('#E5F5EC');
+    return { ok: true, ts: ts };
+  } finally { lock.releaseLock(); }
 }
 
 function handleRead(req) {
@@ -225,7 +287,7 @@ function cleanStr(v, max) {
 }
 
 const SERVER_OWNED = {
-  _id: 1, _ts: 1, ai_analysis: 1, alert_sent: 1, q9_alert: 1, _risk: 1, learning_group: 1,
+  _id: 1, _ts: 1, ai_analysis: 1, alert_ack: 1, alert_sent: 1, q9_alert: 1, _risk: 1, learning_group: 1,
   phq_total: 1, phq_severity: 1, adhd_total: 1, adhd_inatt: 1, adhd_hyper: 1, adhd_severity: 1, adhd_inatt_cnt: 1, adhd_hyper_cnt: 1
 };
 
@@ -403,78 +465,22 @@ function upsert(type, rec) {
   const out = headers.map(h => {
     if (h === '_ts')         return (prev && pv('_ts') !== '') ? cellStr(pv('_ts')) : nowThai();
     if (h === 'ai_analysis') return (prev && !scoresChanged) ? cellStr(pv('ai_analysis')) : '';
-    if (h === 'alert_sent')  return prev ? cellStr(pv('alert_sent')) : '';
+    if (h === 'alert_ack')   return prev ? cellStr(pv('alert_ack')) : '';
     if (Object.prototype.hasOwnProperty.call(rec, h)) return rec[h];
     return prev ? (pv(h) instanceof Date ? cellStr(pv(h)) : pv(h)) : '';
   });
 
   if (isNew) row = Math.max(sh.getLastRow(), 1) + 1;
   sh.getRange(row, 1, 1, headers.length).setValues([out]);
-  return { sh: sh, row: row, headers: headers, isNew: isNew, prevAlertSent: prev ? cellStr(pv('alert_sent')) : '' };
+  return { sh: sh, row: row, headers: headers, isNew: isNew };
 }
 
 // ================================================================
-// PHQ-A ข้อ 9  →  แถบสี + อีเมล (ส่งครั้งเดียวต่อคน)
+// PHQ-A ข้อ 9  →  ไฮไลต์แถวในชีต (การแจ้งเตือนครูอยู่ที่แดชบอร์ด + ปุ่ม "รับทราบ")
 // ================================================================
 function handleQ9(info, rec) {
   const color = rec.q9_alert === 'ด่วน' ? '#FECACA' : '#FEF3C7';
   info.sh.getRange(info.row, 1, 1, info.headers.length).setBackground(color);
-  if (info.prevAlertSent) return;                         // เคยแจ้งแล้ว
-  const ts = nowThai();
-  if (sendQ9Alert(rec, ts)) {
-    info.sh.getRange(info.row, info.headers.indexOf('alert_sent') + 1).setValue(ts);
-  }
-}
-
-function sendQ9Alert(rec, ts) {
-  const to = PropertiesService.getScriptProperties().getProperty('ALERT_EMAILS');
-  if (!to) { Logger.log('ALERT_EMAILS ยังไม่ได้ตั้งค่า — ไม่ได้ส่งอีเมล (ดูแถวสีแดงในชีต phq_data)'); return false; }
-  try {
-    if (MailApp.getRemainingDailyQuota() < 1) { Logger.log('โควตาอีเมลหมด'); return false; }
-    const urgent = rec.q9_alert === 'ด่วน';
-    const subject = (urgent ? '🔴 [ด่วน] ' : '🟠 [ติดตาม] ') + 'แบบคัดกรอง PHQ-A ข้อ 9 — โปรดดูแลนักเรียน';
-    const body =
-      'ระบบวิเคราะห์ผู้เรียน — แจ้งเตือนอัตโนมัติ (ข้อมูลเป็นความลับ ห้ามส่งต่อ)\n\n' +
-      'นักเรียนตอบข้อ 9 (ความคิดทำร้ายตนเอง/อยากตาย) ในแบบคัดกรอง PHQ-A\n' +
-      'ระดับ: ' + rec.q9_alert + '   (คะแนนข้อ 9 = ' + rec.phq_q9 + ')\n' +
-      'ชื่อ: ' + rec.fullname + '\n' +
-      'ชั้น/ห้อง: ' + rec.level + ' ' + rec.classroom + '\n' +
-      'คะแนนรวม PHQ-A: ' + rec.phq_total + '/27\n' +
-      'เวลาที่ส่ง: ' + ts + '\n\n' +
-      'แนวทางเบื้องต้น\n' +
-      '• ติดต่อพูดคุยกับนักเรียนเป็นการส่วนตัวโดยเร็ว (ระดับ "ด่วน" ควรภายในวันนี้)\n' +
-      '• ถามอย่างใส่ใจและตรงไปตรงมา ไม่ตัดสิน และไม่สัญญาว่าจะเก็บเป็นความลับทุกกรณี\n' +
-      '• ประสานครูแนะแนว/ผู้ปกครอง และส่งต่อผู้เชี่ยวชาญตามขั้นตอนของวิทยาลัย\n' +
-      '• สายด่วนสุขภาพจิต 1323 (24 ชม.) | เหตุฉุกเฉิน 1669\n\n' +
-      'ผลนี้เป็นการคัดกรองเบื้องต้น ไม่ใช่การวินิจฉัย\n' +
-      'ชีตข้อมูล: ' + SpreadsheetApp.getActiveSpreadsheet().getUrl();
-    MailApp.sendEmail({ to: to, subject: subject, body: body, name: 'ระบบวิเคราะห์ผู้เรียน' });
-    return true;
-  } catch (err) {
-    Logger.log('sendQ9Alert error: ' + err.message);
-    return false;
-  }
-}
-
-// ส่งซ้ำรายที่ยังไม่ได้แจ้ง (เช่นอีเมลล้มเหลว หรือเพิ่งตั้ง ALERT_EMAILS)
-function retryPendingAlerts() {
-  const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SH.phq);
-  if (!sh || sh.getLastRow() < 2) return;
-  const lock = LockService.getScriptLock();
-  if (!lock.tryLock(10000)) return;
-  try {
-    const headers = readHeaders(sh);
-    const vals = sh.getRange(2, 1, sh.getLastRow() - 1, headers.length).getValues();
-    const ix = h => headers.indexOf(h);
-    vals.forEach((r, i) => {
-      if (ix('q9_alert') < 0 || ix('alert_sent') < 0) return;
-      if (String(r[ix('q9_alert')]) && !String(r[ix('alert_sent')])) {
-        const rec = {};
-        headers.forEach((h, k) => { rec[h] = cellStr(r[k]); });
-        if (sendQ9Alert(rec, nowThai())) sh.getRange(i + 2, ix('alert_sent') + 1).setValue(nowThai());
-      }
-    });
-  } finally { lock.releaseLock(); }
 }
 
 // ================================================================
@@ -482,7 +488,6 @@ function retryPendingAlerts() {
 // ================================================================
 function processAiQueue() {
   const key = PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY');
-  retryPendingAlerts();
   if (!key) return;
   const start = Date.now();
   let done = 0;
@@ -604,7 +609,7 @@ function setupSecurity() {
   if (u === 'cancel' || !String(u).trim()) return;
   const p = ask('ตั้งรหัสผ่าน (อย่างน้อย 10 ตัวอักษร ห้ามใช้ admin1234)');
   if (p === 'cancel') return;
-  if (String(p).length < 10 || /admin1234/i.test(p)) { Browser.msgBox('รหัสผ่านสั้นเกินไปหรือเดาง่าย — ยกเลิกการตั้งค่า'); return; }
+  if (!isStrongPass(p)) { Browser.msgBox('รหัสผ่านสั้นเกินไปหรือเดาง่าย — ยกเลิกการตั้งค่า'); return; }
 
   const salt = Utilities.getUuid();
   props.setProperties({ ADMIN_USER: String(u).trim(), ADMIN_SALT: salt, ADMIN_HASH: hashPass(String(p), salt) });
@@ -612,11 +617,28 @@ function setupSecurity() {
   const k = ask('วาง Anthropic API key (เว้นว่างถ้าไม่ใช้ AI หรือต้องการคงค่าเดิม)');
   if (k !== 'cancel' && String(k).trim()) props.setProperty('ANTHROPIC_API_KEY', String(k).trim());
 
-  const m = ask('อีเมลครูที่ต้องได้รับแจ้งเตือน PHQ-A ข้อ 9 (คั่นหลายคนด้วยเครื่องหมายจุลภาค — เว้นว่างเพื่อคงค่าเดิม)');
-  if (m !== 'cancel' && String(m).trim()) props.setProperty('ALERT_EMAILS', String(m).trim());
-
+  bumpEpoch();   // เซสชันเก่าใช้ไม่ได้
   setupSheets();
   Browser.msgBox('✅ ตั้งค่าเสร็จแล้ว\\nขั้นต่อไป: รัน diagnoseSheets() และ repairSheets() แล้ว Deploy เป็น New version');
+}
+
+// ลืมรหัสผ่าน: เจ้าของสคริปต์รันฟังก์ชันนี้เพื่อตั้งรหัสใหม่ (ทุกเซสชันเดิมจะถูกออกจากระบบ)
+function resetAdminPassword() {
+  const props = PropertiesService.getScriptProperties();
+  const p = Browser.inputBox('ตั้งรหัสผ่านใหม่ของแอดมิน (อย่างน้อย 10 ตัวอักษร)', Browser.Buttons.OK_CANCEL);
+  if (p === 'cancel') return;
+  if (!isStrongPass(p)) { Browser.msgBox('รหัสผ่านสั้นเกินไปหรือเดาง่าย — ไม่มีการเปลี่ยนแปลง'); return; }
+  const salt = Utilities.getUuid();
+  props.setProperties({ ADMIN_SALT: salt, ADMIN_HASH: hashPass(String(p), salt) });
+  bumpEpoch();
+  CacheService.getScriptCache().remove('loginfail');
+  Browser.msgBox('✅ ตั้งรหัสผ่านใหม่แล้ว\\nชื่อผู้ใช้: ' + (props.getProperty('ADMIN_USER') || '(ยังไม่เคยตั้ง — ให้รัน setupSecurity())'));
+}
+
+// ปลดล็อกการเข้าสู่ระบบ (หลังใส่รหัสผิดเกิน 5 ครั้ง)
+function unlockLogin() {
+  CacheService.getScriptCache().remove('loginfail');
+  Browser.msgBox('✅ ปลดล็อกการเข้าสู่ระบบแล้ว');
 }
 
 // ตรวจโครงสร้างชีตเดิม (ไม่แสดงชื่อนักเรียน)
