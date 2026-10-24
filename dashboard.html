@@ -604,7 +604,7 @@ async function submitPw(){
 }
 
 async function reloadAll(){
-  showLoad('กำลังดึงข้อมูลจาก Google Sheets...');
+  showLoad('กำลังดึงข้อมูล');
   try{
     const _d=await fetchAll();
     ALL=_d.learner||[];PHQ=_d.phq||[];ADHD=_d.adhd||[];
