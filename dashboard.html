@@ -304,7 +304,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
     <div class="l-f"><label>รหัสผ่าน</label><input type="password" id="lP" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <div class="l-err" id="lErr">⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
     <button class="l-btn" onclick="doLogin()">🔐 เข้าสู่ระบบ</button>
-    <div class="l-foot" style="margin-bottom:.35rem">ลืมรหัสผ่าน? ติดต่อผู้ดูแลระบบ (เจ้าของ Google Sheet) เพื่อรีเซ็ตรหัสผ่าน</div>
+    <div class="l-foot" style="margin-bottom:.35rem">ลืมรหัสผ่าน? ติดต่อผู้ดูแลระบบ (ผู้ที่แก้ไขชีต "users" ใน Google Sheets ได้) เพื่อตั้งรหัสผ่านใหม่</div>
     <div class="l-foot">ระบบวิเคราะห์ผู้เรียน v4 — สำหรับครูผู้สอนเท่านั้น</div>
   </div>
 </div>
@@ -322,6 +322,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
       <button class="bxs bp2" onclick="exportExcelPHQ()">📥 PHQ</button>
       <button class="bxs bt2" onclick="exportExcelADHD()">📥 ADHD</button>
       <button class="bxs bg2" onclick="reloadAll()" title="โหลดข้อมูลใหม่">🔄</button>
+      <span id="whoami" style="font-size:.78rem;color:var(--g5);align-self:center;max-width:9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
       <button class="bxs bg2" onclick="openPwModal()" title="เปลี่ยนรหัสผ่าน">🔑</button>
       <button class="bxs bgr" onclick="doLogout()">🚪 ออก</button>
     </div>
@@ -490,11 +491,12 @@ async function doLogin(){
     const r=await apiCall({action:'login',username:u,password:p});
     if(r.ok&&r.token){
       sessionStorage.setItem('dt',r.token);
+      sessionStorage.setItem('dn',r.name||u);
       document.getElementById('lP').value='';
       document.getElementById('loginPage').style.display='none';
       init();
     }else{
-      err.textContent=r.error==='locked'?'⛔ ลองผิดหลายครั้ง กรุณารอ 10 นาทีแล้วลองใหม่':'⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+      err.textContent=r.error==='locked'?'⛔ ลองผิดหลายครั้ง กรุณารอ 10 นาทีหรือแจ้งผู้ดูแลระบบให้ปลดล็อก':r.error==='inactive'?'🚫 บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ':'⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
       err.style.display='block';document.getElementById('lP').value='';
     }
   }catch(e){
@@ -509,6 +511,7 @@ function doLogout(){
 }
 function forceRelogin(){
   sessionStorage.removeItem('dt');
+  PW_FORCED=false;
   if(REFRESH_TIMER){clearInterval(REFRESH_TIMER);REFRESH_TIMER=null;}
   document.title=DASH_TITLE;const _b=document.getElementById('q9Banner');if(_b){_b.style.display='none';_b.innerHTML='';}
   const e=document.getElementById('lErr');e.textContent='⏱️ เซสชันหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง';e.style.display='block';
@@ -531,7 +534,11 @@ function hideLoad(){document.getElementById('loadCover').classList.remove('vis')
 
 async function fetchAll(){
   const r=await apiCall({action:'read',token:sessionStorage.getItem('dt')||'',types:['learner','phq','adhd']});
-  if(!r.ok){if(r.error==='unauthorized')forceRelogin();throw new Error(r.error||'read_failed');}
+  if(!r.ok){
+    if(r.error==='unauthorized')forceRelogin();
+    if(r.error==='must_change'){if(!document.getElementById('pwOld'))openPwModal(true);}
+    throw new Error(r.error||'read_failed');
+  }
   return r.data||{};
 }
 
@@ -560,11 +567,12 @@ async function ackQ9(id){
     else alert('บันทึกการรับทราบไม่สำเร็จ ('+(r.error||'unknown')+')');
   }catch(e){alert('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่');}
 }
-function openPwModal(){
+function openPwModal(forced){
+  PW_FORCED=!!forced;
   const f='style="width:100%;padding:9px 12px;border:1.5px solid var(--g2);border-radius:10px;font-size:.9rem;margin:.2rem 0 .7rem;box-sizing:border-box"';
   const l='style="font-size:.8rem;font-weight:600;color:var(--g6)"';
   document.getElementById('modalWrap').innerHTML=`<div class="mo" onclick="closeModal(event)"><div class="mb" onclick="event.stopPropagation()" style="max-width:420px">
-    <div class="mh"><div><div class="mt3">🔑 เปลี่ยนรหัสผ่าน</div><div style="font-size:.79rem;color:var(--g4);margin-top:2px">อย่างน้อย 10 ตัวอักษร · เปลี่ยนแล้วเครื่องอื่นจะถูกออกจากระบบ</div></div><button class="mx" onclick="closeModal()">✕</button></div>
+    <div class="mh"><div><div class="mt3">🔑 เปลี่ยนรหัสผ่าน</div><div style="font-size:.79rem;color:var(--g4);margin-top:2px">${forced?'<b style="color:var(--red)">ต้องเปลี่ยนรหัสผ่านก่อนเริ่มใช้งาน</b> (รหัสที่ผู้ดูแลตั้งให้ใช้ชั่วคราว) · ':''}อย่างน้อย 10 ตัวอักษร · เปลี่ยนแล้วเครื่องอื่นของคุณจะถูกออกจากระบบ</div></div>${forced?'':'<button class="mx" onclick="closeModal()">✕</button>'}</div>
     <div class="mbody">
       <label ${l}>รหัสผ่านเดิม</label><input type="password" id="pwOld" autocomplete="current-password" ${f}>
       <label ${l}>รหัสผ่านใหม่</label><input type="password" id="pwNew" autocomplete="new-password" ${f}>
@@ -585,8 +593,11 @@ async function submitPw(){
   btn.disabled=true;
   try{
     const r=await apiCall({action:'changePassword',token:sessionStorage.getItem('dt')||'',oldPassword:o,newPassword:n1});
-    if(r.ok){sessionStorage.setItem('dt',r.token);say('✅ เปลี่ยนรหัสผ่านเรียบร้อย',true);setTimeout(()=>closeModal(),1300);return;}
-    if(r.error==='unauthorized'){closeModal();forceRelogin();return;}
+    if(r.ok){
+      sessionStorage.setItem('dt',r.token);say('✅ เปลี่ยนรหัสผ่านเรียบร้อย',true);
+      const was=PW_FORCED;setTimeout(()=>{PW_FORCED=false;closeModal();if(was)reloadAll();},1000);return;
+    }
+    if(r.error==='unauthorized'){PW_FORCED=false;closeModal();forceRelogin();return;}
     say(r.error==='wrong_old'?'รหัสผ่านเดิมไม่ถูกต้อง':r.error==='weak'?'รหัสผ่านใหม่คาดเดาง่ายหรือซ้ำรหัสเดิม — ลองใช้ให้ยาวและหลากหลายขึ้น':r.error==='locked'?'ใส่ผิดหลายครั้ง ระบบล็อกชั่วคราว (รอ 10 นาที)':'เปลี่ยนรหัสผ่านไม่สำเร็จ ('+(r.error||'unknown')+')');
   }catch(e){say('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่');}
   btn.disabled=false;
@@ -613,13 +624,14 @@ async function reloadAll(){
     renderQ9Banner();
   }catch(e){
     console.error('reloadAll:',e.message);
-    const ls=document.getElementById('lSub');if(ls)ls.textContent='⚠️ โหลดข้อมูลไม่สำเร็จ — จะลองใหม่อัตโนมัติ';
+    const ls=document.getElementById('lSub');if(ls)ls.textContent=(e.message==='must_change')?'🔑 กรุณาเปลี่ยนรหัสผ่านก่อนเริ่มใช้งาน':'⚠️ โหลดข้อมูลไม่สำเร็จ — จะลองใหม่อัตโนมัติ';
   }finally{
     hideLoad();
   }
 }
 
 async function init(){
+  const _w=document.getElementById('whoami');if(_w)_w.textContent=sessionStorage.getItem('dn')?'👤 '+sessionStorage.getItem('dn'):'';
   await reloadAll();
   REFRESH_TIMER=setInterval(reloadAll,60000); // auto-refresh 1 นาที
 }
@@ -1037,6 +1049,55 @@ function showLT(id,btn){document.querySelectorAll('#d-l .pan').forEach(p=>p.clas
 // MODAL
 // ══════════════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════════════
+// FAMILY / ADDRESS (v4.4) — ป้ายข้อความของคำถามที่อยู่ การเดินทาง และครอบครัว
+// ค่าจากชีตถูก escape แล้วตอน normalizeAll — ข้อความด้านล่างเป็นค่าคงที่
+// ══════════════════════════════════════════════════════════════
+const FAM={
+  commute:{van:'รถตู้ประจำ',motorcycle:'ขี่รถมอเตอร์ไซค์มาเอง',car:'ขับรถยนต์มาเอง',parent_drop:'พ่อแม่/ผู้ปกครองขับรถมาส่ง',walk_dorm:'เดินเท้ามาจากหอพัก',other_hire:'รถรับจ้างอื่นๆ'},
+  parents:{together:'พ่อแม่อยู่ด้วยกัน',separated:'พ่อแม่แยกกันอยู่',divorced:'พ่อแม่หย่าร้าง',father_deceased:'บิดาเสียชีวิต',mother_deceased:'มารดาเสียชีวิต',both_deceased:'บิดาและมารดาเสียชีวิตทั้งคู่'},
+  living:{both_parents:'บิดาและมารดา',father:'บิดา',mother:'มารดา',grandparents:'ปู่ ย่า ตา หรือยาย',relatives:'ญาติคนอื่นๆ (เช่น ลุง ป้า น้า อา)',guardian:'ครอบครัวบุญธรรม / ผู้ปกครองตามกฎหมาย',other:'อื่นๆ'},
+  livingLegacy:{parents:'พ่อแม่/ผู้ปกครอง',relative:'ญาติ',dorm:'หอพัก',alone:'อยู่คนเดียว'},
+  supporter:{both_parents:'พ่อและแม่ช่วยกัน',father:'พ่อคนเดียว',mother:'แม่คนเดียว',grandparents:'ปู่ ย่า ตา หรือ ยาย',relatives:'ลุง ป้า น้า อา หรือญาติคนอื่น',self:'นักเรียนหาเงินส่งตัวเองเรียน',other:'อื่นๆ'}
+};
+// ข้อมูลเดิม (living_status) ไม่ถูกแปลงเป็นหมวดใหม่ เพราะความหมายไม่ตรงกัน — แสดงตามค่าเดิมพร้อมกำกับ "(ข้อมูลเดิม)"
+function livingText(d){
+  if(d.living_with)return(FAM.living[d.living_with]||d.living_with)+(d.living_with==='other'&&d.living_with_other?': '+d.living_with_other:'');
+  if(d.living_status)return(FAM.livingLegacy[d.living_status]||d.living_status)+' (ข้อมูลเดิม)';
+  return'';
+}
+function supporterText(d){
+  if(!d.main_supporter)return'';
+  return(FAM.supporter[d.main_supporter]||d.main_supporter)+(d.main_supporter==='other'&&d.main_supporter_other?': '+d.main_supporter_other:'');
+}
+function addrText(d){
+  const a=[d.addr_subdistrict&&'ต.'+d.addr_subdistrict,d.addr_district&&'อ.'+d.addr_district,d.addr_province&&'จ.'+d.addr_province].filter(Boolean).join(' ');
+  return[d.addr_village&&'หมู่บ้าน/ชุมชน '+d.addr_village,a].filter(Boolean).join(' · ');
+}
+function commuteText(d){
+  if(!d.commute_mode)return'';
+  let s=FAM.commute[d.commute_mode]||d.commute_mode;
+  if(d.commute_mode==='van'){
+    const x=[];if(d.commute_van_route)x.push('สาย '+d.commute_van_route);if(d.commute_van_price!==''&&d.commute_van_price!==undefined)x.push(Number(d.commute_van_price).toLocaleString('th-TH')+' บาท/เดือน');
+    if(x.length)s+=' ('+x.join(' · ')+')';
+  }
+  return s;
+}
+function livesAloneOrDorm(d){
+  return d.living_status==='alone'||d.living_status==='dorm'||d.commute_mode==='walk_dorm'||
+    (d.living_with==='other'&&/คนเดียว|หอพัก|ห้องเช่า|อพาร์ทเมนต์|หอใน/.test(d.living_with_other||''));
+}
+function familySection(d){
+  const row=(ic,l,v)=>v?`<div style="display:flex;gap:.5rem;padding:3px 0"><span style="min-width:1.4rem">${ic}</span><span style="color:var(--g4);min-width:7.5rem">${l}</span><span style="color:var(--g7);flex:1">${v}</span></div>`:'';
+  const sib=[(d.household_members!==''&&d.household_members!==undefined)?`สมาชิกในบ้าน ${d.household_members} คน`:'',
+    (d.siblings_count!==''&&d.siblings_count!==undefined)?`พี่น้อง ${d.siblings_count} คน`:'',
+    (d.birth_order!==''&&d.birth_order!==undefined)?`เป็นลูกคนที่ ${d.birth_order}`:''].filter(Boolean).join(' · ');
+  const rows=row('📍','ที่อยู่ปัจจุบัน',addrText(d))+row('🚌','การเดินทาง',commuteText(d))+row('👨‍👩‍👧','ครอบครัว',sib)+
+    row('💞','สถานภาพบิดามารดา',FAM.parents[d.parents_status]||'')+row('🏠','อาศัยอยู่กับ',livingText(d))+row('💰','ผู้ดูแลค่าใช้จ่ายหลัก',supporterText(d));
+  if(!rows)return'';
+  return`<div class="ms"><div class="mst ou">🏠 ที่อยู่และครอบครัว <span style="font-weight:400;font-size:.72rem;color:var(--red)">🔒 ข้อมูลลับ เฉพาะครู</span></div><div style="font-size:.82rem;line-height:1.6">${rows}</div></div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
 // ADVICE (v4.2) — คำแนะนำสำหรับครูแบบสำเร็จรูป
 // ทำงานในเบราว์เซอร์จากเกณฑ์ที่กำหนดไว้ ไม่เรียก AI/บริการภายนอก
 // ครูแก้ถ้อยคำได้ที่อ็อบเจ็กต์ ADVICE และตาราง ADV_RULES ด้านล่าง
@@ -1142,7 +1203,12 @@ const ADV_RULES=[
   {w:7,when:d=>parseInt(d.family_support||5)<=2&&d.family_support!=='',t:'ได้รับการสนับสนุนจากครอบครัวน้อย (ข้อมูลลับ ห้ามเปิดเผย): ให้ครูแนะแนวช่วยหาแหล่งสนับสนุน เช่น ทุนการศึกษา ชมรม ครูที่ปรึกษา'},
   {w:6,when:d=>d.part_time==='weekly',t:'ทำงานพิเศษทุกสัปดาห์: ตรวจสอบภาระงานและเวลานอน และให้กำหนดส่งที่ยืดหยุ่นพอเหมาะ'},
   {w:6,when:d=>d.challenge_attitude==='avoid'||d.challenge_attitude==='worry'||d.help_seeking==='skip',t:'หลีกเลี่ยงงานยากหรือไม่ค่อยขอความช่วยเหลือ: สร้างบรรยากาศที่ถามได้โดยไม่ถูกตำหนิ เริ่มจากงานที่สำเร็จได้แล้วเพิ่มความยากทีละขั้น'},
-  {w:5,when:d=>d.living_status==='alone',t:'อาศัยอยู่คนเดียว: ถามไถ่ความเป็นอยู่ (อาหาร ค่าใช้จ่าย ความปลอดภัย) เป็นระยะ'},
+  {w:7,when:d=>['father_deceased','mother_deceased','both_deceased'].includes(d.parents_status),t:'สูญเสียบิดาหรือมารดา: ให้ความสำคัญกับด้านอารมณ์ ประสานครูแนะแนว และไม่พูดถึงต่อหน้าผู้อื่น (ข้อมูลลับ)'},
+  {w:7,when:d=>d.main_supporter==='self',t:'นักเรียนหาเงินส่งตัวเองเรียน: ตรวจสอบภาระงาน เวลานอน และแนะนำทุนการศึกษา/ทุนช่วยเหลือของวิทยาลัย'},
+  {w:5,when:d=>d.parents_status==='separated'||d.parents_status==='divorced',t:'พ่อแม่แยกกันอยู่/หย่าร้าง: อาจกระทบอารมณ์และการเรียน — สังเกตและเปิดโอกาสให้พูดคุย (ข้อมูลลับ)'},
+  {w:5,when:d=>livesAloneOrDorm(d),t:'อาศัยอยู่คนเดียวหรือในหอพัก: ถามไถ่ความเป็นอยู่ (อาหาร ค่าใช้จ่าย ความปลอดภัย) เป็นระยะ'},
+  {w:4,when:d=>['grandparents','relatives','guardian'].includes(d.living_with),t:'อาศัยอยู่กับผู้ปกครองที่ไม่ใช่บิดามารดา: ตรวจสอบช่องทางติดต่อผู้ปกครองให้ถูกต้อง และพูดคุยเป็นระยะ'},
+  {w:2,when:d=>d.commute_mode==='van',t:'เดินทางด้วยรถตู้ประจำ: หากมาสายหรือกลับก่อนเวลา อาจเกี่ยวกับรอบรถ — พิจารณาอย่างเข้าใจ'},
   {w:5,when:d=>parseInt(d.computer_skill_level||5)<=2&&d.computer_skill_level!=='',t:'ทักษะคอมพิวเตอร์พื้นฐานน้อย: ใช้ใบงานมีภาพประกอบทีละขั้น และจับคู่กับเพื่อนที่ชำนาญ'},
   {w:4,when:d=>d.has_computer==='shared'||d.has_computer==='school_only'||d.home_internet==='slow_wifi'||d.home_internet==='mobile_data',t:'อุปกรณ์หรืออินเทอร์เน็ตจำกัด: เตรียมสื่อให้ดาวน์โหลดล่วงหน้า และเผื่อเวลาส่งงานที่ต้องใช้เน็ต'},
   {w:4,when:d=>d.planning_habit==='never'||d.planning_habit==='rarely',t:'ไม่ค่อยวางแผนงาน: สอนทำรายการงานและเรียงลำดับความสำคัญประจำสัปดาห์'},
@@ -1175,6 +1241,8 @@ function advPriority(d,phq,adhd){
   const rk=riskOf(d);
   if(rk>=8)up(1,`คะแนนความเสี่ยงด้านการเรียน ${rk}`);
   if(parseInt(d.stress_level||0)>=4)up(1,'รายงานความเครียดสูง');
+  if(['father_deceased','mother_deceased','both_deceased'].includes(d.parents_status))up(1,'สูญเสียบิดาหรือมารดา');
+  if(d.main_supporter==='self')up(1,'หาเงินส่งตัวเองเรียน');
   return{lv,reasons};
 }
 function buildAdvice(d,phq,adhd){
@@ -1251,6 +1319,7 @@ ${adhd.ai_analysis?`<div style="font-size:.77rem;font-weight:600;color:var(--g5)
   }
   const r=riskOf(d);
   const advSec=buildAdvice(d,phq,adhd);
+  const famSec=familySection(d);
   document.getElementById('modalWrap').innerHTML=`<div class="mo" onclick="closeModal(event)">
     <div class="mb" onclick="event.stopPropagation()">
       <div class="mh"><div><div class="mt3">${d.fullname||'—'}</div><div style="font-size:.79rem;color:var(--g4);margin-top:2px">${d.level||''} ${d.classroom||''} ${d.gender?'· '+d.gender:''}</div></div><button class="mx" onclick="closeModal()">✕</button></div>
@@ -1269,13 +1338,14 @@ ${adhd.ai_analysis?`<div style="font-size:.77rem;font-weight:600;color:var(--g5)
             ${d.part_time?`💼 ${d.part_time==='none'?'ไม่ทำงานพิเศษ':d.part_time==='weekend'?'ทำวันหยุด':'ทำทุกสัปดาห์'} &nbsp;`:''}
           </div>
         </div>
-        ${phqSec}${adhdSec}${advSec}${noteSec}
+        ${famSec}${phqSec}${adhdSec}${advSec}${noteSec}
       </div>
     </div>
   </div>`;
   document.getElementById('modalWrap').style.display='block';
 }
-function closeModal(e){if(!e||e.target===e.currentTarget){document.getElementById('modalWrap').style.display='none';document.getElementById('modalWrap').innerHTML='';}}
+let PW_FORCED=false;
+function closeModal(e){if(PW_FORCED)return;if(!e||e.target===e.currentTarget){document.getElementById('modalWrap').style.display='none';document.getElementById('modalWrap').innerHTML='';}}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
 // ══════════════════════════════════════════════════════════════
@@ -1439,7 +1509,7 @@ function showAT(id,btn){document.querySelectorAll('#d-a .pan').forEach(p=>p.clas
 // ══════════════════════════════════════════════════════════════
 function exportExcelLearner(){
   if(!ALL.length){alert('ยังไม่มีข้อมูลผู้เรียน');return;}
-  const hdr=['_id','_ts','fullname','level','classroom','student_no','gender','gpax','phone','parent_phone','computer_skill_level','typing_speed','english_tech','problem_solving','learning_style','challenge_attitude','planning_habit','multitasking','submission_habit','absence','help_seeking','part_time','sleep_hours','has_computer','home_internet','smartphone_os','uses_ai','family_support','living_status','career_goal','stress_level','special_skills','social_platforms','student_note','digital_biz_exp','programs_used','_risk','learning_group'];
+  const hdr=['_id','_ts','fullname','level','classroom','student_no','gender','gpax','phone','parent_phone','addr_subdistrict','addr_district','addr_province','addr_village','commute_mode','commute_van_price','commute_van_route','computer_skill_level','typing_speed','english_tech','problem_solving','learning_style','challenge_attitude','planning_habit','multitasking','submission_habit','absence','help_seeking','part_time','sleep_hours','has_computer','home_internet','smartphone_os','uses_ai','family_support','living_status','household_members','siblings_count','birth_order','parents_status','living_with','living_with_other','main_supporter','main_supporter_other','career_goal','stress_level','special_skills','social_platforms','student_note','digital_biz_exp','programs_used','_risk','learning_group'];
   const rows=ALL.map(d=>hdr.map(k=>unesc(d[k]??'')));
   const ws=XLSX.utils.aoa_to_sheet([hdr,...rows]);ws['!cols']=hdr.map(()=>({wch:18}));
   const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'ผู้เรียน');
