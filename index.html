@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<title>แบบสำรวจผู้เรียน | แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล วิทยาลัยเทคนิคประจวบคีรีขันธ์</title>
+<title>แบบสำรวจผู้เรียน | แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล  วิทยาลัยเทคนิคประจวบคีรีขันธ์</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -168,6 +168,12 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
 .mc strong{color:var(--o)}
 /* FOOTER */
 .footer{text-align:center;padding:1.125rem;font-size:.775rem;color:var(--g4);border-top:1px solid var(--g2);background:var(--w);display:flex;justify-content:center;gap:1.25rem;flex-wrap:wrap}
+.sub-h .flb{font-size:.95rem;color:var(--o);padding-top:.7rem;border-top:1.5px dashed var(--g2)}
+.hint{font-size:.76rem;color:var(--g4);line-height:1.45}
+.hint.warn{color:var(--amb)}
+.cond{display:none;flex-direction:column;gap:9px;padding:12px 13px;border-radius:var(--rm);background:var(--o4);border:1.5px dashed rgba(232,106,46,.35);margin-top:2px}
+.cond.show{display:flex}
+.rc.dis{opacity:.38;pointer-events:none}
 </style>
 </head>
 <body>
@@ -223,6 +229,17 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
   <div class="fl"><label class="flb">เกรดเฉลี่ย (GPAX)</label><select class="fs" name="gpax"><option value="">-- เลือก --</option><option value="3.5-4.0">🌟 3.50-4.00</option><option value="3.0-3.49">⭐ 3.00-3.49</option><option value="2.5-2.99">👍 2.50-2.99</option><option value="2.0-2.49">📚 2.00-2.49</option><option value="below2">💪 ต่ำกว่า 2.00</option><option value="new">🆕 นักเรียนใหม่</option></select></div>
   <div class="fl"><label class="flb">เบอร์โทรนักเรียน</label><input class="fi" type="tel" name="phone" placeholder="08X-XXX-XXXX"></div>
   <div class="fl"><label class="flb">เบอร์โทรผู้ปกครอง</label><input class="fi" type="tel" name="parent_phone" placeholder="08X-XXX-XXXX"></div>
+  <div class="fl ff sub-h"><div class="flb">📍 ที่อยู่ปัจจุบัน</div></div>
+  <div class="fl"><label class="flb">ตำบล <span class="req">*</span></label><input class="fi" type="text" name="addr_subdistrict" maxlength="60" placeholder="ตำบล" autocomplete="off"></div>
+  <div class="fl"><label class="flb">อำเภอ <span class="req">*</span></label><input class="fi" type="text" name="addr_district" maxlength="60" placeholder="อำเภอ" autocomplete="off"></div>
+  <div class="fl"><label class="flb">จังหวัด <span class="req">*</span></label><input class="fi" type="text" name="addr_province" maxlength="60" placeholder="จังหวัด" autocomplete="off"></div>
+  <div class="fl"><label class="flb">ชื่อหมู่บ้าน <span class="req">*</span></label><input class="fi" type="text" name="addr_village" maxlength="80" placeholder="ชื่อหมู่บ้าน / ชุมชน" autocomplete="off"><div class="hint">แถวบ้านที่อยู่ เรียกว่าอะไร</div></div>
+  <div class="fl ff sub-h"><div class="flb">🚌 การเดินทาง</div></div>
+  <div class="fl ff"><label class="flb">ปกติเดินทางมาวิทยาลัยฯ อย่างไร? <span class="req">*</span></label><div class="rs"><label class="rc"><input type="radio" name="commute_mode" value="van"><span class="em">🚐</span><span>รถตู้ประจำ</span></label><label class="rc"><input type="radio" name="commute_mode" value="motorcycle"><span class="em">🏍️</span><span>ขี่รถมอเตอร์ไซค์มาเอง</span></label><label class="rc"><input type="radio" name="commute_mode" value="car"><span class="em">🚗</span><span>ขับรถยนต์มาเอง</span></label><label class="rc"><input type="radio" name="commute_mode" value="parent_drop"><span class="em">👨‍👩‍👧</span><span>พ่อแม่ หรือ ผู้ปกครองขับรถมาส่ง</span></label><label class="rc"><input type="radio" name="commute_mode" value="walk_dorm"><span class="em">🚶</span><span>เดินเท้ามาจากหอพัก</span></label><label class="rc"><input type="radio" name="commute_mode" value="other_hire"><span class="em">🛺</span><span>รถรับจ้างอื่นๆ</span></label></div>
+    <div class="cond" id="vanBox">
+      <div class="fl"><label class="flb">ราคารถตู้ต่อเดือนเท่าไร (บาท) <span class="req">*</span></label><input class="fi" type="number" name="commute_van_price" min="0" max="30000" step="1" inputmode="numeric" placeholder="พิมพ์ตัวเลข เช่น 1200"></div>
+      <div class="fl"><label class="flb">รถตู้สายไหน <span class="req">*</span></label><input class="fi" type="text" name="commute_van_route" maxlength="100" placeholder="พิมพ์ชื่อสาย / เส้นทางรถตู้" autocomplete="off"></div>
+    </div></div>
 </div></div></div>
 </div>
 
@@ -246,7 +263,7 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
   <div class="fl ff"><label class="flb"><span class="qn">Q2.2</span> รูปแบบการเรียนที่ชอบ</label><div class="cg"><label class="cc"><input type="checkbox" name="learning_style" value="video"><span class="em">📺</span><span>ดูวิดีโอ</span></label><label class="cc"><input type="checkbox" name="learning_style" value="practice"><span class="em">💪</span><span>ลงมือปฏิบัติ</span></label><label class="cc"><input type="checkbox" name="learning_style" value="read"><span class="em">📖</span><span>อ่านเอกสาร</span></label><label class="cc"><input type="checkbox" name="learning_style" value="listen"><span class="em">👂</span><span>ฟังครูบรรยาย</span></label><label class="cc"><input type="checkbox" name="learning_style" value="group"><span class="em">👥</span><span>เรียนกลุ่ม</span></label></div></div>
   <div class="fl ff"><label class="flb"><span class="qn">Q2.3</span> งานยากมาก รู้สึกอย่างไร?</label><div class="rs"><label class="rc"><input type="radio" name="challenge_attitude" value="excited"><span class="em">🔥</span><span>ตื่นเต้น อยากลอง</span></label><label class="rc"><input type="radio" name="challenge_attitude" value="try_first"><span class="em">💡</span><span>พยายามก่อน ค่อยขอช่วย</span></label><label class="rc"><input type="radio" name="challenge_attitude" value="worry"><span class="em">😰</span><span>กังวล แต่ยังทำ</span></label><label class="rc"><input type="radio" name="challenge_attitude" value="avoid"><span class="em">😞</span><span>ไม่อยากทำเลย</span></label></div></div>
   <div class="fl"><label class="flb"><span class="qn">Q2.4</span> นิสัยการวางแผน</label><div class="rs"><label class="rc"><input type="radio" name="planning_habit" value="always"><span class="em">📋</span><span>วางแผนทุกครั้ง</span></label><label class="rc"><input type="radio" name="planning_habit" value="sometimes"><span class="em">📝</span><span>บางครั้ง</span></label><label class="rc"><input type="radio" name="planning_habit" value="rarely"><span class="em">😅</span><span>ไม่ค่อยวางแผน</span></label><label class="rc"><input type="radio" name="planning_habit" value="never"><span class="em">⚡</span><span>ลงมือทันที</span></label></div></div>
-  <div class="fl"><label class="flb"><span class="qn">Q2.5</span> Multitasking(สามารถทำงานได้มากกว่าหนึ่งอย่างพร้อมกัน)</label><div class="sc-lb"><span>ทำทีละอย่าง</span><span>เก่งมาก</span></div><div class="sc-bt"><label class="sb"><input type="radio" name="multitasking" value="1"><span>1</span></label><label class="sb"><input type="radio" name="multitasking" value="2"><span>2</span></label><label class="sb"><input type="radio" name="multitasking" value="3"><span>3</span></label><label class="sb"><input type="radio" name="multitasking" value="4"><span>4</span></label><label class="sb"><input type="radio" name="multitasking" value="5"><span>5</span></label></div></div>
+  <div class="fl"><label class="flb"><span class="qn">Q2.5</span> Multitasking</label><div class="sc-lb"><span>ทำทีละอย่าง</span><span>เก่งมาก</span></div><div class="sc-bt"><label class="sb"><input type="radio" name="multitasking" value="1"><span>1</span></label><label class="sb"><input type="radio" name="multitasking" value="2"><span>2</span></label><label class="sb"><input type="radio" name="multitasking" value="3"><span>3</span></label><label class="sb"><input type="radio" name="multitasking" value="4"><span>4</span></label><label class="sb"><input type="radio" name="multitasking" value="5"><span>5</span></label></div></div>
 </div></div></div>
 </div>
 
@@ -278,9 +295,16 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
 <div class="fc"><div class="fch"><div class="fci" style="background:#FFF3E0">🏠</div><div><div class="fcn">06/09</div><div class="fct">สังคมและครอบครัว 🔒</div><div class="fcd">ข้อมูลลับ เฉพาะครูเท่านั้น</div></div></div>
 <div class="fcb"><div class="fg">
   <div class="fl"><label class="flb"><span class="qn">Q5.1</span> การสนับสนุนจากครอบครัว</label><div class="sc-lb"><span>ไม่สนับสนุน</span><span>สนับสนุนเต็มที่</span></div><div class="sc-bt"><label class="sb"><input type="radio" name="family_support" value="1"><span>1</span></label><label class="sb"><input type="radio" name="family_support" value="2"><span>2</span></label><label class="sb"><input type="radio" name="family_support" value="3"><span>3</span></label><label class="sb"><input type="radio" name="family_support" value="4"><span>4</span></label><label class="sb"><input type="radio" name="family_support" value="5"><span>5</span></label></div></div>
-  <div class="fl"><label class="flb"><span class="qn">Q5.2</span> อาศัยอยู่กับ</label><div class="rs"><label class="rc"><input type="radio" name="living_status" value="parents"><span class="em">🏠</span><span>พ่อแม่/ผู้ปกครอง</span></label><label class="rc"><input type="radio" name="living_status" value="relative"><span class="em">👨‍👩‍👦</span><span>ญาติ</span></label><label class="rc"><input type="radio" name="living_status" value="dorm"><span class="em">🏢</span><span>หอพัก</span></label><label class="rc"><input type="radio" name="living_status" value="alone"><span class="em">🧍</span><span>อยู่คนเดียว</span></label></div></div>
-  <div class="fl"><label class="flb"><span class="qn">Q5.3</span> เป้าหมายหลังเรียนจบ</label><div class="rs"><label class="rc"><input type="radio" name="career_goal" value="study_more"><span class="em">🎓</span><span>เรียนต่อ</span></label><label class="rc"><input type="radio" name="career_goal" value="company"><span class="em">🏢</span><span>สมัครงานบริษัท</span></label><label class="rc"><input type="radio" name="career_goal" value="own_biz"><span class="em">🚀</span><span>เปิดธุรกิจเอง</span></label><label class="rc"><input type="radio" name="career_goal" value="freelance"><span class="em">💻</span><span>Freelance</span></label><label class="rc"><input type="radio" name="career_goal" value="unsure"><span class="em">🤷</span><span>ยังไม่แน่ใจ</span></label></div></div>
-  <div class="fl"><label class="flb"><span class="qn">Q5.4</span> ความเครียดโดยรวม</label><div class="sc-lb"><span>แทบไม่เครียด</span><span>เครียดมาก</span></div><div class="sc-bt"><label class="sb"><input type="radio" name="stress_level" value="1"><span>1</span></label><label class="sb"><input type="radio" name="stress_level" value="2"><span>2</span></label><label class="sb"><input type="radio" name="stress_level" value="3"><span>3</span></label><label class="sb"><input type="radio" name="stress_level" value="4"><span>4</span></label><label class="sb"><input type="radio" name="stress_level" value="5"><span>5</span></label></div></div>
+    <div class="fl"><label class="flb"><span class="qn">Q5.2</span> สมาชิกที่อาศัยอยู่ในบ้านเดียวกัน (คน)</label><input class="fi" type="number" name="household_members" min="1" max="30" step="1" inputmode="numeric" placeholder="จำนวนคน"><div class="hint">นับรวมตัวนักเรียนเอง</div></div>
+  <div class="fl"><label class="flb"><span class="qn">Q5.3</span> จำนวนพี่น้อง (คน)</label><input class="fi" type="number" name="siblings_count" min="0" max="20" step="1" inputmode="numeric" placeholder="จำนวนพี่น้อง"><div class="hint">ไม่นับตัวนักเรียน (ถ้าเป็นลูกคนเดียวให้ใส่ 0)</div></div>
+  <div class="fl"><label class="flb"><span class="qn">Q5.4</span> เป็นลูกคนที่</label><input class="fi" type="number" name="birth_order" min="1" max="21" step="1" inputmode="numeric" placeholder="ลำดับ"><div class="hint">นับรวมตัวนักเรียน (ลูกคนโต = 1)</div></div>
+  <div class="fl ff"><label class="flb"><span class="qn">Q5.5</span> สถานภาพบิดามารดา</label><div class="rs"><label class="rc"><input type="radio" name="parents_status" value="together"><span class="em">👫</span><span>พ่อแม่อยู่ด้วยกัน</span></label><label class="rc"><input type="radio" name="parents_status" value="separated"><span class="em">↔️</span><span>พ่อแม่แยกกันอยู่</span></label><label class="rc"><input type="radio" name="parents_status" value="divorced"><span class="em">💔</span><span>พ่อแม่หย่าร้าง</span></label><label class="rc"><input type="radio" name="parents_status" value="father_deceased"><span class="em">🕊️</span><span>บิดาเสียชีวิต</span></label><label class="rc"><input type="radio" name="parents_status" value="mother_deceased"><span class="em">🕊️</span><span>มารดาเสียชีวิต</span></label><label class="rc"><input type="radio" name="parents_status" value="both_deceased"><span class="em">🕊️</span><span>บิดาและมารดาเสียชีวิตทั้งคู่</span></label></div></div>
+  <div class="fl ff"><label class="flb"><span class="qn">Q5.6</span> อาศัยอยู่กับ</label><div class="rs"><label class="rc"><input type="radio" name="living_with" value="both_parents"><span class="em">🏠</span><span>บิดาและมารดา</span></label><label class="rc"><input type="radio" name="living_with" value="father"><span class="em">👨</span><span>บิดา</span></label><label class="rc"><input type="radio" name="living_with" value="mother"><span class="em">👩</span><span>มารดา</span></label><label class="rc"><input type="radio" name="living_with" value="grandparents"><span class="em">👴</span><span>ปู่ ย่า ตา หรือยาย</span></label><label class="rc"><input type="radio" name="living_with" value="relatives"><span class="em">👨‍👩‍👦</span><span>ญาติคนอื่นๆ (เช่น ลุง ป้า น้า อา)</span></label><label class="rc"><input type="radio" name="living_with" value="guardian"><span class="em">🤝</span><span>อาศัยอยู่กับครอบครัวบุญธรรม / ผู้ปกครองตามกฎหมาย</span></label><label class="rc"><input type="radio" name="living_with" value="other"><span class="em">✏️</span><span>อื่นๆ (ให้พิมพ์เอง)</span></label></div>
+    <div class="cond" id="livOtherBox"><input class="fi" type="text" name="living_with_other" maxlength="100" placeholder="ระบุ เช่น อยู่หอพักคนเดียว / อยู่กับเพื่อน"></div><div class="hint warn" id="livHint"></div></div>
+  <div class="fl ff"><label class="flb"><span class="qn">Q5.7</span> ปัจจุบันใครเป็นคนดูแลและออกค่าใช้จ่าย (เงินมาโรงเรียน / ค่าเทอม / ค่ากินอยู่) ให้กับนักเรียนเป็นหลัก</label><div class="rs"><label class="rc"><input type="radio" name="main_supporter" value="both_parents"><span class="em">👫</span><span>พ่อและแม่ช่วยกัน</span></label><label class="rc"><input type="radio" name="main_supporter" value="father"><span class="em">👨</span><span>พ่อคนเดียว</span></label><label class="rc"><input type="radio" name="main_supporter" value="mother"><span class="em">👩</span><span>แม่คนเดียว</span></label><label class="rc"><input type="radio" name="main_supporter" value="grandparents"><span class="em">👴</span><span>ปู่ ย่า ตา หรือ ยาย</span></label><label class="rc"><input type="radio" name="main_supporter" value="relatives"><span class="em">👨‍👩‍👦</span><span>ลุง ป้า น้า อา หรือญาติคนอื่น</span></label><label class="rc"><input type="radio" name="main_supporter" value="self"><span class="em">💪</span><span>นักเรียนหาเงินส่งตัวเองเรียน</span></label><label class="rc"><input type="radio" name="main_supporter" value="other"><span class="em">✏️</span><span>อื่นๆ (ระบุ)</span></label></div>
+    <div class="cond" id="supOtherBox"><input class="fi" type="text" name="main_supporter_other" maxlength="100" placeholder="ระบุผู้ดูแลและออกค่าใช้จ่าย"></div><div class="hint warn" id="supHint"></div></div>
+  <div class="fl"><label class="flb"><span class="qn">Q5.8</span> เป้าหมายหลังเรียนจบ</label><div class="rs"><label class="rc"><input type="radio" name="career_goal" value="study_more"><span class="em">🎓</span><span>เรียนต่อ</span></label><label class="rc"><input type="radio" name="career_goal" value="company"><span class="em">🏢</span><span>สมัครงานบริษัท</span></label><label class="rc"><input type="radio" name="career_goal" value="own_biz"><span class="em">🚀</span><span>เปิดธุรกิจเอง</span></label><label class="rc"><input type="radio" name="career_goal" value="freelance"><span class="em">💻</span><span>Freelance</span></label><label class="rc"><input type="radio" name="career_goal" value="unsure"><span class="em">🤷</span><span>ยังไม่แน่ใจ</span></label></div></div>
+  <div class="fl"><label class="flb"><span class="qn">Q5.9</span> ความเครียดโดยรวม</label><div class="sc-lb"><span>แทบไม่เครียด</span><span>เครียดมาก</span></div><div class="sc-bt"><label class="sb"><input type="radio" name="stress_level" value="1"><span>1</span></label><label class="sb"><input type="radio" name="stress_level" value="2"><span>2</span></label><label class="sb"><input type="radio" name="stress_level" value="3"><span>3</span></label><label class="sb"><input type="radio" name="stress_level" value="4"><span>4</span></label><label class="sb"><input type="radio" name="stress_level" value="5"><span>5</span></label></div></div>
 </div></div></div>
 </div>
 
@@ -331,7 +355,7 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
     <button class="btn bp" id="btnNext" onclick="nextS()">ถัดไป <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M5 3l4 4.5L5 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
   </div>
 </div>
-<footer class="footer"><span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span><span style="opacity:.3">●</span><span>วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span style="opacity:.3">●</span><span style="opacity:.5">v3 — Google Sheets</span></footer>
+<footer class="footer"><span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span><span style="opacity:.3">●</span><span>วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span style="opacity:.3">●</span><span style="opacity:.5">v4 — Google Sheets</span></footer>
 
 <script>
 // ===== CONFIG =====
@@ -399,7 +423,7 @@ function buildADHD(){
 }
 
 // ===== NAVIGATION =====
-function nextS(){if(cur<TOTAL-1){cur++;updateUI();scrollTo(0,0);}else submitForm();}
+function nextS(){if(!validateStep(cur))return;if(cur<TOTAL-1){cur++;updateUI();scrollTo(0,0);}else submitForm();}
 function prevS(){if(cur>0){cur--;updateUI();scrollTo(0,0);}}
 function jumpTo(i){if(i<=cur){cur=i;updateUI();scrollTo(0,0);}}
 
@@ -424,12 +448,90 @@ function updateUI(){
   }
 }
 
+// ===== คำถามเงื่อนไข / ตรวจความสอดคล้องของข้อมูล (v4.4) =====
+const $q=n=>document.querySelector(`#surveyForm [name="${n}"]`);
+const $qv=n=>{const e=document.querySelector(`#surveyForm input[name="${n}"]:checked`);return e?e.value:'';};
+const $qt=n=>String((($q(n)||{}).value)||'').trim();
+const _isInt=(v,min,max)=>/^\d+$/.test(String(v).trim())&&+v>=min&&+v<=max;
+function setCond(boxId,show,clearNames){
+  const b=document.getElementById(boxId);if(!b)return;
+  b.classList.toggle('show',!!show);
+  if(!show)(clearNames||[]).forEach(n=>{const e=$q(n);if(e)e.value='';});   // ซ่อนแล้วล้างค่า ไม่ส่งข้อมูลค้าง
+}
+// ตัวเลือกที่ขัดกับสถานภาพบิดามารดาจะถูกปิดและล้างคำตอบให้อัตโนมัติ
+function syncFamily(){
+  const ps=$qv('parents_status');
+  const fDead=ps==='father_deceased'||ps==='both_deceased',mDead=ps==='mother_deceased'||ps==='both_deceased';
+  const bad={
+    living_with:{both_parents:!!ps&&ps!=='together',father:fDead,mother:mDead},
+    main_supporter:{both_parents:fDead||mDead,father:fDead,mother:mDead}
+  };
+  const hints={living_with:'livHint',main_supporter:'supHint'};
+  Object.keys(bad).forEach(g=>{
+    let cleared=false;
+    document.querySelectorAll(`#surveyForm input[name="${g}"]`).forEach(inp=>{
+      const off=!!bad[g][inp.value];
+      inp.disabled=off;inp.closest('label').classList.toggle('dis',off);
+      if(off&&inp.checked){inp.checked=false;cleared=true;}
+    });
+    const h=document.getElementById(hints[g]);
+    if(h&&cleared)h.textContent='⚠️ ล้างคำตอบเดิมแล้ว เพราะไม่สอดคล้องกับสถานภาพบิดามารดาที่เลือก กรุณาเลือกใหม่';
+    else if(h&&!Object.values(bad[g]).some(Boolean))h.textContent='';
+  });
+  setCond('livOtherBox',$qv('living_with')==='other',['living_with_other']);
+  setCond('supOtherBox',$qv('main_supporter')==='other',['main_supporter_other']);
+  const s=$qt('siblings_count'),bo=$q('birth_order');
+  if(bo)bo.max=(s!==''&&/^\d+$/.test(s))?(+s+1):21;
+}
+function syncCommute(){setCond('vanBox',$qv('commute_mode')==='van',['commute_van_price','commute_van_route']);}
+function syncAll(){syncCommute();syncFamily();}
+// คืน {msg,name} ถ้ามีปัญหา, null ถ้าผ่าน
+function stepProblem(i){
+  if(i===0){
+    if(!$qt('fullname')||!$q('level').value||!$q('classroom').value)return{msg:'กรุณากรอกชื่อ ระดับชั้น และห้องเรียน',name:!$qt('fullname')?'fullname':!$q('level').value?'level':'classroom'};
+    for(const[n,l]of[['addr_subdistrict','ตำบล'],['addr_district','อำเภอ'],['addr_province','จังหวัด'],['addr_village','ชื่อหมู่บ้าน']])if(!$qt(n))return{msg:`กรุณากรอก${l}`,name:n};
+    const cm=$qv('commute_mode');
+    if(!cm)return{msg:'กรุณาเลือกวิธีเดินทางมาวิทยาลัย',name:'commute_mode'};
+    if(cm==='van'){
+      if(!_isInt($qt('commute_van_price'),0,30000))return{msg:'กรุณากรอกราคารถตู้ต่อเดือนเป็นตัวเลข (บาท)',name:'commute_van_price'};
+      if(!$qt('commute_van_route'))return{msg:'กรุณากรอกว่าเดินทางด้วยรถตู้สายไหน',name:'commute_van_route'};
+    }
+  }
+  if(i===5){
+    const hm=$qt('household_members'),sc=$qt('siblings_count'),bo=$qt('birth_order');
+    if(hm!==''&&!_isInt(hm,1,30))return{msg:'จำนวนสมาชิกในบ้านต้องเป็นจำนวนเต็ม 1–30 คน',name:'household_members'};
+    if(sc!==''&&!_isInt(sc,0,20))return{msg:'จำนวนพี่น้องต้องเป็นจำนวนเต็ม 0–20 คน',name:'siblings_count'};
+    if(bo!==''&&!_isInt(bo,1,21))return{msg:'ลำดับการเป็นลูกต้องเป็นจำนวนเต็ม 1–21',name:'birth_order'};
+    if(sc!==''&&bo!==''&&+bo>+sc+1)return{msg:`เป็นลูกคนที่ ${bo} ไม่สอดคล้องกับจำนวนพี่น้อง ${sc} คน (ลำดับต้องไม่เกิน ${+sc+1}) — จำนวนพี่น้องไม่นับตัวนักเรียน`,name:'birth_order'};
+    const lw=$qv('living_with');
+    if(hm!==''&&lw){
+      const min=lw==='both_parents'?3:(lw==='other'?1:2);
+      if(+hm<min)return{msg:`อาศัยอยู่กับ "${lw==='both_parents'?'บิดาและมารดา':'ผู้อื่น'}" ต้องมีสมาชิกในบ้านอย่างน้อย ${min} คน (นับรวมตัวนักเรียน) กรุณาตรวจสอบจำนวนสมาชิก`,name:'household_members'};
+    }
+    if(lw==='other'&&!$qt('living_with_other'))return{msg:'กรุณาพิมพ์ระบุว่าอาศัยอยู่กับใคร (ข้อ อื่นๆ)',name:'living_with_other'};
+    if($qv('main_supporter')==='other'&&!$qt('main_supporter_other'))return{msg:'กรุณาพิมพ์ระบุผู้ดูแลและออกค่าใช้จ่าย (ข้อ อื่นๆ)',name:'main_supporter_other'};
+  }
+  return null;
+}
+function _focusQ(p){const e=$q(p.name);if(e&&e.scrollIntoView){try{e.scrollIntoView({block:'center'});if(e.focus)e.focus();}catch(_){}}}
+function validateStep(i){const p=stepProblem(i);if(!p)return true;alert(p.msg);_focusQ(p);return false;}
+function cleanConditionals(sd){
+  if(sd.commute_mode!=='van'){delete sd.commute_van_price;delete sd.commute_van_route;}
+  if(sd.living_with!=='other')delete sd.living_with_other;
+  if(sd.main_supporter!=='other')delete sd.main_supporter_other;
+  return sd;
+}
+document.getElementById('surveyForm').addEventListener('change',syncAll);
+document.getElementById('surveyForm').addEventListener('input',e=>{if(e.target&&e.target.name==='siblings_count')syncFamily();});
+syncAll();
+
 // ===== SUBMIT =====
 async function submitForm(){
   const form=document.getElementById('surveyForm');
   const fn=form.querySelector('[name="fullname"]').value.trim();
   const lv=form.querySelector('[name="level"]').value;
   const cl=form.querySelector('[name="classroom"]').value.trim();
+  for(const s of [0,5]){const pr=stepProblem(s);if(pr){cur=s;updateUI();alert(pr.msg);_focusQ(pr);return;}}
   if(!fn||!lv||!cl){alert('กรุณากรอกชื่อ ระดับชั้น และห้องเรียน');cur=0;updateUI();return;}
 
   showOverlay('กำลังเตรียมข้อมูล...','กรุณารอสักครู่');
@@ -450,6 +552,7 @@ async function submitForm(){
       const c=[...form.querySelectorAll(`input[type=checkbox][name="${n}"]:checked`)].map(e=>e.value);
       if(c.length)sd[n]=c;
     });
+    cleanConditionals(sd);
     sd._risk=calcRisk(sd);
     sd.learning_group=classify(sd);
 
@@ -581,6 +684,7 @@ function resetForm(){
   window._sid=null;
   cur=0;
   document.getElementById('surveyForm').reset();
+  syncAll();
   ['surveyForm','navBar','heroSection'].forEach(id=>document.getElementById(id).style.display='');
   document.getElementById('spPg').style.display='none';
   buildPHQ();buildADHD();updateUI();
