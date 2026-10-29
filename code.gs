@@ -15,16 +15,18 @@
 //
 // วิธีติดตั้ง (ทำตามลำดับ):
 //   1. วางโค้ดนี้ใน Apps Script (Extensions → Apps Script) แทนของเดิม แล้ว Save
-//   2. รัน setupSecurity()  → ตั้งผู้ใช้/รหัสผ่านแอดมิน และ API key (ไม่บังคับ) ครั้งเดียว
+//   2. รัน setupSecurity()  → สร้างชีต "users" + ผู้ใช้แอดมินคนแรก + API key (ไม่บังคับ) ครั้งเดียว
 //   3. รัน diagnoseSheets() → ดูผลตรวจโครงสร้างชีตเดิมที่ View → Logs / Execution log
 //   4. รัน repairSheets()   → ซ่อมข้อมูลเดิม (วันที่, เบอร์โทร, คะแนนที่เป็น NaN)
 //   5. Deploy → Manage deployments → Edit → New version  (Execute as: Me | Anyone)
 //      *ต้อง "New version" ทุกครั้งที่แก้โค้ด URL เดิมจึงจะใช้โค้ดใหม่*
 //
-// ลืมรหัสผ่าน / ถูกล็อก:
-//   • resetAdminPassword() → ตั้งรหัสผ่านใหม่ (และแสดงชื่อผู้ใช้เดิม) — รันได้เฉพาะเจ้าของสคริปต์
-//   • unlockLogin()        → ปลดล็อกหลังใส่รหัสผิดเกิน 5 ครั้ง (ไม่ต้องรอ 10 นาที)
-//   • เปลี่ยนรหัสผ่านปกติ: กดปุ่ม 🔑 บนแดชบอร์ด
+// จัดการผู้ใช้ (เพิ่ม/ลบ/แก้ไข) ที่ชีต "users" ใน Google Sheets โดยตรง:
+//   • เพิ่ม = เพิ่มแถว พิมพ์ username + password ชั่วคราว | ลบ = ลบแถว | เปลี่ยนรหัส = พิมพ์ทับช่อง password
+//   • ระงับ/เปิดใช้ = ช่อง active (ใช่/ไม่)
+//   • เมนู "👥 ผู้ใช้ระบบ" ในชีต: ตั้งรหัสใหม่ให้ผู้ใช้ / ปลดล็อก / ออกจากระบบทุกเครื่อง
+// ลืมรหัสผ่าน: เมนู 👥 ผู้ใช้ระบบ → ตั้งรหัสผ่านใหม่ให้ผู้ใช้… (หรือรัน resetUserPassword())
+// ถูกล็อก (ใส่รหัสผิดเกิน 5 ครั้ง): เมนู 👥 → ปลดล็อก (หรือรัน unlockLogin()) | เปลี่ยนรหัสเอง: ปุ่ม 🔑 บนแดชบอร์ด
 // ================================================================
 
 const SH = { learner: 'learner_data', phq: 'phq_data', adhd: 'adhd_data' };
@@ -34,7 +36,8 @@ const AI_MODEL        = 'claude-sonnet-5-5';   // เปลี่ยนได้
 const AI_MAX_PER_RUN  = 6;                     // วิเคราะห์ไม่เกินกี่คนต่อรอบ trigger
 const AI_MAX_RETRY    = 3;
 const TOKEN_TTL_SEC   = 21600;                 // 6 ชม. (เพดานของ CacheService)
-const MAX_LOGIN_FAILS = 5;
+const MAX_LOGIN_FAILS = 5;                    // ต่อ 1 ชื่อผู้ใช้
+const MAX_GLOBAL_FAILS = 60;                  // ทั้งระบบ (กันการเดารหัสแบบสุ่มชื่อ)
 const LOGIN_LOCK_SEC  = 600;
 const SUBMIT_PER_MIN  = 150;                   // เบรกกันถูกยิงรัว ๆ (ทั้งห้องส่งพร้อมกันยังพอ)
 
@@ -43,7 +46,54 @@ const SUBMIT_PER_MIN  = 150;                   // เบรกกันถูก
 const ADHD_CUT = 6, ADHD_WATCH = 4;
 
 const TEXT_COLS = ['_id', '_ts', 'student_no', 'phone', 'parent_phone', 'alert_ack'];
-const LONG_COLS = { student_note: 1000, special_skills: 300, social_platforms: 300, programs_used: 300, digital_biz_exp: 300 };
+const LONG_COLS = { addr_subdistrict: 60, addr_district: 60, addr_province: 60, addr_village: 80, commute_van_route: 100, living_with_other: 100, main_supporter_other: 100, student_note: 1000, special_skills: 300, social_platforms: 300, programs_used: 300, digital_biz_exp: 300 };
+
+// ค่าที่อนุญาตของคำถามแบบเลือก (ค่านอกรายการจะถูกล้างเป็นค่าว่าง)
+// true = ต้องตอบครบทุกข้อ (แบบสำรวจ + PHQ-A + ADHD) จึงจะบันทึก  (ตั้งเป็น false ถ้าต้องการผ่อนปรนชั่วคราว)
+var REQUIRE_COMPLETE = true;
+
+// ค่าที่อนุญาตของคำถามแบบเลือกข้อเดียว (ค่านอกรายการจะถูกล้างเป็นค่าว่าง → นับว่า "ยังไม่ตอบ")
+const ENUMS = {
+  gender:         ['ชาย', 'หญิง', 'อื่นๆ'],
+  gpax:           ['3.5-4.0', '3.0-3.49', '2.5-2.99', '2.0-2.49', 'below2', 'new'],
+  commute_mode:   ['van', 'motorcycle', 'car', 'parent_drop', 'walk_dorm', 'other_hire'],
+  computer_skill_level: ['1', '2', '3', '4', '5'],
+  typing_speed:   ['under20', '20-40', '40-60', 'over60'],
+  english_tech:   ['1', '2', '3', '4'],
+  problem_solving:['try', 'search', 'ask', 'wait'],
+  challenge_attitude: ['excited', 'try_first', 'worry', 'avoid'],
+  planning_habit: ['always', 'sometimes', 'rarely', 'never'],
+  multitasking:   ['1', '2', '3', '4', '5'],
+  submission_habit: ['5', '4', '3', '2', '1'],
+  absence:        ['0', '1-3', '4-6', '7+'],
+  help_seeking:   ['ask_teacher', 'ask_friend', 'self_study', 'skip'],
+  part_time:      ['none', 'weekend', 'weekly'],
+  sleep_hours:    ['under5', '5-6', '7-8', 'over8'],
+  has_computer:   ['own', 'shared', 'school_only', 'none'],
+  home_internet:  ['fast_wifi', 'slow_wifi', 'mobile_data', 'none'],
+  smartphone_os:  ['android', 'ios', 'none'],
+  uses_ai:        ['often', 'sometimes', 'never'],
+  family_support: ['1', '2', '3', '4', '5'],
+  parents_status: ['together', 'separated', 'divorced', 'father_deceased', 'mother_deceased', 'both_deceased'],
+  living_with:    ['both_parents', 'father', 'mother', 'grandparents', 'relatives', 'guardian', 'other'],
+  main_supporter: ['both_parents', 'father', 'mother', 'grandparents', 'relatives', 'self', 'other'],
+  career_goal:    ['study_more', 'company', 'own_biz', 'freelance', 'unsure'],
+  stress_level:   ['1', '2', '3', '4', '5'],
+  living_status:  ['parents', 'relative', 'dorm', 'alone']          // ค่าเดิมของแบบสำรวจรุ่นก่อน (คงไว้เพื่อข้อมูลเก่า ไม่บังคับ)
+};
+// คำถามเลือกได้หลายข้อ ("none" = ไม่มี/ไม่ใช้ เลือกคู่กับข้ออื่นไม่ได้)
+const ENUM_MULTI = {
+  programs_used:   ['word', 'excel', 'powerpoint', 'gdocs', 'canva', 'photoshop', 'video', 'code', 'none'],
+  digital_biz_exp: ['sell_online', 'content', 'design', 'social', 'web', 'none'],
+  learning_style:  ['video', 'practice', 'read', 'listen', 'group'],
+  special_skills:  ['video_edit', 'graphic', 'photo', 'code', 'ads', 'seo', 'accounting', 'none'],
+  social_platforms:['tiktok', 'facebook', 'instagram', 'youtube', 'x', 'lineoa', 'shopee', 'none']
+};
+// ฟิลด์ที่ต้องตอบ (นอกจากชนิดเลือกข้างบน)
+const REQUIRED_TEXT = ['fullname', 'level', 'classroom', 'student_no', 'phone', 'parent_phone',
+  'addr_subdistrict', 'addr_district', 'addr_province', 'addr_village', 'student_note'];
+const REQUIRED_INT = ['household_members', 'siblings_count', 'birth_order'];
+const INT_FIELDS = { household_members: [1, 30], siblings_count: [0, 20], birth_order: [1, 21], commute_van_price: [0, 30000] };
 
 const PHQ_ITEMS = [
   'รู้สึกหดหู่ เศร้า หรือสิ้นหวัง',
@@ -60,11 +110,16 @@ const PHQ_ITEMS = [
 const HDR_LEARNER = [
   '_id','_ts','fullname','level','classroom','student_no',
   'gender','gpax','phone','parent_phone',
+  'addr_subdistrict','addr_district','addr_province','addr_village',
+  'commute_mode','commute_van_price','commute_van_route',
   'computer_skill_level','typing_speed','english_tech',
   'problem_solving','learning_style','challenge_attitude','planning_habit','multitasking',
   'submission_habit','absence','help_seeking','part_time','sleep_hours',
   'has_computer','home_internet','smartphone_os','uses_ai',
-  'family_support','living_status','career_goal','stress_level',
+  'family_support','living_status',
+  'household_members','siblings_count','birth_order','parents_status',
+  'living_with','living_with_other','main_supporter','main_supporter_other',
+  'career_goal','stress_level',
   'special_skills','social_platforms','student_note',
   'digital_biz_exp','programs_used',
   '_risk','learning_group'
@@ -119,26 +174,30 @@ function doPost(e) {
 // Auth
 // ================================================================
 function handleLogin(req) {
-  const props = PropertiesService.getScriptProperties();
   const cache = CacheService.getScriptCache();
-  const fails = Number(cache.get('loginfail') || 0);
-  if (fails >= MAX_LOGIN_FAILS) return { ok: false, error: 'locked' };
-
-  const user = String(req.username || '').trim();
+  const uname = normUser_(req.username);
   const pass = String(req.password || '');
-  const savedUser = props.getProperty('ADMIN_USER') || '';
-  const savedHash = props.getProperty('ADMIN_HASH') || '';
-  const salt      = props.getProperty('ADMIN_SALT') || '';
-
-  const okUser = savedUser !== '' && constEq(user, savedUser);
-  const okPass = savedHash !== '' && constEq(hashPass(pass, salt), savedHash);
-  if (!(okUser && okPass)) {
-    cache.put('loginfail', String(fails + 1), LOGIN_LOCK_SEC);
+  const le = lockEpoch_();
+  const kU = 'lf:' + le + ':' + uname, kG = 'lfg:' + le;
+  if (!uname || Number(cache.get(kU) || 0) >= MAX_LOGIN_FAILS || Number(cache.get(kG) || 0) >= MAX_GLOBAL_FAILS) {
+    return { ok: false, error: 'locked' };
+  }
+  ensureUsersReady_();
+  sweepPendingPasswords_();                       // กันกรณี onEdit ไม่ทำงาน (เช่น วางรหัสผ่านจากสคริปต์/แอปมือถือ)
+  const u = findUser_(uname);
+  // คำนวณ hash เสมอแม้ไม่พบผู้ใช้ เพื่อให้เวลาตอบสนองใกล้เคียงกัน
+  const okPass = constEq(hashPass(pass, u ? u.salt : 'x-no-user'), u ? u.hash : 'x-no-hash') && !!u && u.hash !== '';
+  if (!u || !okPass) {
+    cache.put(kU, String(Number(cache.get(kU) || 0) + 1), LOGIN_LOCK_SEC);
+    cache.put(kG, String(Number(cache.get(kG) || 0) + 1), LOGIN_LOCK_SEC);
     Utilities.sleep(700);
     return { ok: false, error: 'invalid' };
   }
-  cache.remove('loginfail');
-  return { ok: true, token: issueToken(), expiresIn: TOKEN_TTL_SEC };
+  if (!u.active) return { ok: false, error: 'inactive' };          // รหัสถูกแต่บัญชีถูกระงับ
+  cache.remove(kU);
+  const token = issueToken({ uname: u.uname, h: u.hash.slice(0, 16) });
+  touchLastLogin_(u.uname);
+  return { ok: true, token: token, name: u.display || u.username, mustChange: u.mustChange, expiresIn: TOKEN_TTL_SEC };
 }
 
 function handleLogout(req) {
@@ -147,7 +206,9 @@ function handleLogout(req) {
   return { ok: true };
 }
 
-// token ผูกกับ "epoch" — เปลี่ยน/รีเซ็ตรหัสผ่านแล้ว epoch เพิ่ม ทำให้ทุกเซสชันเก่าใช้ไม่ได้ทันที
+// ---------- token / session ----------
+// token ผูกกับ "epoch" (รีเซ็ตทุกเครื่องได้) และผูกกับ hash รหัสผ่านของผู้ใช้
+// → ลบผู้ใช้, ระงับบัญชี, หรือเปลี่ยนรหัสผ่านในชีต = เซสชันของผู้ใช้นั้นใช้ไม่ได้ทันที (คนอื่นไม่ถูกกระทบ)
 function epoch() { return PropertiesService.getScriptProperties().getProperty('TOKEN_EPOCH') || '0'; }
 function bumpEpoch() {
   const props = PropertiesService.getScriptProperties();
@@ -155,44 +216,230 @@ function bumpEpoch() {
   props.setProperty('TOKEN_EPOCH', n);
   return n;
 }
+function lockEpoch_() { return PropertiesService.getScriptProperties().getProperty('LOCK_EPOCH') || '0'; }
 function tokKey(token) { return 'tok:' + epoch() + ':' + token; }
-function issueToken() {
+function issueToken(sess) {
   const token = Utilities.getUuid().replace(/-/g, '') + Utilities.getUuid().replace(/-/g, '');
-  CacheService.getScriptCache().put(tokKey(token), '1', TOKEN_TTL_SEC);
+  CacheService.getScriptCache().put(tokKey(token), JSON.stringify(sess), TOKEN_TTL_SEC);
   return token;
 }
-function checkToken(token) {
+function getSession(token) {
   const t = String(token || '');
-  if (t.length < 40) return false;
-  return CacheService.getScriptCache().get(tokKey(t)) === '1';
+  if (t.length < 40) return null;
+  const raw = CacheService.getScriptCache().get(tokKey(t));
+  if (!raw) return null;
+  let s;
+  try { s = JSON.parse(raw); } catch (e) { return null; }
+  const u = findUser_(s.uname);
+  if (!u || !u.active || !u.hash || u.hash.slice(0, 16) !== s.h) return null;
+  return { uname: u.uname, user: u, mc: u.mustChange };          // mustChange อ่านสดจากชีตทุกครั้ง
 }
+function checkToken(token) { return getSession(token); }
 function isStrongPass(p) {
   p = String(p);
   return p.length >= 10 && !/admin1234/i.test(p) && new Set(p.split('')).size >= 4;
 }
 
 function handleChangePassword(req) {
-  if (!checkToken(req.token)) return { ok: false, error: 'unauthorized' };
+  const s = getSession(req.token);
+  if (!s) return { ok: false, error: 'unauthorized' };
   const cache = CacheService.getScriptCache();
-  const fails = Number(cache.get('loginfail') || 0);
+  const kU = 'lf:' + lockEpoch_() + ':' + s.uname;
+  const fails = Number(cache.get(kU) || 0);
   if (fails >= MAX_LOGIN_FAILS) return { ok: false, error: 'locked' };
-  const props = PropertiesService.getScriptProperties();
   const oldPw = String(req.oldPassword || ''), newPw = String(req.newPassword || '');
-  if (!constEq(hashPass(oldPw, props.getProperty('ADMIN_SALT') || ''), props.getProperty('ADMIN_HASH') || '')) {
-    cache.put('loginfail', String(fails + 1), LOGIN_LOCK_SEC);
+  if (!constEq(hashPass(oldPw, s.user.salt), s.user.hash)) {
+    cache.put(kU, String(fails + 1), LOGIN_LOCK_SEC);
     Utilities.sleep(700);
     return { ok: false, error: 'wrong_old' };
   }
   if (!isStrongPass(newPw) || newPw === oldPw) return { ok: false, error: 'weak' };
-  const salt = Utilities.getUuid();
-  props.setProperties({ ADMIN_SALT: salt, ADMIN_HASH: hashPass(newPw, salt) });
-  bumpEpoch();                                   // ออกจากระบบทุกอุปกรณ์
-  return { ok: true, token: issueToken() };      // เครื่องที่เปลี่ยนรหัสยังใช้งานต่อได้
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(15000)) return { ok: false, error: 'busy' };
+  try {
+    const d = readUsers_();
+    const u = d.rows.filter(r => r.uname === s.uname)[0];
+    if (!u) return { ok: false, error: 'unauthorized' };
+    writeUserPassword_(d, u.row, newPw, false);
+    const nu = findUser_(s.uname);
+    return { ok: true, token: issueToken({ uname: nu.uname, h: nu.hash.slice(0, 16) }) };   // เครื่องที่เปลี่ยนรหัสใช้งานต่อได้ เครื่องอื่นของผู้ใช้นี้หลุด
+  } finally { lock.releaseLock(); }
+}
+
+// ================================================================
+// Users — จัดการผู้ใช้ (เพิ่ม/ลบ/แก้ไข) จากชีต "users" ใน Google Sheets
+//   คอลัมน์: username | password | display_name | active | must_change | last_login | note | _salt | _hash
+//   • เพิ่มผู้ใช้  = เพิ่มแถวใหม่ พิมพ์ username + password (ชั่วคราว) → ระบบเข้ารหัสแล้วแทนที่ด้วย "(ตั้งรหัสผ่านแล้ว)"
+//   • เปลี่ยนรหัสผ่าน = พิมพ์รหัสใหม่ทับช่อง password
+//   • ระงับ/เปิดใช้ = ช่อง active (ใช่/ไม่)    • ลบผู้ใช้ = ลบแถว
+//   ผู้ใช้ที่ถูกตั้งรหัสจากชีตต้องเปลี่ยนรหัสผ่านเองเมื่อเข้าสู่ระบบครั้งแรก
+// ================================================================
+const SH_USERS = 'users';
+const USERS_HDR = ['username', 'password', 'display_name', 'active', 'must_change', 'last_login', 'note', '_salt', '_hash'];
+const PW_MARK = '(ตั้งรหัสผ่านแล้ว)';
+const PW_WEAK = '⚠ รหัสผ่านต้องยาว ≥10 ตัวอักษร และไม่เดาง่าย — พิมพ์ใหม่';
+const YES = 'ใช่', NO = 'ไม่';
+
+function normUser_(v) { return String(v === null || v === undefined ? '' : v).trim().toLowerCase(); }
+function isActive_(v) {
+  const s = String(v === null || v === undefined ? '' : v).trim().toLowerCase();
+  return !(s === 'ไม่' || s === 'no' || s === 'n' || s === 'false' || s === '0' || s === 'off' || s === 'ระงับ');
+}
+function usersSheet_(create) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(SH_USERS);
+  if (!sh && create) { sh = ss.insertSheet(SH_USERS); formatUsersSheet_(sh); }
+  return sh;
+}
+function formatUsersSheet_(sh) {
+  const r = sh.getRange(1, 1, 1, USERS_HDR.length);
+  r.setValues([USERS_HDR]);
+  styleHeader(r);
+  sh.setFrozenRows(1);
+  const col = h => USERS_HDR.indexOf(h) + 1;
+  try {
+    sh.getRange(1, col('username'), sh.getMaxRows(), 2).setNumberFormat('@');          // เก็บเป็นข้อความ (รหัสที่ขึ้นต้นด้วย 0 ไม่เพี้ยน)
+    sh.getRange(1, col('username')).setNote('ชื่อผู้ใช้ (ไม่สนตัวพิมพ์เล็ก/ใหญ่)\nเพิ่มผู้ใช้ = เพิ่มแถวใหม่ | ลบผู้ใช้ = ลบทั้งแถว');
+    sh.getRange(1, col('password')).setNote('พิมพ์รหัสผ่านใหม่ (≥10 ตัวอักษร) แล้วกด Enter\nระบบจะเข้ารหัสและแทนที่ด้วย "' + PW_MARK + '"\nผู้ใช้ต้องเปลี่ยนรหัสผ่านเองเมื่อเข้าสู่ระบบครั้งแรก\nเปลี่ยนรหัส = พิมพ์รหัสใหม่ทับช่องนี้');
+    sh.getRange(1, col('active')).setNote('ใช่ = ใช้งานได้ | ไม่ = ระงับบัญชี (เซสชันที่ล็อกอินอยู่จะหลุดทันที)');
+    sh.getRange(1, col('must_change')).setNote('ใช่ = ต้องเปลี่ยนรหัสผ่านก่อนใช้งาน (ระบบตั้งให้เองเมื่อตั้งรหัสจากชีต)');
+    sh.getRange(2, col('active'), 500, 1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList([YES, NO], true).setAllowInvalid(false).build());
+    sh.setColumnWidths(1, 8, 130);
+    sh.hideColumns(col('_salt'), 2);
+    sh.getRange(1, col('_salt'), sh.getMaxRows(), 2).protect().setWarningOnly(true).setDescription('ค่าเข้ารหัส — ห้ามแก้ไขเอง');
+  } catch (err) { Logger.log('formatUsersSheet_ (cosmetic): ' + err.message); }
+}
+function readUsers_() {
+  const sh = usersSheet_(false);
+  const empty = { sh: sh, ix: () => -1, rows: [] };
+  if (!sh || sh.getLastRow() < 2 || sh.getLastColumn() < 1) return empty;
+  const headers = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].map(String);
+  const ix = h => headers.indexOf(h);
+  if (ix('username') < 0 || ix('password') < 0 || ix('_hash') < 0 || ix('_salt') < 0) return empty;
+  const vals = sh.getRange(2, 1, sh.getLastRow() - 1, headers.length).getValues();
+  const g = (r, h) => (ix(h) < 0 ? '' : r[ix(h)]);
+  const rows = [];
+  vals.forEach((r, i) => {
+    const uname = normUser_(g(r, 'username'));
+    if (!uname) return;
+    rows.push({
+      row: i + 2, uname: uname, username: String(g(r, 'username')).trim(),
+      password: String(g(r, 'password') === null ? '' : g(r, 'password')),
+      display: String(g(r, 'display_name') || '').trim(),
+      active: isActive_(g(r, 'active')), mustChange: String(g(r, 'must_change')).trim() === YES,
+      salt: String(g(r, '_salt') || ''), hash: String(g(r, '_hash') || '')
+    });
+  });
+  return { sh: sh, ix: ix, rows: rows };
+}
+function findUser_(uname) {
+  const n = normUser_(uname);
+  if (!n) return null;
+  const rows = readUsers_().rows;
+  for (let i = 0; i < rows.length; i++) if (rows[i].uname === n) return rows[i];     // ชื่อซ้ำ → ใช้แถวแรก
+  return null;
+}
+function isPendingPw_(pw) {
+  const s = String(pw).trim();
+  return s !== '' && s !== PW_MARK && s.charAt(0) !== '⚠';
+}
+// เขียน salt/hash, ล้างรหัสจริงออกจากช่อง password, ตั้ง must_change
+function writeUserPassword_(d, row, plain, mustChange) {
+  const sh = d.sh, ix = d.ix, salt = Utilities.getUuid();
+  sh.getRange(row, ix('_salt') + 1).setValue(salt);
+  sh.getRange(row, ix('_hash') + 1).setValue(hashPass(String(plain), salt));
+  sh.getRange(row, ix('password') + 1).setValue(PW_MARK);
+  if (ix('must_change') >= 0) sh.getRange(row, ix('must_change') + 1).setValue(mustChange ? YES : '');
+  if (ix('active') >= 0) { const c = sh.getRange(row, ix('active') + 1); if (String(c.getValue()).trim() === '') c.setValue(YES); }
+}
+// แปลงรหัสผ่านที่พิมพ์ในชีตเป็น hash ทุกแถวที่ค้างอยู่ — คืนจำนวนที่ทำสำเร็จ/ที่ปฏิเสธ
+function sweepPendingPasswords_() {
+  const d = readUsers_();
+  let ok = 0, weak = 0;
+  d.rows.forEach(u => {
+    if (!isPendingPw_(u.password)) return;
+    if (isStrongPass(u.password.trim())) { writeUserPassword_(d, u.row, u.password.trim(), true); ok++; }
+    else { d.sh.getRange(u.row, d.ix('password') + 1).setValue(PW_WEAK); weak++; }
+  });
+  return { ok: ok, weak: weak };
+}
+function toast_(msg) { try { SpreadsheetApp.getActiveSpreadsheet().toast(msg, 'ผู้ใช้ระบบ', 8); } catch (e) { Logger.log(msg); } }
+
+// ทำงานอัตโนมัติเมื่อมีการแก้ไขชีต (simple trigger)
+function onEdit(e) {
+  try {
+    if (!e || !e.range) return;
+    const sh = e.range.getSheet();
+    if (!sh || sh.getName() !== SH_USERS || e.range.getRow() < 2) return;
+    const r = sweepPendingPasswords_();
+    if (r.ok) toast_('ตั้งรหัสผ่านแล้ว ' + r.ok + ' ราย — ผู้ใช้ต้องเปลี่ยนรหัสผ่านเมื่อเข้าสู่ระบบครั้งแรก');
+    if (r.weak) toast_('รหัสผ่านสั้นหรือเดาง่าย ' + r.weak + ' ราย — ต้องยาว ≥10 ตัวอักษร');
+    const seen = {}, dup = [];
+    readUsers_().rows.forEach(u => { if (seen[u.uname]) dup.push(u.username); seen[u.uname] = 1; });
+    if (dup.length) toast_('ชื่อผู้ใช้ซ้ำ: ' + dup.join(', ') + ' (ระบบใช้แถวแรกเท่านั้น)');
+  } catch (err) { Logger.log('onEdit: ' + err.message); }
+}
+function onOpen() {
+  try {
+    SpreadsheetApp.getUi().createMenu('👥 ผู้ใช้ระบบ')
+      .addItem('สร้าง/ตรวจแผ่นงาน users', 'setupUsersSheet')
+      .addItem('แปลงรหัสผ่านที่พิมพ์ค้างอยู่', 'menuProcessPasswords')
+      .addItem('ตั้งรหัสผ่านใหม่ให้ผู้ใช้…', 'resetUserPassword')
+      .addItem('ปลดล็อกการเข้าสู่ระบบ', 'unlockLogin')
+      .addItem('ออกจากระบบทุกเครื่อง', 'menuLogoutAll')
+      .addToUi();
+  } catch (e) { Logger.log('onOpen: ' + e.message); }
+}
+function touchLastLogin_(uname) {
+  try {
+    const lock = LockService.getScriptLock();
+    if (!lock.tryLock(3000)) return;
+    try {
+      const d = readUsers_(), u = d.rows.filter(r => r.uname === uname)[0];
+      if (u && d.ix('last_login') >= 0) { const c = d.sh.getRange(u.row, d.ix('last_login') + 1); c.setNumberFormat('@'); c.setValue(nowThai()); }
+    } finally { lock.releaseLock(); }
+  } catch (e) { Logger.log('touchLastLogin_: ' + e.message); }
+}
+// ย้ายผู้ดูแลเดิม (Script Properties) เข้าชีต users ครั้งเดียว — ใช้รหัสผ่านเดิมได้ต่อ
+function migrateLegacyAdmin_() {
+  const props = PropertiesService.getScriptProperties();
+  const user = props.getProperty('ADMIN_USER'), hash = props.getProperty('ADMIN_HASH'), salt = props.getProperty('ADMIN_SALT');
+  if (!user || !hash || !salt) return false;
+  const sh = usersSheet_(true);
+  const d = readUsers_();
+  if (!d.rows.some(r => r.uname === normUser_(user))) {
+    const row = Math.max(sh.getLastRow(), 1) + 1;
+    const hdr = readHeaders(sh), vals = hdr.map(h => ({ username: user, password: PW_MARK, display_name: user, active: YES, must_change: '', note: 'ย้ายมาจากระบบเดิม', _salt: salt, _hash: hash }[h] || ''));
+    sh.getRange(row, 1, 1, hdr.length).setValues([vals]);
+  }
+  ['ADMIN_USER', 'ADMIN_HASH', 'ADMIN_SALT'].forEach(k => props.deleteProperty(k));
+  return true;
+}
+function ensureUsersReady_() {
+  const d = readUsers_();
+  if (d.rows.length === 0 && PropertiesService.getScriptProperties().getProperty('ADMIN_HASH')) migrateLegacyAdmin_();
+}
+function upsertUserWithPassword_(username, plain, mustChange) {
+  const sh = usersSheet_(true);
+  let d = readUsers_();
+  const n = normUser_(username);
+  let u = d.rows.filter(r => r.uname === n)[0];
+  if (!u) {
+    const row = Math.max(sh.getLastRow(), 1) + 1;
+    const hdr = readHeaders(sh);
+    sh.getRange(row, 1, 1, hdr.length).setValues([hdr.map(h => ({ username: String(username).trim(), display_name: String(username).trim(), active: YES }[h] || ''))]);
+    d = readUsers_();
+    u = d.rows.filter(r => r.uname === n)[0];
+  }
+  writeUserPassword_(d, u.row, plain, !!mustChange);
+  return u.row;
 }
 
 // ครูกด "รับทราบ" ที่แดชบอร์ด → บันทึกเวลาลงคอลัมน์ alert_ack ของชีต phq_data
 function handleAck(req) {
-  if (!checkToken(req.token)) return { ok: false, error: 'unauthorized' };
+  const s = getSession(req.token);
+  if (!s) return { ok: false, error: 'unauthorized' };
+  if (s.mc) return { ok: false, error: 'must_change' };
   const id = String(req.id || '');
   if (!/^[A-Za-z0-9]{5,30}$/.test(id)) return { ok: false, error: 'invalid' };
   const lock = LockService.getScriptLock();
@@ -211,7 +458,9 @@ function handleAck(req) {
 }
 
 function handleRead(req) {
-  if (!checkToken(req.token)) return { ok: false, error: 'unauthorized' };
+  const s = getSession(req.token);
+  if (!s) return { ok: false, error: 'unauthorized' };
+  if (s.mc) return { ok: false, error: 'must_change' };      // ต้องเปลี่ยนรหัสผ่านก่อนจึงจะดูข้อมูลได้
   const types = Array.isArray(req.types) && req.types.length ? req.types : ['learner', 'phq', 'adhd'];
   const data = {};
   types.forEach(t => { if (SH[t]) data[t] = readAll(t); });
@@ -252,6 +501,12 @@ function handleSubmit(req) {
   const adhd = recs.adhd ? buildRecord('adhd', recs.adhd, id, common) : null;
   if (recs.phq && !phq)   return { ok: false, error: 'invalid' };
   if (recs.adhd && !adhd) return { ok: false, error: 'invalid' };
+  if (REQUIRE_COMPLETE) {
+    const miss = missingLearnerFields_(learner);
+    if (!phq) miss.push('phq');
+    if (!adhd) miss.push('adhd');
+    if (miss.length) return { ok: false, error: 'incomplete', missing: miss.slice(0, 30) };
+  }
 
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(25000)) return { ok: false, error: 'busy' };
@@ -301,6 +556,7 @@ function buildRecord(type, raw, id, common) {
 
   if (type === 'learner') {
     if (!rec.fullname || !rec.level || !rec.classroom) return null;
+    normalizeLearnerExtras(rec);
     rec._risk = calcRisk(rec);
     rec.learning_group = classifyLearner(rec);
     return rec;
@@ -332,6 +588,62 @@ function buildRecord(type, raw, id, common) {
     rec.adhd_severity = adhdSev(rec.adhd_inatt_cnt, rec.adhd_hyper_cnt).key;
   }
   return rec;
+}
+
+// ตรวจ/ล้างค่าของคำถามชุดที่อยู่-การเดินทาง-ครอบครัว ให้สอดคล้องกัน (ไม่ปฏิเสธทั้งแบบสำรวจ แต่ล้างเฉพาะค่าที่ไม่ถูกต้อง)
+function normalizeLearnerExtras(rec) {
+  Object.keys(ENUMS).forEach(k => {
+    if (rec[k] !== undefined && rec[k] !== '' && ENUMS[k].indexOf(rec[k]) < 0) rec[k] = '';
+  });
+  // คำถามเลือกหลายข้อ: ตัดค่านอกรายการ, "none" ห้ามอยู่คู่กับข้ออื่น (ขัดกัน → ล้างให้ตอบใหม่)
+  Object.keys(ENUM_MULTI).forEach(k => {
+    if (rec[k] === undefined || rec[k] === '') return;
+    const items = String(rec[k]).split(',').map(s => s.trim()).filter(s => ENUM_MULTI[k].indexOf(s) >= 0);
+    const uniq = items.filter((s, i) => items.indexOf(s) === i);
+    rec[k] = (uniq.indexOf('none') >= 0 && uniq.length > 1) ? '' : uniq.join(', ');
+  });
+  // รูปแบบข้อมูล: รหัสนักเรียน (ตัวเลข 6–15 หลัก), เบอร์โทร (9–10 หลัก ขึ้นต้น 0), ความยาวขั้นต่ำของข้อความ
+  if (rec.student_no !== undefined && !/^\d{6,15}$/.test(String(rec.student_no).trim())) rec.student_no = '';
+  ['phone', 'parent_phone'].forEach(k => {
+    if (rec[k] === undefined || rec[k] === '') return;
+    const dg = String(rec[k]).replace(/[\s-]/g, '');
+    rec[k] = /^0\d{8,9}$/.test(dg) ? dg : '';
+  });
+  [['fullname', 3], ['addr_subdistrict', 2], ['addr_district', 2], ['addr_province', 2], ['addr_village', 2], ['student_note', 2]].forEach(x => {
+    if (rec[x[0]] !== undefined && String(rec[x[0]]).trim().length < x[1]) rec[x[0]] = '';
+  });
+  Object.keys(INT_FIELDS).forEach(k => {
+    const v = rec[k];
+    if (v === undefined || v === '') return;
+    const n = Number(String(v).trim());
+    const r = INT_FIELDS[k];
+    rec[k] = (/^\d+$/.test(String(v).trim()) && Number.isInteger(n) && n >= r[0] && n <= r[1]) ? n : '';
+  });
+  // รถตู้: เก็บราคา/สายเฉพาะเมื่อเลือก "รถตู้ประจำ"
+  if (rec.commute_mode !== 'van') { rec.commute_van_price = ''; rec.commute_van_route = ''; }
+  // "อื่นๆ": เก็บข้อความระบุเฉพาะเมื่อเลือก "อื่นๆ"
+  if (rec.living_with !== 'other') rec.living_with_other = '';
+  if (rec.main_supporter !== 'other') rec.main_supporter_other = '';
+  // ลำดับการเป็นลูกต้องไม่เกิน (จำนวนพี่น้อง + 1)
+  if (rec.birth_order !== undefined && rec.birth_order !== '' && rec.siblings_count !== undefined && rec.siblings_count !== '' &&
+      rec.birth_order > rec.siblings_count + 1) rec.birth_order = '';
+}
+
+// รายการฟิลด์ที่ "ยังไม่ได้ตอบ/ไม่ถูกต้อง" ของแบบสำรวจ (ใช้เมื่อ REQUIRE_COMPLETE)
+function missingLearnerFields_(rec) {
+  const miss = [];
+  const empty = v => v === undefined || v === null || String(v).trim() === '';
+  REQUIRED_TEXT.forEach(k => { if (empty(rec[k])) miss.push(k); });
+  Object.keys(ENUMS).forEach(k => { if (k !== 'living_status' && empty(rec[k])) miss.push(k); });
+  Object.keys(ENUM_MULTI).forEach(k => { if (empty(rec[k])) miss.push(k); });
+  REQUIRED_INT.forEach(k => { if (empty(rec[k])) miss.push(k); });
+  if (rec.commute_mode === 'van') {
+    if (empty(rec.commute_van_price)) miss.push('commute_van_price');
+    if (empty(rec.commute_van_route)) miss.push('commute_van_route');
+  }
+  if (rec.living_with === 'other' && empty(rec.living_with_other)) miss.push('living_with_other');
+  if (rec.main_supporter === 'other' && empty(rec.main_supporter_other)) miss.push('main_supporter_other');
+  return miss;
 }
 
 function phqSev(s) {
@@ -600,46 +912,66 @@ function installTriggers() {
   if (!has) ScriptApp.newTrigger('processAiQueue').timeBased().everyMinutes(5).create();
 }
 
-// ตั้งรหัสผ่านแอดมิน / API key / อีเมลแจ้งเตือน — เก็บใน Script Properties (ไม่อยู่ในโค้ด)
+// สร้าง/ตรวจแผ่นงาน "users" (ย้ายผู้ดูแลเดิมเข้าชีตให้อัตโนมัติ และแปลงรหัสผ่านที่พิมพ์ค้างอยู่)
+function setupUsersSheet() {
+  const existed = !!usersSheet_(false);
+  const sh = usersSheet_(true);
+  if (existed) { ensureHeaders(sh, USERS_HDR); }
+  const migrated = migrateLegacyAdmin_();
+  const r = sweepPendingPasswords_();
+  Browser.msgBox('✅ แผ่นงาน "users" พร้อมใช้งาน' + (migrated ? '\\nย้ายผู้ดูแลเดิมเข้าชีตแล้ว (ใช้รหัสผ่านเดิมได้)' : '') +
+    (r.ok ? '\\nตั้งรหัสผ่านให้ ' + r.ok + ' ราย' : '') + '\\nเพิ่ม/ลบ/แก้ไขผู้ใช้ได้ที่ชีตนี้โดยตรง');
+}
+
+// ตั้งค่าครั้งแรก: ผู้ใช้แอดมินคนแรก + API key (ไม่บังคับ) — รหัสผ่านเก็บเป็น hash ในชีต users, API key เก็บใน Script Properties
 function setupSecurity() {
   const props = PropertiesService.getScriptProperties();
   const ask = (msg) => Browser.inputBox(msg, Browser.Buttons.OK_CANCEL);
 
-  const u = ask('ตั้งชื่อผู้ใช้แอดมินสำหรับแดชบอร์ด (เช่น teacher_tdb)');
-  if (u === 'cancel' || !String(u).trim()) return;
-  const p = ask('ตั้งรหัสผ่าน (อย่างน้อย 10 ตัวอักษร ห้ามใช้ admin1234)');
-  if (p === 'cancel') return;
-  if (!isStrongPass(p)) { Browser.msgBox('รหัสผ่านสั้นเกินไปหรือเดาง่าย — ยกเลิกการตั้งค่า'); return; }
-
-  const salt = Utilities.getUuid();
-  props.setProperties({ ADMIN_USER: String(u).trim(), ADMIN_SALT: salt, ADMIN_HASH: hashPass(String(p), salt) });
-
+  usersSheet_(true);
+  migrateLegacyAdmin_();
+  const u = ask('เพิ่มผู้ใช้แอดมิน: พิมพ์ชื่อผู้ใช้\\n(เว้นว่างถ้ามีผู้ใช้ในชีต "users" แล้ว — เพิ่ม/ลบ/แก้ไขผู้ใช้ได้ในชีตนั้นโดยตรง)');
+  if (u === 'cancel') return;
+  if (String(u).trim()) {
+    const p = ask('ตั้งรหัสผ่านของ "' + String(u).trim() + '" (อย่างน้อย 10 ตัวอักษร ห้ามใช้ admin1234)');
+    if (p === 'cancel') return;
+    if (!isStrongPass(p)) { Browser.msgBox('รหัสผ่านสั้นเกินไปหรือเดาง่าย — ยกเลิกการตั้งค่า'); return; }
+    upsertUserWithPassword_(String(u).trim(), String(p), false);
+  }
   const k = ask('วาง Anthropic API key (เว้นว่างถ้าไม่ใช้ AI หรือต้องการคงค่าเดิม)');
   if (k !== 'cancel' && String(k).trim()) props.setProperty('ANTHROPIC_API_KEY', String(k).trim());
 
   bumpEpoch();   // เซสชันเก่าใช้ไม่ได้
   setupSheets();
-  Browser.msgBox('✅ ตั้งค่าเสร็จแล้ว\\nขั้นต่อไป: รัน diagnoseSheets() และ repairSheets() แล้ว Deploy เป็น New version');
+  Browser.msgBox('✅ ตั้งค่าเสร็จแล้ว\\nจัดการผู้ใช้ที่ชีต "users" | ขั้นต่อไป: รัน diagnoseSheets() และ repairSheets() แล้ว Deploy เป็น New version');
 }
 
-// ลืมรหัสผ่าน: เจ้าของสคริปต์รันฟังก์ชันนี้เพื่อตั้งรหัสใหม่ (ทุกเซสชันเดิมจะถูกออกจากระบบ)
-function resetAdminPassword() {
-  const props = PropertiesService.getScriptProperties();
-  const p = Browser.inputBox('ตั้งรหัสผ่านใหม่ของแอดมิน (อย่างน้อย 10 ตัวอักษร)', Browser.Buttons.OK_CANCEL);
+// ลืมรหัสผ่าน: เจ้าของสคริปต์ (หรือเมนู 👥 ผู้ใช้ระบบ) ตั้งรหัสใหม่ให้ผู้ใช้ — ถ้าชื่อนี้ยังไม่มีจะสร้างผู้ใช้ใหม่
+function resetUserPassword() {
+  const ask = (msg) => Browser.inputBox(msg, Browser.Buttons.OK_CANCEL);
+  const names = readUsers_().rows.map(r => r.username);
+  const u = ask('ชื่อผู้ใช้ที่ต้องการตั้งรหัสผ่านใหม่' + (names.length ? '\\nผู้ใช้ในระบบตอนนี้: ' + names.join(', ') : '') + '\\n(ถ้าพิมพ์ชื่อใหม่ จะสร้างผู้ใช้ใหม่)');
+  if (u === 'cancel' || !String(u).trim()) return;
+  const p = ask('รหัสผ่านใหม่ของ "' + String(u).trim() + '" (อย่างน้อย 10 ตัวอักษร)');
   if (p === 'cancel') return;
   if (!isStrongPass(p)) { Browser.msgBox('รหัสผ่านสั้นเกินไปหรือเดาง่าย — ไม่มีการเปลี่ยนแปลง'); return; }
-  const salt = Utilities.getUuid();
-  props.setProperties({ ADMIN_SALT: salt, ADMIN_HASH: hashPass(String(p), salt) });
-  bumpEpoch();
-  CacheService.getScriptCache().remove('loginfail');
-  Browser.msgBox('✅ ตั้งรหัสผ่านใหม่แล้ว\\nชื่อผู้ใช้: ' + (props.getProperty('ADMIN_USER') || '(ยังไม่เคยตั้ง — ให้รัน setupSecurity())'));
+  upsertUserWithPassword_(String(u).trim(), String(p), false);
+  CacheService.getScriptCache().remove('lf:' + lockEpoch_() + ':' + normUser_(u));
+  Browser.msgBox('✅ ตั้งรหัสผ่านใหม่ให้ "' + String(u).trim() + '" แล้ว\\n(เซสชันเดิมของผู้ใช้นี้ถูกยกเลิกอัตโนมัติ)');
 }
+function resetAdminPassword() { resetUserPassword(); }      // ชื่อเดิม ใช้ได้ต่อ
 
-// ปลดล็อกการเข้าสู่ระบบ (หลังใส่รหัสผิดเกิน 5 ครั้ง)
+// ปลดล็อกการเข้าสู่ระบบของทุกบัญชี (หลังใส่รหัสผิดเกิน 5 ครั้ง)
 function unlockLogin() {
-  CacheService.getScriptCache().remove('loginfail');
+  const props = PropertiesService.getScriptProperties();
+  props.setProperty('LOCK_EPOCH', String(Number(props.getProperty('LOCK_EPOCH') || '0') + 1));
   Browser.msgBox('✅ ปลดล็อกการเข้าสู่ระบบแล้ว');
 }
+function menuProcessPasswords() {
+  const r = sweepPendingPasswords_();
+  Browser.msgBox(r.ok || r.weak ? ('ตั้งรหัสผ่านสำเร็จ ' + r.ok + ' ราย' + (r.weak ? ' | ถูกปฏิเสธ (สั้น/เดาง่าย) ' + r.weak + ' ราย' : '')) : 'ไม่มีรหัสผ่านที่พิมพ์ค้างอยู่');
+}
+function menuLogoutAll() { bumpEpoch(); Browser.msgBox('✅ ออกจากระบบทุกเครื่องแล้ว'); }
 
 // ตรวจโครงสร้างชีตเดิม (ไม่แสดงชื่อนักเรียน)
 function diagnoseSheets() {
