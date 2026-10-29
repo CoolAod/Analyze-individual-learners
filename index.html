@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<title>แบบสำรวจผู้เรียน | แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล  วิทยาลัยเทคนิคประจวบคีรีขันธ์</title>
+<title>แบบสำรวจผู้เรียน | แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล วิทยาลัยเทคนิค</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -174,6 +174,9 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
 .cond{display:none;flex-direction:column;gap:9px;padding:12px 13px;border-radius:var(--rm);background:var(--o4);border:1.5px dashed rgba(232,106,46,.35);margin-top:2px}
 .cond.show{display:flex}
 .rc.dis{opacity:.38;pointer-events:none}
+.req-note{font-size:.8rem;font-weight:600;color:var(--o);background:var(--o4);border:1.5px dashed rgba(232,106,46,.35);border-radius:var(--rm);padding:.55rem .8rem;margin:0 0 .8rem}
+@keyframes flashq{0%,60%{box-shadow:0 0 0 3px rgba(217,48,37,.55)}100%{box-shadow:0 0 0 0 rgba(217,48,37,0)}}
+.flash{border-radius:12px;animation:flashq 1.8s ease-out}
 </style>
 </head>
 <body>
@@ -192,7 +195,7 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
   <div class="hd-i">
     <a class="brand" href="index.html">
       <div class="b-logo"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3L3 8v11h6v-5h4v5h6V8L11 3z" fill="white" opacity=".9"/></svg></div>
-      <div class="b-tx"><span class="b-school">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="b-dept">แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span></div>
+      <div class="b-tx"><span class="b-school">วิทยาลัยเทคนิค</span><span class="b-dept">แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span></div>
     </a>
     <nav class="hn">
       <a href="index.html" class="np act">📋 แบบสำรวจ</a>
@@ -233,9 +236,9 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
   <div class="fl"><label class="flb">ตำบล <span class="req">*</span></label><input class="fi" type="text" name="addr_subdistrict" maxlength="60" placeholder="ตำบล" autocomplete="off"></div>
   <div class="fl"><label class="flb">อำเภอ <span class="req">*</span></label><input class="fi" type="text" name="addr_district" maxlength="60" placeholder="อำเภอ" autocomplete="off"></div>
   <div class="fl"><label class="flb">จังหวัด <span class="req">*</span></label><input class="fi" type="text" name="addr_province" maxlength="60" placeholder="จังหวัด" autocomplete="off"></div>
-  <div class="fl"><label class="flb">ชื่อหมู่ <span class="req">*</span></label><input class="fi" type="text" name="addr_village" maxlength="80" placeholder="ชื่อหมู่ / ชุมชน" autocomplete="off"><div class="hint">แถวที่อยู่ เรียกว่าอะไร</div></div>
+  <div class="fl"><label class="flb">ชื่อหมู่บ้าน <span class="req">*</span></label><input class="fi" type="text" name="addr_village" maxlength="80" placeholder="ชื่อหมู่บ้าน / ชุมชน" autocomplete="off"><div class="hint">แถวบ้านที่อยู่ เรียกว่าอะไร</div></div>
   <div class="fl ff sub-h"><div class="flb">🚌 การเดินทาง</div></div>
-  <div class="fl ff"><label class="flb">ปกติเดินทางมาวิทยาลัยฯ อย่างไร? <span class="req">*</span></label><div class="rs"><label class="rc"><input type="radio" name="commute_mode" value="van"><span class="em">🚐</span><span>รถตู้ประจำ</span></label><label class="rc"><input type="radio" name="commute_mode" value="motorcycle"><span class="em">🏍️</span><span>ขี่รถมอเตอร์ไซค์มาเอง</span></label><label class="rc"><input type="radio" name="commute_mode" value="car"><span class="em">🚗</span><span>ขับรถยนต์มาเอง</span></label><label class="rc"><input type="radio" name="commute_mode" value="parent_drop"><span class="em">👨‍👩‍👧</span><span>พ่อแม่ หรือ ผู้ปกครองขับรถมาส่ง</span></label><label class="rc"><input type="radio" name="commute_mode" value="walk_dorm"><span class="em">🚶</span><span>เดินเท้ามาจากบ้าน / หอพัก </span></label><label class="rc"><input type="radio" name="commute_mode" value="other_hire"><span class="em">🛺</span><span>รถรับจ้างอื่นๆ</span></label></div>
+  <div class="fl ff"><label class="flb">ปกติเดินทางมาวิทยาลัยฯ อย่างไร? <span class="req">*</span></label><div class="rs"><label class="rc"><input type="radio" name="commute_mode" value="van"><span class="em">🚐</span><span>รถตู้ประจำ</span></label><label class="rc"><input type="radio" name="commute_mode" value="motorcycle"><span class="em">🏍️</span><span>ขี่รถมอเตอร์ไซค์มาเอง</span></label><label class="rc"><input type="radio" name="commute_mode" value="car"><span class="em">🚗</span><span>ขับรถยนต์มาเอง</span></label><label class="rc"><input type="radio" name="commute_mode" value="parent_drop"><span class="em">👨‍👩‍👧</span><span>พ่อแม่ หรือ ผู้ปกครองขับรถมาส่ง</span></label><label class="rc"><input type="radio" name="commute_mode" value="walk_dorm"><span class="em">🚶</span><span>เดินเท้ามาจากหอพัก</span></label><label class="rc"><input type="radio" name="commute_mode" value="other_hire"><span class="em">🛺</span><span>รถรับจ้างอื่นๆ</span></label></div>
     <div class="cond" id="vanBox">
       <div class="fl"><label class="flb">ราคารถตู้ต่อเดือนเท่าไร (บาท) <span class="req">*</span></label><input class="fi" type="number" name="commute_van_price" min="0" max="30000" step="1" inputmode="numeric" placeholder="พิมพ์ตัวเลข เช่น 1200"></div>
       <div class="fl"><label class="flb">รถตู้สายไหน <span class="req">*</span></label><input class="fi" type="text" name="commute_van_route" maxlength="100" placeholder="พิมพ์ชื่อสาย / เส้นทางรถตู้" autocomplete="off"></div>
@@ -283,7 +286,7 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
 <div class="fss" data-s="4">
 <div class="fc"><div class="fch"><div class="fci" style="background:#E3F2FD">📱</div><div><div class="fcn">05/09</div><div class="fct">ความพร้อมด้านอุปกรณ์</div></div></div>
 <div class="fcb"><div class="fg">
-  <div class="fl"><label class="flb"><span class="qn">Q4.1</span> คอมพิวเตอร์/แล็ปท็อป</label><div class="rs"><label class="rc"><input type="radio" name="has_computer" value="own"><span class="em">💻</span><span>มีส่วนตัว</span></label><label class="rc"><input type="radio" name="has_computer" value="shared"><span class="em">🤝</span><span>ใช้ร่วมกับคนใน</span></label><label class="rc"><input type="radio" name="has_computer" value="school_only"><span class="em">🏫</span><span>ใช้ที่โรงเรียนเท่านั้น</span></label><label class="rc"><input type="radio" name="has_computer" value="none"><span class="em">❌</span><span>ไม่มีเลย</span></label></div></div>
+  <div class="fl"><label class="flb"><span class="qn">Q4.1</span> คอมพิวเตอร์/แล็ปท็อป</label><div class="rs"><label class="rc"><input type="radio" name="has_computer" value="own"><span class="em">💻</span><span>มีส่วนตัว</span></label><label class="rc"><input type="radio" name="has_computer" value="shared"><span class="em">🤝</span><span>ใช้ร่วมกับคนในบ้าน</span></label><label class="rc"><input type="radio" name="has_computer" value="school_only"><span class="em">🏫</span><span>ใช้ที่โรงเรียนเท่านั้น</span></label><label class="rc"><input type="radio" name="has_computer" value="none"><span class="em">❌</span><span>ไม่มีเลย</span></label></div></div>
   <div class="fl"><label class="flb"><span class="qn">Q4.2</span> อินเทอร์เน็ตที่บ้าน</label><div class="rs"><label class="rc"><input type="radio" name="home_internet" value="fast_wifi"><span class="em">⚡</span><span>WiFi ความเร็วสูง</span></label><label class="rc"><input type="radio" name="home_internet" value="slow_wifi"><span class="em">📶</span><span>WiFi ช้า/ไม่เสถียร</span></label><label class="rc"><input type="radio" name="home_internet" value="mobile_data"><span class="em">📱</span><span>Data มือถือ</span></label><label class="rc"><input type="radio" name="home_internet" value="none"><span class="em">❌</span><span>ไม่มีอินเทอร์เน็ต</span></label></div></div>
   <div class="fl"><label class="flb"><span class="qn">Q4.3</span> สมาร์ทโฟน</label><div class="rs"><label class="rc"><input type="radio" name="smartphone_os" value="android"><span class="em">🤖</span><span>Android</span></label><label class="rc"><input type="radio" name="smartphone_os" value="ios"><span class="em">🍎</span><span>iOS (iPhone)</span></label><label class="rc"><input type="radio" name="smartphone_os" value="none"><span class="em">❌</span><span>ไม่มีสมาร์ทโฟน</span></label></div></div>
   <div class="fl"><label class="flb"><span class="qn">Q4.4</span> ใช้ AI ช่วยเรียน?</label><div class="rs"><label class="rc"><input type="radio" name="uses_ai" value="often"><span class="em">🤖</span><span>ใช้บ่อย (ChatGPT ฯลฯ)</span></label><label class="rc"><input type="radio" name="uses_ai" value="sometimes"><span class="em">💡</span><span>ใช้บ้าง</span></label><label class="rc"><input type="radio" name="uses_ai" value="never"><span class="em">🤷</span><span>ยังไม่เคยใช้</span></label></div></div>
@@ -315,8 +318,8 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
   <div class="nt info">💡 ครูจะออกแบบกิจกรรมให้เหมาะกับความสามารถของคุณ</div>
   <div class="fg">
     <div class="fl ff"><label class="flb"><span class="qn">Q6.1</span> ทักษะพิเศษด้านดิจิทัล</label><div class="cg"><label class="cc"><input type="checkbox" name="special_skills" value="video_edit"><span class="em">🎬</span><span>ตัดต่อวิดีโอ</span></label><label class="cc"><input type="checkbox" name="special_skills" value="graphic"><span class="em">🎨</span><span>ออกแบบกราฟิก</span></label><label class="cc"><input type="checkbox" name="special_skills" value="photo"><span class="em">📷</span><span>ถ่ายภาพ/วิดีโอ</span></label><label class="cc"><input type="checkbox" name="special_skills" value="code"><span class="em">👨‍💻</span><span>เขียนโค้ด/เว็บ</span></label><label class="cc"><input type="checkbox" name="special_skills" value="ads"><span class="em">📢</span><span>ยิงโฆษณา Ads</span></label><label class="cc"><input type="checkbox" name="special_skills" value="seo"><span class="em">🔍</span><span>SEO/คอนเทนต์</span></label><label class="cc"><input type="checkbox" name="special_skills" value="accounting"><span class="em">📊</span><span>บัญชีดิจิทัล</span></label><label class="cc"><input type="checkbox" name="special_skills" value="none"><span class="em">🌱</span><span>ยังไม่มีทักษะ</span></label></div></div>
-    <div class="fl ff"><label class="flb"><span class="qn">Q6.2</span> Social Media ที่ใช้งานจริง</label><div class="cg"><label class="cc"><input type="checkbox" name="social_platforms" value="tiktok"><span class="em">🎵</span><span>TikTok</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="facebook"><span class="em">📘</span><span>Facebook</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="instagram"><span class="em">📸</span><span>Instagram</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="youtube"><span class="em">▶️</span><span>YouTube</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="x"><span class="em">🐦</span><span>X (Twitter)</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="lineoa"><span class="em">💚</span><span>Line OA</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="shopee"><span class="em">🛒</span><span>Shopee/Lazada</span></label></div></div>
-    <div class="fl ff"><label class="flb"><span class="qn">Q6.3</span> อยากให้ครูรู้อะไรเกี่ยวกับตัวคุณ?</label><textarea class="ft" name="student_note" placeholder="เช่น ความฝัน สิ่งที่กังวล หรือสิ่งที่ต้องการความช่วยเหลือ..."></textarea></div>
+    <div class="fl ff"><label class="flb"><span class="qn">Q6.2</span> Social Media ที่ใช้งานจริง</label><div class="cg"><label class="cc"><input type="checkbox" name="social_platforms" value="tiktok"><span class="em">🎵</span><span>TikTok</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="facebook"><span class="em">📘</span><span>Facebook</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="instagram"><span class="em">📸</span><span>Instagram</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="youtube"><span class="em">▶️</span><span>YouTube</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="x"><span class="em">🐦</span><span>X (Twitter)</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="lineoa"><span class="em">💚</span><span>Line OA</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="shopee"><span class="em">🛒</span><span>Shopee/Lazada</span></label><label class="cc"><input type="checkbox" name="social_platforms" value="none"><span class="em">🚫</span><span>ไม่ได้ใช้โซเชียลมีเดีย</span></label></div></div>
+    <div class="fl ff"><label class="flb"><span class="qn">Q6.3</span> อยากให้ครูรู้อะไรเกี่ยวกับตัวคุณ?</label><textarea class="ft" name="student_note" placeholder="เช่น ความฝัน สิ่งที่กังวล หรือสิ่งที่ต้องการความช่วยเหลือ (ถ้าไม่มี ให้พิมพ์ว่า ไม่มี)"></textarea></div>
   </div>
 </div></div>
 </div>
@@ -355,11 +358,11 @@ body{font-family:'Sarabun',sans-serif;background:#F7F5F3;color:#2D2A27;line-heig
     <button class="btn bp" id="btnNext" onclick="nextS()">ถัดไป <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M5 3l4 4.5L5 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
   </div>
 </div>
-<footer class="footer"><span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span><span style="opacity:.3">●</span><span>วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span style="opacity:.3">●</span><span style="opacity:.5"> © 2026 </span></footer>
+<footer class="footer"><span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span><span style="opacity:.3">●</span><span>วิทยาลัยเทคนิค</span><span style="opacity:.3">●</span><span style="opacity:.5">v4 — Google Sheets</span></footer>
 
 <script>
 // ===== CONFIG =====
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbx1fwxmbI3s7bjoIgngeZ22foHjvzTZ2RLL4F6WzlZZrYEkeJusEQlNrFtig52jjHzd/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxJ6-OvzSYqQHQ106gytpkEWihbwa4ClKdu0x2grMD9UOTLjd-4Sb0LADKJx9v-c35_/exec';
 
 // ===== SECTIONS =====
 const SECTIONS=[
@@ -486,7 +489,7 @@ function syncFamily(){
 function syncCommute(){setCond('vanBox',$qv('commute_mode')==='van',['commute_van_price','commute_van_route']);}
 function syncAll(){syncCommute();syncFamily();}
 // คืน {msg,name} ถ้ามีปัญหา, null ถ้าผ่าน
-function stepProblem(i){
+function consistencyProblem(i){
   if(i===0){
     if(!$qt('fullname')||!$q('level').value||!$q('classroom').value)return{msg:'กรุณากรอกชื่อ ระดับชั้น และห้องเรียน',name:!$qt('fullname')?'fullname':!$q('level').value?'level':'classroom'};
     for(const[n,l]of[['addr_subdistrict','ตำบล'],['addr_district','อำเภอ'],['addr_province','จังหวัด'],['addr_village','ชื่อหมู่บ้าน']])if(!$qt(n))return{msg:`กรุณากรอก${l}`,name:n};
@@ -513,7 +516,74 @@ function stepProblem(i){
   }
   return null;
 }
-function _focusQ(p){const e=$q(p.name);if(e&&e.scrollIntoView){try{e.scrollIntoView({block:'center'});if(e.focus)e.focus();}catch(_){}}}
+function _focusQ(p){
+  const e=$q(p.name);if(!e)return;
+  const host=e.closest('.phq-q,.adhd-q,.fl')||e;
+  try{host.scrollIntoView({block:'center'});host.classList.remove('flash');void host.offsetWidth;host.classList.add('flash');if(e.focus&&e.type!=='radio'&&e.type!=='checkbox')e.focus();}catch(_){}
+}
+
+// ===== บังคับตอบทุกข้อ (v4.5) =====
+const _clean=s=>String(s||'').replace(/\*/g,'').replace(/\s+/g,' ').trim();
+function _labelOf(el){
+  const host=el.closest('.phq-q,.adhd-q');
+  if(host){const n=host.querySelector('.phq-qn,.adhd-qn'),q=host.querySelector('.phq-qt,.adhd-qt');return _clean((n?n.textContent:'')+' '+(q?q.textContent:''));}
+  const fl=el.closest('.fl'),lab=fl&&fl.querySelector(':scope > label.flb');
+  return _clean(lab?lab.textContent:el.name);
+}
+// ตรวจว่าทุกคำถามในหน้าถูกตอบ (ข้ามช่องเงื่อนไขที่ซ่อนอยู่)
+function completenessProblem(i){
+  const step=document.querySelectorAll('#surveyForm > .fss')[i];if(!step)return null;
+  const seen={};
+  for(const el of step.querySelectorAll('input,select,textarea')){
+    const n=el.name;if(!n||seen[n])continue;
+    const cond=el.closest('.cond');if(cond&&!cond.classList.contains('show'))continue;
+    seen[n]=1;
+    const group=[...step.querySelectorAll(`[name="${n}"]`)];
+    const choice=el.type==='radio'||el.type==='checkbox'||el.tagName==='SELECT';
+    const ok=(el.type==='radio'||el.type==='checkbox')?group.some(g=>g.checked):String(el.value||'').trim()!=='';
+    if(!ok){
+      const lab=_labelOf(el);
+      return{msg:(choice?'กรุณาเลือกคำตอบ: ':(cond&&!cond.querySelector('label.flb')?'กรุณาพิมพ์ระบุ: ':'กรุณากรอก: '))+lab,name:n};
+    }
+  }
+  return null;
+}
+// รูปแบบข้อมูล + ตัวเลือก "ไม่มี" ห้ามเลือกคู่กับข้ออื่น
+function formatProblem(i){
+  if(i===0){
+    if($qt('fullname').length<3)return{msg:'กรุณากรอกชื่อ-นามสกุลให้ครบถ้วน',name:'fullname'};
+    if(!/^\d{6,15}$/.test($qt('student_no')))return{msg:'รหัสนักเรียนต้องเป็นตัวเลข 6–15 หลัก (ไม่ต้องมีช่องว่างหรือขีด)',name:'student_no'};
+    for(const[n,l]of[['phone','เบอร์โทรนักเรียน'],['parent_phone','เบอร์โทรผู้ปกครอง']])
+      if(!/^0\d{8,9}$/.test($qt(n).replace(/[\s-]/g,'')))return{msg:`${l}ไม่ถูกต้อง (ต้องเป็นตัวเลข 9–10 หลัก ขึ้นต้นด้วย 0)`,name:n};
+    for(const[n,l]of[['addr_subdistrict','ตำบล'],['addr_district','อำเภอ'],['addr_province','จังหวัด'],['addr_village','ชื่อหมู่บ้าน']])
+      if($qt(n).length<2)return{msg:`กรุณากรอก${l}ให้ถูกต้อง`,name:n};
+  }
+  if(i===6&&$qt('student_note').length<2)return{msg:'กรุณาพิมพ์ข้อความถึงครู (ถ้าไม่มี ให้พิมพ์ว่า "ไม่มี")',name:'student_note'};
+  const step=document.querySelectorAll('#surveyForm > .fss')[i];
+  for(const n of new Set([...step.querySelectorAll('input[type=checkbox]')].map(e=>e.name))){
+    const on=[...step.querySelectorAll(`input[type=checkbox][name="${n}"]:checked`)].map(e=>e.value);
+    if(on.includes('none')&&on.length>1)return{msg:'เลือก "ไม่มี/ไม่ใช้" ไปพร้อมกับตัวเลือกอื่นไม่ได้: '+_labelOf(step.querySelector(`[name="${n}"]`)),name:n};
+  }
+  return null;
+}
+function stepProblem(i){return completenessProblem(i)||formatProblem(i)||consistencyProblem(i);}
+function markRequired(){
+  document.querySelectorAll('#surveyForm > .fss').forEach(step=>{
+    if(!step.querySelector('.req-note')){
+      const n=document.createElement('div');n.className='req-note';n.textContent='* ต้องตอบให้ครบทุกข้อในหน้านี้ จึงจะไปหน้าถัดไปได้';
+      step.insertBefore(n,step.firstChild);
+    }
+    step.querySelectorAll('.fl > label.flb').forEach(l=>{if(!l.querySelector('.req'))l.insertAdjacentHTML('beforeend',' <span class="req">*</span>');});
+  });
+}
+// ตัวเลือก "ไม่มี/ไม่ใช้" (none) เลือกคู่กับข้ออื่นไม่ได้: เลือก none → ล้างข้ออื่น / เลือกข้ออื่น → ล้าง none
+document.getElementById('surveyForm').addEventListener('change',e=>{
+  const x=e.target;if(!x||x.type!=='checkbox')return;
+  const grp=[...document.querySelectorAll(`#surveyForm input[type=checkbox][name="${x.name}"]`)],none=grp.find(g=>g.value==='none');
+  if(!none||!x.checked)return;
+  if(x===none)grp.forEach(g=>{if(g!==none)g.checked=false;});else none.checked=false;
+});
+markRequired();
 function validateStep(i){const p=stepProblem(i);if(!p)return true;alert(p.msg);_focusQ(p);return false;}
 function cleanConditionals(sd){
   if(sd.commute_mode!=='van'){delete sd.commute_van_price;delete sd.commute_van_route;}
@@ -531,7 +601,7 @@ async function submitForm(){
   const fn=form.querySelector('[name="fullname"]').value.trim();
   const lv=form.querySelector('[name="level"]').value;
   const cl=form.querySelector('[name="classroom"]').value.trim();
-  for(const s of [0,5]){const pr=stepProblem(s);if(pr){cur=s;updateUI();alert(pr.msg);_focusQ(pr);return;}}
+  for(let s=0;s<TOTAL;s++){const pr=stepProblem(s);if(pr){cur=s;updateUI();alert(pr.msg);_focusQ(pr);return;}}
   if(!fn||!lv||!cl){alert('กรุณากรอกชื่อ ระดับชั้น และห้องเรียน');cur=0;updateUI();return;}
 
   showOverlay('กำลังเตรียมข้อมูล...','กรุณารอสักครู่');
@@ -609,6 +679,7 @@ async function sendSubmit(id,records){
       const r=await resp.json();
       if(r&&r.ok)return r;
       if(r&&r.error==='busy'){lastErr=new Error('ระบบกำลังรับข้อมูลจำนวนมาก');await _sleep(1500*attempt);continue;}
+      if(r&&r.error==='incomplete')throw new Error('ข้อมูลไม่ครบหรือไม่ถูกต้อง — กรุณารีเฟรชหน้านี้แล้วกรอกใหม่ (ฟอร์มอาจเป็นรุ่นเก่า) ข้อที่มีปัญหา: '+((r.missing||[]).join(', ')));
       if(r&&r.error==='invalid')throw new Error('ข้อมูลไม่ครบหรือไม่ถูกต้อง (ตรวจสอบ ชื่อ / ระดับชั้น / ห้อง และการตอบแบบประเมิน)');
       throw new Error('เซิร์ฟเวอร์ปฏิเสธข้อมูล ('+((r&&r.error)||'unknown')+')');
     }catch(e){
