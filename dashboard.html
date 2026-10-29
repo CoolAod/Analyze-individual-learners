@@ -304,8 +304,8 @@ tr:hover td{background:var(--o4);cursor:pointer}
     <div class="l-f"><label>รหัสผ่าน</label><input type="password" id="lP" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <div class="l-err" id="lErr">⚠️ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
     <button class="l-btn" onclick="doLogin()">🔐 เข้าสู่ระบบ</button>
-    <div class="l-foot" style="margin-bottom:.35rem">ลืมรหัสผ่าน ? ติดต่อผู้ดูแลระบบ </div>
-    <div class="l-foot">ระบบวิเคราะห์ผู้เรียน — สำหรับครูผู้สอนเท่านั้น</div>
+    <div class="l-foot" style="margin-bottom:.35rem">ลืมรหัสผ่าน? ติดต่อผู้ดูแลระบบ (ผู้ที่แก้ไขชีต "users" ใน Google Sheets ได้) เพื่อตั้งรหัสผ่านใหม่</div>
+    <div class="l-foot">ระบบวิเคราะห์ผู้เรียน v4 — สำหรับครูผู้สอนเท่านั้น</div>
   </div>
 </div>
 
@@ -314,7 +314,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
   <div class="hd-i">
     <a class="brand" href="index.html">
       <div class="b-logo"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2.5L2.5 7.5v10h5v-4.5h5V17.5h5v-10L10 2.5z" fill="white" opacity=".9"/></svg></div>
-      <div class="b-tx"><span class="b-s">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="b-d">แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span></div>
+      <div class="b-tx"><span class="b-s">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="b-d">แผนก ทดธ.</span></div>
     </a>
     <nav class="hn"><a href="index.html" class="np">📋 แบบสำรวจ</a><a href="dashboard.html" class="np act">📊 แดชบอร์ด</a></nav>
     <div class="ha">
@@ -456,13 +456,13 @@ tr:hover td{background:var(--o4);cursor:pointer}
 <!-- MODAL -->
 <div id="modalWrap" style="display:none"></div>
 
-<footer class="footer"><span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span><span style="opacity:.3">●</span><span>วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span style="opacity:.3">●</span><span style="opacity:.5"> © 2026 </span></footer>
+<footer class="footer"><span>แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span><span style="opacity:.3">●</span><span>วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span style="opacity:.3">●</span><span style="opacity:.5">v3 — Google Sheets</span></footer>
 
 <script>
 // ══════════════════════════════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════════════════════════════
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbx1fwxmbI3s7bjoIgngeZ22foHjvzTZ2RLL4F6WzlZZrYEkeJusEQlNrFtig52jjHzd/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxJ6-OvzSYqQHQ106gytpkEWihbwa4ClKdu0x2grMD9UOTLjd-4Sb0LADKJx9v-c35_/exec';
 let REFRESH_TIMER=null;   // (v4) การล็อกอิน/ตรวจสิทธิ์ย้ายไปที่ Apps Script แล้ว
 
 // ══════════════════════════════════════════════════════════════
@@ -604,7 +604,7 @@ async function submitPw(){
 }
 
 async function reloadAll(){
-  showLoad('กำลังดึงข้อมูล');
+  showLoad('กำลังดึงข้อมูลจาก Google Sheets...');
   try{
     const _d=await fetchAll();
     ALL=_d.learner||[];PHQ=_d.phq||[];ADHD=_d.adhd||[];
@@ -1003,7 +1003,7 @@ function renderSkills(){
   const slm={video_edit:'🎬 ตัดต่อ',graphic:'🎨 กราฟิก',photo:'📷 ถ่ายภาพ',code:'👨‍💻 โค้ด',ads:'📢 Ads',seo:'🔍 SEO',accounting:'📊 บัญชี'};
   const sc={};FILT.forEach(d=>String(d.special_skills||'').split(',').map(s=>s.trim()).filter(s=>s&&s!=='none').forEach(s=>{sc[s]=(sc[s]||0)+1;}));
   document.getElementById('spTags').innerHTML=Object.entries(sc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="tg">${slm[k]||k}<span class="ct">${v}</span></span>`).join('')||'<span class="tg">ยังไม่มีข้อมูล</span>';
-  const pm={tiktok:'🎵 TikTok',facebook:'📘 Facebook',instagram:'📸 Instagram',youtube:'▶️ YouTube',x:'🐦 X',lineoa:'💚 Line OA',shopee:'🛒 Shopee'};
+  const pm={tiktok:'🎵 TikTok',facebook:'📘 Facebook',instagram:'📸 Instagram',youtube:'▶️ YouTube',x:'🐦 X',lineoa:'💚 Line OA',shopee:'🛒 Shopee',none:'🚫 ไม่ใช้โซเชียล'};
   const pc={};FILT.forEach(d=>String(d.social_platforms||'').split(',').map(s=>s.trim()).filter(Boolean).forEach(s=>{pc[s]=(pc[s]||0)+1;}));
   document.getElementById('platTags').innerHTML=Object.entries(pc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="tg">${pm[k]||k}<span class="ct">${v}</span></span>`).join('')||'<span class="tg">ยังไม่มีข้อมูล</span>';
   const cl={study_more:'🎓 เรียนต่อ',company:'🏢 สมัครงาน',own_biz:'🚀 เปิดธุรกิจ',freelance:'💻 Freelance',unsure:'🤷 ไม่แน่ใจ'};
@@ -1215,7 +1215,7 @@ const ADV_RULES=[
   {w:4,when:d=>d.problem_solving==='wait',t:'เมื่อติดปัญหามักรอ: สอนลำดับการขอความช่วยเหลือ (ลองเอง → ค้นหา → ถามเพื่อน → ถามครู)'},
   {w:3,when:d=>d.typing_speed==='under20',t:'พิมพ์ช้า: เผื่อเวลาในงานพิมพ์ และแนะนำโปรแกรมฝึกพิมพ์'},
   {w:3,when:d=>d.english_tech==='1'||d.english_tech==='2',t:'ภาษาอังกฤษเชิงเทคนิคเป็นอุปสรรค: ทำคำศัพท์ประจำบทเป็นไทยคู่อังกฤษ'},
-  {w:3,when:d=>!!(d.special_skills&&String(d.special_skills).trim())||(!!d.digital_biz_exp&&d.digital_biz_exp!=='none'),t:'มีทักษะพิเศษหรือประสบการณ์ที่ระบุไว้: มอบบทบาทที่ได้แสดงความสามารถ เช่น ผู้ช่วยครูหรือหัวหน้ากลุ่ม'},
+  {w:3,when:d=>_realItems(d.special_skills).length>0||_realItems(d.digital_biz_exp).length>0,t:'มีทักษะพิเศษหรือประสบการณ์ที่ระบุไว้: มอบบทบาทที่ได้แสดงความสามารถ เช่น ผู้ช่วยครูหรือหัวหน้ากลุ่ม'},
   {w:2,when:d=>d.learning_style==='video',t:'ชอบเรียนจากวิดีโอ: แนบคลิปสั้นประกอบบทเรียน'},
   {w:2,when:d=>d.learning_style==='practice',t:'ชอบเรียนจากการลงมือทำ: เริ่มด้วยงานปฏิบัติสั้น ๆ แล้วค่อยอธิบายทฤษฎี'},
   {w:2,when:d=>d.learning_style==='read',t:'ชอบเรียนจากการอ่าน: จัดใบความรู้หรือเอกสารสรุปให้'},
@@ -1226,6 +1226,8 @@ const ADV_RULES=[
   {w:2,when:d=>d.career_goal==='company',t:'ต้องการทำงานบริษัท: เน้นทักษะที่ตลาดงานต้องการและโอกาสฝึกงาน'},
   {w:2,when:d=>d.career_goal==='unsure',t:'ยังไม่แน่ใจเป้าหมาย: ชวนสำรวจความสนใจและแนะแนวอาชีพ'}
 ];
+// รายการตัวเลือกจริง (ตัด "none" = ไม่มี/ไม่ใช้ ที่นักเรียนต้องเลือกเมื่อไม่มีข้อมูล)
+function _realItems(v){return String(v||'').split(',').map(s=>s.trim()).filter(s=>s&&s!=='none');}
 function advPriority(d,phq,adhd){
   const reasons=[];let lv=0;
   const up=(n,why)=>{if(n>lv)lv=n;reasons.push(why);};
