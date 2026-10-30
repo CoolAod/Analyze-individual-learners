@@ -287,6 +287,41 @@ tr:hover td{background:var(--o4);cursor:pointer}
 .gsort{margin-left:auto;font-size:.8rem;color:var(--g5)}.gsort select{padding:5px 9px;border:1.5px solid var(--g2);border-radius:8px;font-size:.8rem;margin-left:4px}
 .gc.sel{box-shadow:0 0 0 3px rgba(0,0,0,.2)}.gc:hover{filter:brightness(.98)}
 @media print{.q9b,.grp-bar{display:none!important}}
+.ov-seg{display:inline-flex;background:var(--g1);border-radius:99px;padding:3px}
+.ov-seg button{border:0;background:transparent;padding:6px 15px;border-radius:99px;font-size:.8rem;font-weight:600;color:var(--g5);cursor:pointer;font-family:inherit}
+.ov-seg button.on{background:#fff;color:var(--o);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.ov-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:0 0 6px}
+.ov-kpi{background:#fff;border:1px solid var(--g1);border-radius:20px;padding:16px 18px;box-shadow:0 2px 12px rgba(40,40,40,.04)}
+.ov-kl{font-size:.76rem;color:var(--g5);font-weight:600}
+.ov-kv{font-size:1.95rem;font-weight:700;color:var(--o);line-height:1.15;margin:4px 0 2px}.ov-kv small{font-size:.95rem;color:var(--g4);font-weight:600;margin-left:2px}
+.ov-ks{font-size:.72rem;color:var(--g4)}
+.ov-sec{font-size:.8rem;letter-spacing:.06em;color:var(--g5);font-weight:700;margin:24px 2px 10px;display:flex;align-items:center;gap:10px}
+.ov-sec::after{content:"";flex:1;height:1px;background:var(--g2)}
+.ov-note{font-size:.72rem;font-weight:600;color:var(--red);letter-spacing:0}
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px}.ov-grid.c4{grid-template-columns:repeat(auto-fit,minmax(262px,1fr))}
+.ov-card{background:#fff;border:1px solid var(--g1);border-radius:20px;padding:16px 18px 14px;box-shadow:0 2px 12px rgba(40,40,40,.04);min-width:0}
+.ov-ct{font-weight:700;font-size:.92rem;color:var(--g7);display:flex;align-items:center;gap:9px;margin-bottom:14px}
+.ov-ic{width:30px;height:30px;border-radius:10px;background:var(--o4);display:inline-grid;place-items:center;font-size:.95rem}
+.ov-ft{margin-top:12px;padding-top:10px;border-top:1px dashed var(--g2);font-size:.72rem;color:var(--g4);line-height:1.5}
+.ov-empty{padding:26px 0;text-align:center;color:var(--g4);font-size:.82rem}
+.ov-hbs{display:flex;flex-direction:column;gap:9px}
+.ov-hb{display:grid;grid-template-columns:minmax(70px,40%) 1fr 2.6rem;gap:10px;align-items:center;font-size:.8rem;color:var(--g7)}
+.ov-hb.z{opacity:.45}.ov-hl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ov-trk{height:10px;background:var(--g1);border-radius:99px;overflow:hidden;display:block}
+.ov-fill{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#F7B07F,#E86A2E)}.ov-fill.mu{background:var(--g3,#C9C9C5)}
+.ov-hv{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.ov-cols{display:flex;gap:10px;align-items:flex-end}
+.ov-col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px}
+.ov-cv{font-size:.76rem;font-weight:700;color:var(--g7);font-variant-numeric:tabular-nums}
+.ov-bw{height:118px;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.ov-bar{width:100%;max-width:44px;border-radius:12px 12px 5px 5px;background:linear-gradient(180deg,#F5A26B,#E86A2E)}.ov-bar.z{background:var(--g1);height:3px!important}
+.ov-cl{font-size:.7rem;color:var(--g5);text-align:center;line-height:1.3;word-break:break-word}
+.ov-dn{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.ov-svg{width:124px;height:124px;flex:none}.ov-dn-n{font-size:22px;font-weight:700;fill:#2B2B2B}.ov-dn-t{font-size:9px;fill:#8a8a85}
+.ov-lgs{flex:1;min-width:130px;display:flex;flex-direction:column;gap:7px}
+.ov-lg{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--g7)}.ov-lg.z{opacity:.45}
+.ov-dot{width:10px;height:10px;border-radius:50%;flex:none}.ov-ll{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ov-lv{font-weight:700;font-variant-numeric:tabular-nums}
+@media(max-width:760px){.hd-i{flex-wrap:wrap;row-gap:6px}.ha{flex-shrink:1;flex-basis:100%;justify-content:flex-end}.hn{display:none}#whoami{display:none}.dtb-i{overflow-x:auto;-webkit-overflow-scrolling:touch}.ov-grid,.ov-grid.c4{grid-template-columns:1fr}.ov-hb{grid-template-columns:minmax(70px,42%) 1fr 2.4rem}}
 </style>
 </head>
 <body>
@@ -314,7 +349,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
   <div class="hd-i">
     <a class="brand" href="index.html">
       <div class="b-logo"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2.5L2.5 7.5v10h5v-4.5h5V17.5h5v-10L10 2.5z" fill="white" opacity=".9"/></svg></div>
-      <div class="b-tx"><span class="b-s">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="b-d">แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span></div>
+      <div class="b-tx"><span class="b-s">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="b-d">แผนก ทดธ.</span></div>
     </a>
     <nav class="hn"><a href="index.html" class="np">📋 แบบสำรวจ</a><a href="dashboard.html" class="np act">📊 แดชบอร์ด</a></nav>
     <div class="ha">
@@ -322,6 +357,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
       <button class="bxs bp2" onclick="exportExcelPHQ()">📥 PHQ</button>
       <button class="bxs bt2" onclick="exportExcelADHD()">📥 ADHD</button>
       <button class="bxs bg2" onclick="reloadAll()" title="โหลดข้อมูลใหม่">🔄</button>
+      <span id="lastSync" title="เวลาที่ซิงก์ข้อมูลล่าสุดจาก Google Sheets" style="font-size:.74rem;color:var(--g4);align-self:center"></span>
       <span id="whoami" style="font-size:.78rem;color:var(--g5);align-self:center;max-width:9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
       <button class="bxs bg2" onclick="openPwModal()" title="เปลี่ยนรหัสผ่าน">🔑</button>
       <button class="bxs bgr" onclick="doLogout()">🚪 ออก</button>
@@ -329,10 +365,12 @@ tr:hover td{background:var(--o4);cursor:pointer}
   </div>
 </header>
 <div class="q9b" id="q9Banner" style="display:none"></div>
+<div class="q9b" id="loadErr" style="display:none;background:#FEF5E4;border-bottom-color:#E8A317"></div>
 
 <!-- DASH TABS -->
 <div class="dtb"><div class="dtb-i">
-  <button class="dtab act" id="dt-l" onclick="switchDash('l')">📊 แดชบอร์ดผู้เรียน</button>
+  <button class="dtab act" id="dt-o" onclick="switchDash('o')">📈 ภาพรวม</button>
+  <button class="dtab" id="dt-l" onclick="switchDash('l')">📊 แดชบอร์ดผู้เรียน</button>
   <button class="dtab" id="dt-p" onclick="switchDash('p')">💜 รายงาน PHQ-A</button>
   <button class="dtab" id="dt-a" onclick="switchDash('a')">🧩 รายงาน ADHD</button>
 </div></div>
@@ -340,7 +378,15 @@ tr:hover td{background:var(--o4);cursor:pointer}
 <main class="main">
 
 <!-- ══ LEARNER ══════════════════════════════════════════════════ -->
-<div class="dp act" id="d-l">
+<div class="dp act" id="d-o">
+    <div class="ph"><div><div class="pt">📈 สถิติภาพรวมผู้เรียน</div><div class="ps" id="ovSub">กำลังโหลด...</div></div>
+      <div class="fw"><div class="ov-seg" id="ovMode"><button class="on" data-m="n" onclick="setOvMode('n')">จำนวนคน</button><button data-m="p" onclick="setOvMode('p')">ร้อยละ</button></div>
+        <select class="fsel" id="ovLevel" onchange="ovLevelChanged()"><option value="all">ทุกระดับชั้น</option><option value="ปวช.1">ปวช.1</option><option value="ปวช.2">ปวช.2</option><option value="ปวช.3">ปวช.3</option><option value="ปวส.1">ปวส.1</option><option value="ปวส.2">ปวส.2</option></select>
+        <select class="fsel" id="ovRoom" onchange="renderOverview()"><option value="all">ทุกห้อง</option></select></div></div>
+    <div class="ov-kpis" id="ovKpis"></div>
+    <div id="ovBody"></div>
+  </div>
+  <div class="dp" id="d-l">
   <div class="ph">
     <div><div class="pt">📊 แดชบอร์ดวิเคราะห์ผู้เรียน</div><div class="ps" id="lSub">กำลังโหลด...</div></div>
     <div class="fw"><button class="bxs bo" onclick="openPrintModal()" style="padding:7px 13px">🖨️ ปริ๊นรายงานห้อง</button><select class="fsel" id="fClass" onchange="renderLearner()"><option value="all">ทุกห้อง</option></select></div>
@@ -475,10 +521,31 @@ const PHQ_Q=['รู้สึกหดหู่ เศร้า หรือส�
 // LOGIN
 // ══════════════════════════════════════════════════════════════
 async function apiCall(payload){
-  const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
-  if(!r.ok)throw new Error('HTTP '+r.status);
-  return r.json();
+  const ms=window.API_TIMEOUT_MS||45000,ac=new AbortController(),tm=setTimeout(()=>ac.abort(),ms);
+  try{
+    const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:ac.signal});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return await r.json();
+  }catch(e){if(e&&e.name==='AbortError')e.isTimeout=true;throw e;}
+  finally{clearTimeout(tm);}
 }
+// แปลงข้อผิดพลาดเป็นข้อความที่บอกว่าต้องแก้อะไร
+function describeErr(e){
+  const m=String((e&&e.message)||e||'');
+  if(e&&e.isTimeout)return{t:'เซิร์ฟเวอร์ไม่ตอบกลับภายในเวลาที่กำหนด',h:'ตรวจว่าลิงก์ SCRIPT_URL ถูกต้อง และได้ Deploy เป็น New version แล้ว จากนั้นลองรีเฟรชหน้านี้'};
+  if(e&&e.name==='SyntaxError')return{t:'เซิร์ฟเวอร์ตอบกลับมาไม่ใช่ข้อมูลที่อ่านได้',h:'มักเกิดจากยังไม่ได้อนุญาตสิทธิ์หลังแก้โค้ด: เปิด Apps Script → รันฟังก์ชัน setupUsersSheet() → Review permissions → Allow แล้ว Deploy → Manage deployments → Edit → New version'};
+  if(e&&e.name==='TypeError')return{t:'เชื่อมต่อ Apps Script ไม่ได้',h:'ตรวจ 3 อย่าง: (1) ลิงก์ SCRIPT_URL ในไฟล์ตรงกับ Web app URL ลงท้าย /exec (2) Deploy ตั้ง Execute as = Me และ Who has access = Anyone (3) อินเทอร์เน็ตของเครื่องนี้'};
+  if(/^HTTP /.test(m))return{t:'เซิร์ฟเวอร์ตอบกลับผิดปกติ ('+m+')',h:'ตรวจลิงก์ SCRIPT_URL และการ Deploy เป็น Anyone'};
+  if(m==='server_error')return{t:'เซิร์ฟเวอร์เกิดข้อผิดพลาดภายใน',h:'เปิด Apps Script → เมนู Executions ดูข้อความ error ของการเรียกล่าสุด'};
+  if(m==='bad_action'||m==='No record'||m==='read_failed')return{t:'เซิร์ฟเวอร์ยังเป็นโค้ดรุ่นเก่า ('+m+')',h:'วาง Code.gs ล่าสุดแล้ว Deploy → Manage deployments → Edit → New version (ห้ามสร้าง New deployment ถ้าไม่อยากเปลี่ยนลิงก์)'};
+  return{t:'เซิร์ฟเวอร์ตอบว่า: '+m,h:'ถ้าไม่แน่ใจ ให้ลองรีเฟรชหน้า หรือแจ้งผู้ดูแลระบบพร้อมข้อความนี้'};
+}
+function showLoadErr(e){
+  const d=describeErr(e),el=document.getElementById('loadErr');if(!el)return;
+  el.innerHTML=`<div class="q9b-in"><div class="q9b-t" style="color:#8A5300">⚠️ โหลดข้อมูลไม่สำเร็จ: ${d.t}</div><div class="q9b-n" style="color:#6b4a00">${d.h}</div><div style="margin-top:.45rem"><button class="bxs bo" onclick="reloadAll()">🔄 ลองใหม่</button></div></div>`;
+  el.style.display='block';
+}
+function hideLoadErr(){const el=document.getElementById('loadErr');if(el){el.style.display='none';el.innerHTML='';}}
 async function doLogin(){
   const u=document.getElementById('lU').value.trim();
   const p=document.getElementById('lP').value;
@@ -500,7 +567,7 @@ async function doLogin(){
       err.style.display='block';document.getElementById('lP').value='';
     }
   }catch(e){
-    err.textContent='⚠️ เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่';err.style.display='block';
+    const d=describeErr(e);err.textContent='⚠️ '+d.t+' — '+d.h;err.style.display='block';
   }finally{btn.disabled=false;btn.textContent='🔐 เข้าสู่ระบบ';}
 }
 function doLogout(){
@@ -512,6 +579,7 @@ function doLogout(){
 function forceRelogin(){
   sessionStorage.removeItem('dt');
   PW_FORCED=false;
+  hideLoadErr();
   if(REFRESH_TIMER){clearInterval(REFRESH_TIMER);REFRESH_TIMER=null;}
   document.title=DASH_TITLE;const _b=document.getElementById('q9Banner');if(_b){_b.style.display='none';_b.innerHTML='';}
   const e=document.getElementById('lErr');e.textContent='⏱️ เซสชันหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง';e.style.display='block';
@@ -603,10 +671,27 @@ async function submitPw(){
   btn.disabled=false;
 }
 
-async function reloadAll(){
-  showLoad('กำลังดึงข้อมูลจาก Google Sheets...');
+// รีเฟรชอัตโนมัติทุก 5 นาที (เดิม 1 นาที) แบบเงียบ — ไม่ขึ้นหน้าจอโหลดเต็มจอ, ข้ามเมื่อแท็บถูกซ่อน
+// ปุ่ม 🔄 และการเข้าสู่ระบบครั้งแรกจะแสดงหน้าจอโหลดตามปกติ
+const REFRESH_MS=300000;
+let LAST_OK=0,RELOADING=false;
+function markSynced(){
+  LAST_OK=Date.now();
+  const el=document.getElementById('lastSync');
+  if(el)el.textContent='🕒 '+new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+}
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden&&sessionStorage.getItem('dt')&&LAST_OK&&Date.now()-LAST_OK>REFRESH_MS)reloadAll(true);
+});
+async function reloadAll(silent){
+  if(RELOADING)return;
+  RELOADING=true;
+  const isSilent=(silent===true);
+  if(!isSilent)showLoad('กำลังดึงข้อมูลจาก Google Sheets...');
+  const _slow=isSilent?null:setTimeout(()=>{const m=document.getElementById('loadMsg');if(m)m.textContent='ยังรอเซิร์ฟเวอร์ตอบ... (การเรียกครั้งแรกหลัง Deploy อาจใช้เวลา 20–30 วินาที)';},12000);
   try{
     const _d=await fetchAll();
+    hideLoadErr();
     ALL=_d.learner||[];PHQ=_d.phq||[];ADHD=_d.adhd||[];
     normalizeAll();
     // populate classroom selects
@@ -621,26 +706,32 @@ async function reloadAll(){
     renderLearner();
     applyPF();
     applyAF();
+    renderOverview();
     renderQ9Banner();
+    markSynced();
   }catch(e){
-    console.error('reloadAll:',e.message);
+    console.error('reloadAll:',e);
+    const quiet=(e.message==='must_change'||e.message==='unauthorized');
     const ls=document.getElementById('lSub');if(ls)ls.textContent=(e.message==='must_change')?'🔑 กรุณาเปลี่ยนรหัสผ่านก่อนเริ่มใช้งาน':'⚠️ โหลดข้อมูลไม่สำเร็จ — จะลองใหม่อัตโนมัติ';
+    if(!quiet)showLoadErr(e);
   }finally{
-    hideLoad();
+    if(_slow)clearTimeout(_slow);
+    RELOADING=false;
+    if(!isSilent)hideLoad();
   }
 }
 
 async function init(){
   const _w=document.getElementById('whoami');if(_w)_w.textContent=sessionStorage.getItem('dn')?'👤 '+sessionStorage.getItem('dn'):'';
   await reloadAll();
-  REFRESH_TIMER=setInterval(reloadAll,60000); // auto-refresh 1 นาที
+  REFRESH_TIMER=setInterval(()=>{if(!document.hidden)reloadAll(true);},REFRESH_MS); // auto-refresh ทุก 5 นาที (เงียบ)
 }
 
 // ══════════════════════════════════════════════════════════════
 // DASH SWITCH
 // ══════════════════════════════════════════════════════════════
 function switchDash(t){
-  ['l','p','a'].forEach(k=>{
+  ['o','l','p','a'].forEach(k=>{
     document.getElementById('d-'+k).classList.toggle('act',k===t);
     document.getElementById('dt-'+k).classList.toggle('act',k===t);
   });
@@ -1048,6 +1139,164 @@ function showLT(id,btn){document.querySelectorAll('#d-l .pan').forEach(p=>p.clas
 // ══════════════════════════════════════════════════════════════
 // MODAL
 // ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+// OVERVIEW (v4.6) — Dashboard สถิติภาพรวมผู้เรียน (วาดด้วย CSS/SVG ล้วน ไม่ต้องใช้ไลบรารีภายนอก)
+// ใช้ข้อมูลจากแบบสำรวจ (ALL) ตามตัวกรองระดับชั้น/ห้องของแท็บนี้
+// ══════════════════════════════════════════════════════════════
+const OV_L={"gender": {"ชาย": "ชาย", "หญิง": "หญิง", "อื่นๆ": "อื่นๆ"}, "level": {"ปวช.1": "ปวช.1", "ปวช.2": "ปวช.2", "ปวช.3": "ปวช.3", "ปวส.1": "ปวส.1", "ปวส.2": "ปวส.2"}, "gpax_s": {"3.5-4.0": "3.50–4.00", "3.0-3.49": "3.00–3.49", "2.5-2.99": "2.50–2.99", "2.0-2.49": "2.00–2.49", "below2": "ต่ำกว่า 2.00", "new": "ใหม่"}, "commute_mode": {"van": "รถตู้ประจำ", "motorcycle": "ขี่รถมอเตอร์ไซค์มาเอง", "car": "ขับรถยนต์มาเอง", "parent_drop": "พ่อแม่/ผู้ปกครองมาส่ง", "walk_dorm": "เดินเท้ามาจากหอพัก", "other_hire": "รถรับจ้างอื่นๆ"}, "english_tech": {"1": "ไม่เข้าใจเลย", "2": "เดาได้บ้าง", "3": "อ่านเข้าใจได้", "4": "คล่องมาก"}, "learning_style": {"video": "ดูวิดีโอ", "practice": "ลงมือปฏิบัติ", "read": "อ่านเอกสาร", "listen": "ฟังครูบรรยาย", "group": "เรียนกลุ่ม"}, "special_skills": {"video_edit": "ตัดต่อวิดีโอ", "graphic": "ออกแบบกราฟิก", "photo": "ถ่ายภาพ/วิดีโอ", "code": "เขียนโค้ด/เว็บ", "ads": "ยิงโฆษณา Ads", "seo": "SEO/คอนเทนต์", "accounting": "บัญชีดิจิทัล", "none": "ยังไม่มีทักษะ"}, "part_time": {"none": "ไม่ทำงานพิเศษ", "weekend": "เฉพาะวันหยุด", "weekly": "ทุกสัปดาห์"}, "sleep_hours_s": {"under5": "< 5 ชม.", "5-6": "5–6 ชม.", "7-8": "7–8 ชม.", "over8": "> 8 ชม."}, "has_computer": {"own": "มีส่วนตัว", "shared": "ใช้ร่วมกับคนในบ้าน", "school_only": "ใช้ที่โรงเรียนเท่านั้น", "none": "ไม่มีเลย"}, "smartphone_os": {"android": "Android", "ios": "iOS (iPhone)", "none": "ไม่มีสมาร์ทโฟน"}, "parents_status": {"together": "พ่อแม่อยู่ด้วยกัน", "separated": "พ่อแม่แยกกันอยู่", "divorced": "พ่อแม่หย่าร้าง", "father_deceased": "บิดาเสียชีวิต", "mother_deceased": "มารดาเสียชีวิต", "both_deceased": "บิดาและมารดาเสียชีวิตทั้งคู่"}, "living_with": {"both_parents": "บิดาและมารดา", "father": "บิดา", "mother": "มารดา", "grandparents": "ปู่ ย่า ตา หรือยาย", "relatives": "ญาติคนอื่นๆ (เช่น ลุง ป้า น้า อา)", "guardian": "ครอบครัวบุญธรรม / ผู้ปกครองตามกฎหมาย", "other": "อื่นๆ (ระบุเอง)", "legacy_parents": "พ่อแม่/ผู้ปกครอง (ข้อมูลเดิม)", "legacy_relative": "ญาติ (ข้อมูลเดิม)", "legacy_dorm": "หอพัก (ข้อมูลเดิม)", "legacy_alone": "อยู่คนเดียว (ข้อมูลเดิม)"}, "living_legacy": {"parents": "พ่อแม่/ผู้ปกครอง (ข้อมูลเดิม)", "relative": "ญาติ (ข้อมูลเดิม)", "dorm": "หอพัก (ข้อมูลเดิม)", "alone": "อยู่คนเดียว (ข้อมูลเดิม)"}, "main_supporter": {"both_parents": "พ่อและแม่ช่วยกัน", "father": "พ่อคนเดียว", "mother": "แม่คนเดียว", "grandparents": "ปู่ ย่า ตา หรือ ยาย", "relatives": "ลุง ป้า น้า อา หรือญาติคนอื่น", "self": "นักเรียนหาเงินส่งตัวเองเรียน", "other": "อื่นๆ (ระบุเอง)"}, "career_goal": {"study_more": "เรียนต่อ", "company": "สมัครงานบริษัท", "own_biz": "เปิดธุรกิจเอง", "freelance": "Freelance", "unsure": "ยังไม่แน่ใจ"}};
+const OV_PAL=['#E86A2E','#F5A26B','#FBD3B5','#9CA3AF','#D1D5DB','#6B7280','#C2410C'];
+const OV_LEVELS=['ปวช.1','ปวช.2','ปวช.3','ปวส.1','ปวส.2'];
+const OV_GPAX_MID={'3.5-4.0':3.75,'3.0-3.49':3.25,'2.5-2.99':2.75,'2.0-2.49':2.25,'below2':1.75};
+let OV_MODE='n';
+const _ovPct=(n,t)=>t?Math.round(n*100/t):0;
+const _ovVal=(n,t)=>OV_MODE==='p'?(_ovPct(n,t)+'%'):String(n);
+const _ovEmpty='<div class="ov-empty">ยังไม่มีข้อมูล</div>';
+
+function ovRows(){
+  const lv=(document.getElementById('ovLevel')||{}).value||'all',rm=(document.getElementById('ovRoom')||{}).value||'all';
+  return ALL.filter(d=>(lv==='all'||d.level===lv)&&(rm==='all'||d.classroom===rm));
+}
+function setOvMode(m){
+  OV_MODE=m;
+  document.querySelectorAll('#ovMode button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+  renderOverview();
+}
+// นับแบบเลือกข้อเดียว / แบบเลือกหลายข้อ
+function ovTally(rows,keys,labels,get){
+  const c={};let tot=0;
+  rows.forEach(d=>{const v=String(get(d)||'').trim();if(!v)return;c[v]=(c[v]||0)+1;tot++;});
+  const items=keys.map(k=>({k,l:labels[k]||k,n:c[k]||0}));
+  Object.keys(c).filter(k=>!keys.includes(k)).sort().forEach(k=>items.push({k,l:labels[k]||k,n:c[k]}));
+  return{items,tot};
+}
+function ovMulti(rows,keys,labels,field){
+  const c={};let tot=0;
+  rows.forEach(d=>{
+    const a=String(d[field]||'').split(',').map(s=>s.trim()).filter(Boolean);
+    if(!a.length)return;tot++;new Set(a).forEach(k=>{c[k]=(c[k]||0)+1;});
+  });
+  const items=keys.map(k=>({k,l:labels[k]||k,n:c[k]||0}));
+  Object.keys(c).filter(k=>!keys.includes(k)).forEach(k=>items.push({k,l:labels[k]||k,n:c[k]}));
+  return{items,tot};
+}
+function ovPlace(s){return String(s||'').replace(/^(ตำบล|อำเภอ|จังหวัด|ต\.|อ\.|จ\.)\s*/,'').replace(/\s+/g,' ').trim();}
+function ovPlaceTally(rows,field){
+  const c={};let tot=0;
+  rows.forEach(d=>{const v=ovPlace(d[field]);if(!v)return;c[v]=(c[v]||0)+1;tot++;});
+  return{items:Object.keys(c).map(k=>({k,l:k,n:c[k]})),tot};
+}
+
+// ---------- ตัวสร้างกราฟ ----------
+function ovHBars(items,tot,o={}){
+  let it=items.slice();
+  if(o.sort!==false)it.sort((a,b)=>b.n-a.n||String(a.l).localeCompare(String(b.l),'th'));
+  if(o.top&&it.length>o.top){
+    const rest=it.slice(o.top);it=it.slice(0,o.top);
+    const rn=rest.reduce((s,x)=>s+x.n,0);
+    if(rn)it.push({k:'__o',l:'อื่นๆ ('+rest.length+' รายการ)',n:rn,mu:true});
+  }
+  if(!tot||!it.length)return _ovEmpty;
+  const mx=Math.max(1,...it.map(x=>x.n));
+  return'<div class="ov-hbs">'+it.map(x=>`<div class="ov-hb${x.n?'':' z'}" title="${x.l}: ${x.n} คน (${_ovPct(x.n,tot)}%)"><span class="ov-hl">${x.l}</span><span class="ov-trk"><span class="ov-fill${x.mu?' mu':''}" style="width:${x.n/mx*100}%"></span></span><span class="ov-hv">${_ovVal(x.n,tot)}</span></div>`).join('')+'</div>';
+}
+function ovCols(items,tot){
+  if(!tot||!items.length)return _ovEmpty;
+  const mx=Math.max(1,...items.map(x=>x.n));
+  return'<div class="ov-cols">'+items.map(x=>`<div class="ov-col" title="${x.l}: ${x.n} คน (${_ovPct(x.n,tot)}%)"><div class="ov-cv">${_ovVal(x.n,tot)}</div><div class="ov-bw"><div class="ov-bar${x.n?'':' z'}" style="height:${Math.max(x.n/mx*100,x.n?4:0)}%"></div></div><div class="ov-cl">${x.l}</div></div>`).join('')+'</div>';
+}
+function ovDonut(items,tot){
+  if(!tot)return _ovEmpty;
+  const R=46,C=2*Math.PI*R;let off=0;
+  items.forEach((x,i)=>{x.c=OV_PAL[i%OV_PAL.length];});
+  const arcs=items.filter(x=>x.n>0).map(x=>{const len=x.n/tot*C;const s=`<circle cx="60" cy="60" r="${R}" fill="none" stroke="${x.c}" stroke-width="16" stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}"><title>${x.l}: ${x.n} คน</title></circle>`;off+=len;return s;}).join('');
+  const leg=items.map(x=>`<div class="ov-lg${x.n?'':' z'}"><span class="ov-dot" style="background:${x.c}"></span><span class="ov-ll">${x.l}</span><span class="ov-lv">${_ovVal(x.n,tot)}</span></div>`).join('');
+  return`<div class="ov-dn"><svg viewBox="0 0 120 120" class="ov-svg"><circle cx="60" cy="60" r="${R}" fill="none" stroke="#F1F1F0" stroke-width="16"/><g transform="rotate(-90 60 60)">${arcs}</g><text x="60" y="58" text-anchor="middle" class="ov-dn-n">${tot}</text><text x="60" y="73" text-anchor="middle" class="ov-dn-t">คน</text></svg><div class="ov-lgs">${leg}</div></div>`;
+}
+const ovCard=(ic,title,body,foot)=>`<div class="ov-card"><div class="ov-ct"><span class="ov-ic">${ic}</span>${title}</div>${body}${foot?`<div class="ov-ft">${foot}</div>`:''}</div>`;
+const ovSec=(t,note)=>`<div class="ov-sec">${t}${note?` <span class="ov-note">${note}</span>`:''}</div>`;
+const ovAvg=(rows,get)=>{const v=rows.map(get).filter(x=>Number.isFinite(x));return v.length?{avg:v.reduce((a,b)=>a+b,0)/v.length,n:v.length}:null;};
+
+function ovFillFilters(){
+  const lvSel=document.getElementById('ovLevel'),rmSel=document.getElementById('ovRoom');if(!lvSel||!rmSel)return;
+  const lv=lvSel.value||'all',oldRm=rmSel.value||'all';
+  const rooms=[...new Set(ALL.filter(d=>lv==='all'||d.level===lv).map(d=>d.classroom).filter(Boolean))].sort((a,b)=>COLL.compare(a,b));
+  rmSel.innerHTML='<option value="all">ทุกห้อง</option>'+rooms.map(r=>`<option value="${r}">${r}</option>`).join('');
+  rmSel.value=rooms.includes(oldRm)?oldRm:'all';
+}
+function ovLevelChanged(){ovFillFilters();renderOverview();}
+
+function renderOverview(){
+  const body=document.getElementById('ovBody');if(!body)return;
+  if(!document.getElementById('ovRoom').options.length||document.getElementById('ovRoom').options.length===1)ovFillFilters();
+  const R=ovRows(),L=OV_L,N=R.length;
+  document.getElementById('ovSub').textContent=N?`แสดงข้อมูล ${N} คน จากทั้งหมด ${ALL.length} คน`:(ALL.length?'ไม่มีนักเรียนตามตัวกรองที่เลือก':'ยังไม่มีข้อมูล');
+  // ----- KPI -----
+  const gp=ovAvg(R,d=>OV_GPAX_MID[d.gpax]),sk=ovAvg(R,d=>parseInt(d.computer_skill_level)||NaN),st=ovAvg(R,d=>parseInt(d.stress_level)||NaN);
+  const hiS=R.filter(d=>parseInt(d.stress_level)>=4).length,stN=R.filter(d=>d.stress_level).length;
+  const own=R.filter(d=>d.has_computer==='own').length,hcN=R.filter(d=>d.has_computer).length;
+  const kpi=(l,v,s)=>`<div class="ov-kpi"><div class="ov-kl">${l}</div><div class="ov-kv">${v}</div><div class="ov-ks">${s}</div></div>`;
+  document.getElementById('ovKpis').innerHTML=
+    kpi('นักเรียนที่กรอกแล้ว',N,'คน')+
+    kpi('GPAX เฉลี่ย (โดยประมาณ)',gp?gp.avg.toFixed(2):'—',gp?`จากค่ากลางของช่วงเกรด ${gp.n} คน`:'ยังไม่มีข้อมูล')+
+    kpi('ทักษะคอมพิวเตอร์เฉลี่ย',sk?sk.avg.toFixed(1)+'<small>/5</small>':'—',sk?`จาก ${sk.n} คน`:'ยังไม่มีข้อมูล')+
+    kpi('ความเครียดเฉลี่ย',st?st.avg.toFixed(1)+'<small>/5</small>':'—',stN?`ระดับสูง (4–5): ${hiS} คน (${_ovPct(hiS,stN)}%)`:'ยังไม่มีข้อมูล')+
+    kpi('มีคอมพิวเตอร์ส่วนตัว',hcN?_ovPct(own,hcN)+'<small>%</small>':'—',hcN?`${own} จาก ${hcN} คน`:'ยังไม่มีข้อมูล');
+  // ----- ข้อมูลทั่วไป -----
+  const g=ovTally(R,['ชาย','หญิง','อื่นๆ'],L.gender,d=>d.gender);
+  const lv=ovTally(R,OV_LEVELS,L.level,d=>d.level);
+  const gx=ovTally(R,['3.5-4.0','3.0-3.49','2.5-2.99','2.0-2.49','below2','new'],L.gpax_s,d=>d.gpax);
+  // ----- ที่อยู่/การเดินทาง -----
+  const sd=ovPlaceTally(R,'addr_subdistrict'),ds=ovPlaceTally(R,'addr_district'),pv=ovPlaceTally(R,'addr_province');
+  const cm=ovTally(R,['van','motorcycle','car','parent_drop','walk_dorm','other_hire'],L.commute_mode,d=>d.commute_mode);
+  const vans=R.filter(d=>d.commute_mode==='van').map(d=>Number(d.commute_van_price)).filter(x=>Number.isFinite(x)&&x>0);
+  const vanFoot=vans.length?`รถตู้ประจำ ${vans.length} คน · ค่าโดยสารเฉลี่ย ${Math.round(vans.reduce((a,b)=>a+b,0)/vans.length).toLocaleString('th-TH')} บาท/เดือน (${Math.min(...vans).toLocaleString('th-TH')}–${Math.max(...vans).toLocaleString('th-TH')})`:'';
+  // ----- ทักษะ/การเรียนรู้ -----
+  const cs=ovTally(R,['1','2','3','4','5'],{1:'1',2:'2',3:'3',4:'4',5:'5'},d=>d.computer_skill_level);
+  const en=ovTally(R,['1','2','3','4'],L.english_tech,d=>d.english_tech);
+  const ls=ovMulti(R,['video','practice','read','listen','group'],L.learning_style,'learning_style');
+  const sp=ovMulti(R,['video_edit','graphic','photo','code','ads','seo','accounting','none'],L.special_skills,'special_skills');
+  // ----- ความพร้อม/วิถีชีวิต -----
+  const pt=ovTally(R,['none','weekend','weekly'],L.part_time,d=>d.part_time);
+  const sl=ovTally(R,['under5','5-6','7-8','over8'],L.sleep_hours_s,d=>d.sleep_hours);
+  const hc=ovTally(R,['own','shared','school_only','none'],L.has_computer,d=>d.has_computer);
+  const os=ovTally(R,['android','ios','none'],L.smartphone_os,d=>d.smartphone_os);
+  // ----- ครอบครัวและเป้าหมาย -----
+  const ps=ovTally(R,['together','separated','divorced','father_deceased','mother_deceased','both_deceased'],L.parents_status,d=>d.parents_status);
+  const lw=ovTally(R,['both_parents','father','mother','grandparents','relatives','guardian','other'],Object.assign({},L.living_with,L.living_legacy),d=>d.living_with||(d.living_status?'legacy_'+d.living_status:''));
+  const legacyKeys={};Object.keys(L.living_legacy).forEach(k=>{legacyKeys['legacy_'+k]=L.living_legacy[k];});
+  lw.items.forEach(x=>{if(legacyKeys[x.k])x.l=legacyKeys[x.k];});
+  const ms=ovTally(R,['both_parents','father','mother','grandparents','relatives','self','other'],L.main_supporter,d=>d.main_supporter);
+  const cg=ovTally(R,['study_more','company','own_biz','freelance','unsure'],L.career_goal,d=>d.career_goal);
+  const sr=ovTally(R,['1','2','3','4','5'],{1:'1',2:'2',3:'3',4:'4',5:'5'},d=>d.stress_level);
+  const pctOf=(x,t)=>t?` (${_ovPct(x,t)}%)`:'';
+  body.innerHTML=
+    ovSec('ข้อมูลทั่วไป')+'<div class="ov-grid">'+
+      ovCard('👥','เพศ',ovDonut(g.items,g.tot))+
+      ovCard('🎓','ระดับชั้น',ovCols(lv.items,lv.tot))+
+      ovCard('📈','เกรดเฉลี่ย (GPAX)',ovCols(gx.items,gx.tot))+'</div>'+
+    ovSec('ที่อยู่ปัจจุบันและการเดินทาง')+'<div class="ov-grid c4">'+
+      ovCard('📍','ตำบล',ovHBars(sd.items,sd.tot,{top:8}),sd.items.length>8?`ทั้งหมด ${sd.items.length} ตำบล`:'')+
+      ovCard('🏘️','อำเภอ',ovHBars(ds.items,ds.tot,{top:8}),ds.items.length>8?`ทั้งหมด ${ds.items.length} อำเภอ`:'')+
+      ovCard('🗺️','จังหวัด',ovHBars(pv.items,pv.tot,{top:8}),pv.items.length>8?`ทั้งหมด ${pv.items.length} จังหวัด`:'')+
+      ovCard('🚌','การเดินทางมาวิทยาลัย',ovHBars(cm.items,cm.tot),vanFoot)+'</div>'+
+    ovSec('ทักษะและการเรียนรู้')+'<div class="ov-grid c4">'+
+      ovCard('💻','ระดับทักษะคอมพิวเตอร์',ovCols(cs.items,cs.tot),'1 = ไม่มีพื้นฐาน · 5 = ชำนาญมาก'+(sk?` · เฉลี่ย ${sk.avg.toFixed(1)}`:''))+
+      ovCard('🌐','ภาษาอังกฤษเทคโนโลยี',ovCols(en.items,en.tot))+
+      ovCard('📖','รูปแบบการเรียนที่ชอบ',ovHBars(ls.items,ls.tot),'เลือกได้หลายข้อ — ร้อยละคิดจากจำนวนนักเรียนที่ตอบ')+
+      ovCard('⭐','ทักษะพิเศษด้านดิจิทัล',ovHBars(sp.items,sp.tot),'เลือกได้หลายข้อ — ร้อยละคิดจากจำนวนนักเรียนที่ตอบ')+'</div>'+
+    ovSec('ความพร้อมและวิถีชีวิต')+'<div class="ov-grid c4">'+
+      ovCard('💼','งานพิเศษ / Part-time',ovDonut(pt.items,pt.tot))+
+      ovCard('😴','ชั่วโมงนอนต่อวัน',ovCols(sl.items,sl.tot),sl.tot?`นอนน้อยกว่า 5 ชม.: ${sl.items[0].n} คน${pctOf(sl.items[0].n,sl.tot)}`:'')+
+      ovCard('🖥️','คอมพิวเตอร์ / แล็ปท็อป',ovHBars(hc.items,hc.tot,{sort:false}))+
+      ovCard('📱','สมาร์ทโฟน',ovDonut(os.items,os.tot))+'</div>'+
+    ovSec('ครอบครัวและเป้าหมาย','🔒 ข้อมูลลับ เฉพาะครู')+'<div class="ov-grid">'+
+      ovCard('💞','สถานภาพบิดามารดา',ovHBars(ps.items,ps.tot,{sort:false}))+
+      ovCard('🏠','อาศัยอยู่กับ',ovHBars(lw.items,lw.tot),lw.items.some(x=>String(x.k).startsWith('legacy_')&&x.n)?'รวมข้อมูลเดิมจากแบบสำรวจรุ่นก่อน (ระบุว่า "ข้อมูลเดิม")':'')+
+      ovCard('💰','ผู้ดูแลและออกค่าใช้จ่ายหลัก',ovHBars(ms.items,ms.tot,{sort:false}))+
+      ovCard('🎯','เป้าหมายหลังเรียนจบ',ovDonut(cg.items,cg.tot))+
+      ovCard('🧘','ความเครียดโดยรวม',ovCols(sr.items,sr.tot),'1 = แทบไม่เครียด · 5 = เครียดมาก'+(st?` · เฉลี่ย ${st.avg.toFixed(1)}`:''))+'</div>';
+}
+
 // ══════════════════════════════════════════════════════════════
 // FAMILY / ADDRESS (v4.4) — ป้ายข้อความของคำถามที่อยู่ การเดินทาง และครอบครัว
 // ค่าจากชีตถูก escape แล้วตอน normalizeAll — ข้อความด้านล่างเป็นค่าคงที่
