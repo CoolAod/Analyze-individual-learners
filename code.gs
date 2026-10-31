@@ -1,7 +1,7 @@
 // ================================================================
 // Code.gs — Google Apps Script Web App Backend  v4 (Secure)
 // ระบบวิเคราะห์ผู้เรียนรายบุคคล
-// วิทยาลัยเทคนิคประจวบคีรีขันธ์  แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล
+// วิทยาลัยเทคนิคประจวบคีรีขันธ์  แผนก ทดธ.
 //
 // สิ่งที่เปลี่ยนจาก v3:
 //   1) doGet ไม่คืนข้อมูลอีกต่อไป  — อ่านข้อมูลได้เฉพาะผู้ที่ login (token ฝั่งเซิร์ฟเวอร์)
@@ -703,7 +703,7 @@ function getSheet(type) {
   const fresh = !sh;
   if (!sh) sh = ss.insertSheet(SH[type]);
   const headers = ensureHeaders(sh, HDR[type]);
-  if (fresh) applyTextFormats(sh, headers);
+  if (fresh) applyTextFormats(sh, headers, type);
   return sh;
 }
 function readHeaders(sh) {
@@ -730,13 +730,39 @@ function ensureHeaders(sh, expected) {
   return have;
 }
 function styleHeader(r) { r.setBackground('#E86A2E').setFontColor('#FFFFFF').setFontWeight('bold'); }
-function applyTextFormats(sh, headers) {
+// คอลัมน์ตัวเลขจริง (ที่เหลือเก็บเป็น "ข้อความ" ทั้งหมด เพื่อกัน Google Sheets แปลงค่าเช่น "5-6" → 5 มิ.ย., "1-3" → 1 มี.ค.)
+const NUMERIC_LEARNER = ['_risk', 'household_members', 'siblings_count', 'birth_order', 'commute_van_price'];
+function isNumericCol_(type, h) {
+  if (type === 'learner') return NUMERIC_LEARNER.indexOf(h) >= 0;
+  return /^(phq|adhd)_(total|inatt|hyper|inatt_cnt|hyper_cnt|q\d+)$/.test(h);
+}
+function colFormat_(type, h) { return isNumericCol_(type, h) ? '0' : '@'; }
+function applyTextFormats(sh, headers, type) {
   const rows = sh.getMaxRows();
-  TEXT_COLS.forEach(h => {
-    const i = headers.indexOf(h);
-    if (i >= 0) sh.getRange(1, i + 1, rows, 1).setNumberFormat('@');
+  headers.forEach((h, i) => {
+    if (!h) return;
+    if (type) sh.getRange(1, i + 1, rows, 1).setNumberFormat(colFormat_(type, h));
+    else if (TEXT_COLS.indexOf(h) >= 0) sh.getRange(1, i + 1, rows, 1).setNumberFormat('@');
   });
 }
+// ช่องที่มีค่าเป็นช่วงตัวเลขแบบ "5-6" ซึ่งเสี่ยงถูกแปลงเป็นวันที่ — กู้คืนจากวันที่กลับเป็นค่าเดิม
+const DATE_ENUM_FIELDS = ['sleep_hours', 'absence', 'typing_speed', 'gpax'];
+function recoverEnum_(field, v) {
+  let tz = TZ;
+  try { tz = SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone() || TZ; } catch (e) { /* ใช้ TZ เริ่มต้น */ }
+  const d = Number(Utilities.formatDate(v, tz, 'd')), m = Number(Utilities.formatDate(v, tz, 'M'));
+  const cands = [d + '-' + m, m + '-' + d];            // ลองทั้ง วัน-เดือน และ เดือน-วัน (ตามภาษาของชีต)
+  for (let i = 0; i < cands.length; i++) if ((ENUMS[field] || []).indexOf(cands[i]) >= 0) return cands[i];
+  return null;
+}
+function cellStrF_(type, h, v) {
+  if (v instanceof Date && type === 'learner' && DATE_ENUM_FIELDS.indexOf(h) >= 0) {
+    const r = recoverEnum_(h, v);
+    if (r !== null) return r;
+  }
+  return cellStr(v);
+}
+function rowFormats_(type, headers) { return [headers.map(h => (h ? colFormat_(type, h) : '@'))]; }
 function findRow(sh, idCol, id) {
   const last = sh.getLastRow();
   if (last < 2) return -1;
@@ -755,7 +781,7 @@ function readAll(type) {
     .filter(row => row.some(c => c !== '' && c !== null))
     .map(row => {
       const o = {};
-      headers.forEach((h, i) => { o[h] = cellStr(row[i]); });
+      headers.forEach((h, i) => { o[h] = cellStrF_(type, h, row[i]); });
       return o;
     });
 }
@@ -779,11 +805,13 @@ function upsert(type, rec) {
     if (h === 'ai_analysis') return (prev && !scoresChanged) ? cellStr(pv('ai_analysis')) : '';
     if (h === 'alert_ack')   return prev ? cellStr(pv('alert_ack')) : '';
     if (Object.prototype.hasOwnProperty.call(rec, h)) return rec[h];
-    return prev ? (pv(h) instanceof Date ? cellStr(pv(h)) : pv(h)) : '';
+    return prev ? (pv(h) instanceof Date ? cellStrF_(type, h, pv(h)) : pv(h)) : '';
   });
 
   if (isNew) row = Math.max(sh.getLastRow(), 1) + 1;
-  sh.getRange(row, 1, 1, headers.length).setValues([out]);
+  const rowRange = sh.getRange(row, 1, 1, headers.length);
+  rowRange.setNumberFormats(rowFormats_(type, headers));     // ตั้งรูปแบบก่อนเขียน กันค่าถูกแปลงเป็นวันที่/ตัวเลข
+  rowRange.setValues([out]);
   return { sh: sh, row: row, headers: headers, isNew: isNew };
 }
 
@@ -901,7 +929,7 @@ function callClaude(key, prompt) {
 function setupSheets() {
   Object.keys(SH).forEach(type => {
     const sh = getSheet(type);
-    applyTextFormats(sh, readHeaders(sh));
+    applyTextFormats(sh, readHeaders(sh), type);
   });
   installTriggers();
   SpreadsheetApp.flush();
@@ -1023,15 +1051,23 @@ function repairSheets() {
     Object.keys(SH).forEach(type => {
       const sh = getSheet(type);
       const headers = readHeaders(sh);
-      applyTextFormats(sh, headers);
       const last = sh.getLastRow();
-      if (last < 2) { report.push('[' + type + '] ไม่มีข้อมูล'); return; }
+      if (last < 2) { applyTextFormats(sh, headers, type); report.push('[' + type + '] ไม่มีข้อมูล'); return; }
       const rng = sh.getRange(2, 1, last - 1, headers.length);
       const vals = rng.getValues();
       const ix = h => headers.indexOf(h);
-      let ts = 0, ph = 0, recomputed = 0, bad = 0;
+      let ts = 0, ph = 0, recomputed = 0, bad = 0, enumFixed = 0;
+      const otherDates = {};
 
       vals.forEach(r => {
+        // ค่าที่ถูก Sheets แปลงเป็นวันที่ (เช่น ชั่วโมงนอน "5-6", ขาดเรียน "1-3") → กู้กลับเป็นค่าเดิม
+        if (type === 'learner') {
+          headers.forEach((h, i) => {
+            if (!(r[i] instanceof Date) || TEXT_COLS.indexOf(h) >= 0) return;
+            if (DATE_ENUM_FIELDS.indexOf(h) >= 0) { const rv = recoverEnum_(h, r[i]); if (rv !== null) { r[i] = rv; enumFixed++; return; } }
+            otherDates[h] = (otherDates[h] || 0) + 1;
+          });
+        }
         TEXT_COLS.forEach(h => {
           const i = ix(h); if (i < 0) return;
           if (r[i] instanceof Date) { r[i] = fmtThaiTs(r[i]); ts++; }
@@ -1069,9 +1105,13 @@ function repairSheets() {
         }
       });
 
+      applyTextFormats(sh, headers, type);                         // ตั้งรูปแบบคอลัมน์ใหม่หลังอ่านค่าแล้ว
+      rng.setNumberFormats(vals.map(() => rowFormats_(type, headers)[0]));
       rng.setValues(vals);
-      report.push('[' + type + '] แถว=' + vals.length + ' | แปลงวันที่=' + ts + ' | เติม 0 เบอร์โทร=' + ph +
-        ' | คำนวณคะแนนใหม่=' + recomputed + ' | ข้อมูลรายข้อไม่ครบ (ซ่อมไม่ได้)=' + bad);
+      const od = Object.keys(otherDates);
+      report.push('[' + type + '] แถว=' + vals.length + ' | แปลงวันที่=' + ts + ' | กู้ค่าที่ถูกแปลงเป็นวันที่=' + enumFixed + ' | เติม 0 เบอร์โทร=' + ph +
+        ' | คำนวณคะแนนใหม่=' + recomputed + ' | ข้อมูลรายข้อไม่ครบ (ซ่อมไม่ได้)=' + bad +
+        (od.length ? ' | ⚠ มีเซลล์ที่ถูกแปลงเป็นวันที่และกู้ไม่ได้ในคอลัมน์: ' + od.join(', ') : ''));
     });
   } finally { lock.releaseLock(); }
   Logger.log(report.join('\n'));
