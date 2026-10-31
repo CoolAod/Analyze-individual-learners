@@ -349,7 +349,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
   <div class="hd-i">
     <a class="brand" href="index.html">
       <div class="b-logo"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2.5L2.5 7.5v10h5v-4.5h5V17.5h5v-10L10 2.5z" fill="white" opacity=".9"/></svg></div>
-      <div class="b-tx"><span class="b-s">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="b-d">แผนก ทดธ.</span></div>
+      <div class="b-tx"><span class="b-s">วิทยาลัยเทคนิคประจวบคีรีขันธ์</span><span class="b-d">แผนกวิชาเทคโนโลยีธุรกิจดิจิทัล</span></div>
     </a>
     <nav class="hn"><a href="index.html" class="np">📋 แบบสำรวจ</a><a href="dashboard.html" class="np act">📊 แดชบอร์ด</a></nav>
     <div class="ha">
@@ -508,7 +508,7 @@ tr:hover td{background:var(--o4);cursor:pointer}
 // ══════════════════════════════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════════════════════════════
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxJ6-OvzSYqQHQ106gytpkEWihbwa4ClKdu0x2grMD9UOTLjd-4Sb0LADKJx9v-c35_/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbzW4AS7Ko4vTTNcWBBU0A6f5T9pIQ3uoFr23KFOxI3smzVvGdotgH65VktEHDaJ13Gu/exec';
 let REFRESH_TIMER=null;   // (v4) การล็อกอิน/ตรวจสิทธิ์ย้ายไปที่ Apps Script แล้ว
 
 // ══════════════════════════════════════════════════════════════
@@ -795,9 +795,22 @@ function normADHD(d){
   d.adhd_severity=adhdSevKey(CI,CH);
   return d;
 }
+// ค่าช่วงตัวเลขที่ Google Sheets เคยแปลงเป็นวันที่ (เช่น "5-6" → 05/06/2569) → กู้กลับเป็นค่าเดิม
+// (กรณีเซิร์ฟเวอร์ยังเป็นโค้ดรุ่นเก่า หรือข้อมูลเดิมยังไม่ได้รัน repairSheets())
+const DATE_ENUMS={sleep_hours:['under5','5-6','7-8','over8'],absence:['0','1-3','4-6','7+'],typing_speed:['under20','20-40','40-60','over60'],gpax:['3.5-4.0','3.0-3.49','2.5-2.99','2.0-2.49','below2','new']};
+function fixDateEnum(f,v){
+  const s=String(v||'');let d,mo,m=s.match(/^(\d{2})\/(\d{2})\/\d{4}(?:\s|$)/);
+  if(m){d=+m[1];mo=+m[2];}
+  else{
+    m=s.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);if(!m)return v;
+    const x=new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5])+7*3600*1000);d=x.getUTCDate();mo=x.getUTCMonth()+1;
+  }
+  for(const c of [d+'-'+mo,mo+'-'+d])if(DATE_ENUMS[f].includes(c))return c;
+  return v;
+}
 function normalizeAll(){
   const clean=d=>{const o={};Object.keys(d).forEach(k=>{o[k]=esc(d[k]===null||d[k]===undefined?'':d[k]);});o._ts=normTs(d._ts);return o;};
-  ALL=ALL.map(clean);
+  ALL=ALL.map(clean).map(r=>{for(const f in DATE_ENUMS)if(r[f])r[f]=fixDateEnum(f,r[f]);return r;});
   const p=PHQ.map(clean).map(normPHQ);PHQ_BAD=p.filter(x=>!x).length;PHQ=p.filter(Boolean);
   const a=ADHD.map(clean).map(normADHD);ADHD_BAD=a.filter(x=>!x).length;ADHD=a.filter(Boolean);
   if(PHQ_BAD||ADHD_BAD)console.warn('ข้อมูลคะแนนไม่สมบูรณ์ (ไม่นำมาคำนวณ): PHQ',PHQ_BAD,'ADHD',ADHD_BAD,'— รัน repairSheets() ใน Apps Script');
